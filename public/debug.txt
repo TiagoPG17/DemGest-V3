@@ -1,0 +1,40 @@
+DEBUG CARGO: No se encontró cargo con carga explícita.
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_26-06-2025.pdf con fecha_finalizacion: 2025-07-07
+Ejecutando generarContrato para ID 1 a las 2025-06-27 14:57:11 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Juan Pérez Gonzalez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-08-14
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_27-06-2025.pdf con fecha_finalizacion: 2025-08-14
+Ejecutando generarContrato para ID 1 a las 2025-06-27 14:58:52 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Juan Pérez Gonzalez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-08-14
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_27-06-2025.pdf con fecha_finalizacion: 2025-08-14
+Ejecutando generarContrato para ID 1 a las 2025-06-27 15:00:00 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Juan Pérez Gonzalez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-08-14
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_27-06-2025.pdf con fecha_finalizacion: 2025-08-14
+Ejecutando generarContrato para ID 1 a las 2025-06-27 15:00:24 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Juan Pérez Gonzalez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-08-14
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_27-06-2025.pdf con fecha_finalizacion: 2025-08-14
+Ejecutando generarContrato para ID 1 a las 2025-06-27 15:06:26 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Juan Pérez Gonzalez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-08-14
+DEBUG: Generando PDF Contrato_Juan_Pérez_Gonzalez_27-06-2025.pdf con fecha_finalizacion: 2025-08-14
+Ejecutando generarContrato para ID 87 a las 2025-06-27 15:20:53 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Jaime Andres Cañas Velez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-09-06
+DEBUG: Generando PDF Contrato_Jaime_Andres_Cañas_Velez_27-06-2025.pdf con fecha_finalizacion: 2025-09-06
+Ejecutando generarContrato para ID 87 a las 2025-06-27 15:24:15 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+DEBUG EMPLEADO: ID: , Nombre: Jaime Andres Cañas Velez, Cargo ID: No definido
+DEBUG FECHA: Fecha de finalización calculada: 2025-09-06
+DEBUG: Generando PDF Contrato_Jaime_Andres_Cañas_Velez_27-06-2025.pdf con fecha_finalizacion: 2025-09-06
+Ejecutando generarContrato para ID 127 a las 2025-07-03 21:19:22 desde C:\xampp\htdocs\Demgest\app\Http\Controllers\ContratoController.php línea 21
+DEBUG LOGO: Logo codificado correctamente. Longitud: 17066
+Error al generar contrato: Call to undefined relationship [estados] on model [App\Models\Empleado].
