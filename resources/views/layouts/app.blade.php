@@ -7,23 +7,22 @@
 
     <title>{{ config('app.name', 'DemGest') }}</title>
 
-    <!-- Fonts -->
+    <!-- Fonts: Preconnect y carga de Google Fonts Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Scripts -->
+    <!-- Assets compilados con Vite (CSS y JS) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Alpine.js (solo una referencia con defer) -->
+    <!-- Alpine.js para interacciones dinámicas -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
-<body class="font-sans antialiased bg-gray-100">
     <div class="min-h-screen flex">
-        <!-- Sidebar (Desktop) -->
+        <!-- Sidebar (visible en desktop) -->
         <aside class="w-64 bg-[rgb(60,66,80)] text-white hidden md:block">
             <div class="p-6">
-                {{-- Logo y Título para Desktop Sidebar --}}
+                <!-- Logo y título de la aplicación -->
                 <div class="flex items-center mb-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-300 mr-2">
                         <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
@@ -34,9 +33,9 @@
                 </div>
                 <p class="text-indigo-200 text-sm mt-1">Sistema de Gestión</p>
             </div>
-            <!-- Navigation -->
+            <!-- Navegación de la sidebar -->
             <nav class="mt-2">
-                <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3  hover:bg-gray-800 hover:text-white">
+                <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3 hover:bg-gray-800 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -52,7 +51,7 @@
                     </svg>
                     Empleados
                 </a>
-               <a href="{{ route('contratos.index') }}" class="flex items-center px-6 py-3 hover:bg-gray-800 text-white">
+                <a href="{{ route('contratos.index') }}" class="flex items-center px-6 py-3 hover:bg-gray-800 text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3">
                         <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
@@ -62,9 +61,9 @@
                     </svg>
                     Reporte
                 </a>
-        
+            </nav>
         </aside>
-        <!-- Main Content Area -->
+        <!-- Área principal de contenido -->
         <div class="flex-1 flex flex-col">
             <main class="flex-1 overflow-auto p-5">
                 @yield('content')
@@ -74,6 +73,3 @@
     @stack('scripts')
 </body>
 </html>
-
-
-

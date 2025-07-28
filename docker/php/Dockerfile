@@ -1,24 +1,54 @@
-FROM php:8.2-fpm
+# Etapa de construcción para assets
+FROM node:18-alpine as build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY resources/ ./resources/
+COPY vite.config.js ./
+RUN npm run build
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip unzip git curl libzip-dev libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath
+# Etapa de producción
+FROM php:8.2-fpm-alpine
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Instalar dependencias del sistema
+RUN apk add --no-cache \
+    libzip-dev \
+    oniguruma-dev \
+    nginx \
+    supervisor \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        zip \
+        opcache \
+    && docker-php-ext-enable opcache
 
+# Instalar Composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+
+# Configurar directorio de trabajo
 WORKDIR /var/www
 
+# Copiar solo los archivos necesarios
 COPY . .
+COPY --from=build /app/public/build /var/www/public/build
 
-RUN composer install
+# Instalar dependencias de PHP y optimizar
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+# Configuración de Nginx
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 9000
-CMD ["php-fpm"]
+# Configuración de Supervisor
+COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Establecer permisos
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache \
+    && php artisan storage:link
+
+# Puerto expuesto
+EXPOSE 80
+
+# Comando de inicio
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

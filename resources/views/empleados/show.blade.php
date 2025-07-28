@@ -14,9 +14,6 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Detalles del Empleado</h1>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('contrato.generar', ['id' => $empleado->id_empleado]) }}" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">
-                    Descargar Contrato
-                </a>
                 <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                         <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
@@ -38,6 +35,7 @@
                 </form>
             </div>
         </header>
+
         <!-- Mensaje de éxito -->
         @if (session('success'))
             <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
@@ -49,31 +47,32 @@
                 </div>
             </div>
         @endif
+
         <!-- Tarjeta principal con información del empleado -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <!-- Encabezado con información básica -->
             <div class="p-6 border-b border-gray-200">
                 <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <?php
-                    // Calcular las iniciales del nombre completo (solo las dos primeras palabras)
-                    $iniciales = '';
-                    if ($empleado->nombre_completo) {
-                        $palabras = explode(' ', trim($empleado->nombre_completo));
-                        $primerasDosPalabras = array_slice($palabras, 0, 2);
-                        foreach ($primerasDosPalabras as $palabra) {
-                            if (!empty($palabra)) {
-                                $iniciales .= strtoupper(substr($palabra, 0, 1));
+                        // Calcular las iniciales del nombre completo (solo las dos primeras palabras)
+                        $iniciales = '';
+                        if ($empleado->nombre_completo) {
+                            $palabras = explode(' ', trim($empleado->nombre_completo));
+                            $primerasDosPalabras = array_slice($palabras, 0, 2);
+                            foreach ($primerasDosPalabras as $palabra) {
+                                if (!empty($palabra)) {
+                                    $iniciales .= strtoupper(substr($palabra, 0, 1));
+                                }
                             }
                         }
-                    }
-                    
-                    $infoLaboral = $empleado->informacionLaboralActual;
+                        
+                        $infoLaboral = $empleado->informacionLaboralActual;
                     ?>
                     <div class="flex-shrink-0 w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-white text-2xl font-bold"
-                        @class([
-                            'bg-blue-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'contiflex') !== false,
-                            'bg-red-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'formacol') !== false,
-                        ])>
+                         @class([
+                             'bg-blue-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'contiflex') !== false,
+                             'bg-red-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'formacol') !== false,
+                         ])>
                         {{ $iniciales }}
                     </div>
                     <div class="flex-1">
@@ -118,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Tabs de información -->
             <div x-data="{ activeTab: 'personal' }">
                 <!-- Navegación de tabs -->
@@ -138,6 +138,7 @@
                         Datos Adicionales
                     </button>
                 </nav>
+
                 <!-- Contenido de los tabs -->
                 <div class="p-6 space-y-6">
                     <!-- Tab: Información Personal -->
@@ -252,6 +253,7 @@
                                 @endif
                             </section>
                         </div>
+
                         <!-- Sección: Patologías -->
                         <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
                             <header class="bg-emerald-500 p-4 flex items-center gap-3 rounded-t-lg">
@@ -273,7 +275,11 @@
                                                         {{ $patologia->nombre_patologia }}
                                                     </h4>
                                                     @if ($patologia->gravedad_patologia)
-                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium @if(strtolower($patologia->gravedad_patologia) == 'leve') bg-green-100 text-green-800 @elseif(strtolower($patologia->gravedad_patologia) == 'moderada') bg-yellow-100 text-yellow-800 @elseif(strtolower($patologia->gravedad_patologia) == 'severa') bg-red-100 text-red-800 @else bg-gray-100 text-gray-800 @endif">
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                            @if(strtolower($patologia->gravedad_patologia) == 'leve') bg-green-100 text-green-800 
+                                                            @elseif(strtolower($patologia->gravedad_patologia) == 'moderada') bg-yellow-100 text-yellow-800 
+                                                            @elseif(strtolower($patologia->gravedad_patologia) == 'severa') bg-red-100 text-red-800 
+                                                            @else bg-gray-100 text-gray-800 @endif">
                                                             {{ $patologia->gravedad_patologia }}
                                                         </span>
                                                     @endif
@@ -310,6 +316,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Tab: Ubicación -->
                     <div x-show="activeTab === 'ubicacion'" class="space-y-6">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -338,6 +345,7 @@
                                     </dl>
                                 </div>
                             </section>
+
                             <!-- Sección: Lugar de Residencia -->
                             <section aria-label="Lugar de Residencia del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
                                 <header class="bg-cyan-600 p-4 flex items-center gap-3 rounded-t-lg">
@@ -369,6 +377,7 @@
                                 </div>
                             </section>
                         </div>
+
                         <!-- Tarjeta adicional: Información de Comunicación -->
                         <div class="grid grid-cols-1">
                             <section aria-label="Información de Comunicación" class="bg-white rounded-lg shadow-sm border border-indigo-200">
@@ -390,8 +399,8 @@
                                             <dd class="mt-1 text-gray-900">{{ $empleado->telefono ?? 'No especificado' }}</dd>
                                         </div>
                                         <div>
-                                            <td class="font-medium text-gray-800">Telefono fijo</dt>
-                                            <dd class="">{{ $empleado->telefono_fijo ?? 'No especificado' }} </dt>
+                                            <dt class="font-medium text-gray-800">Teléfono fijo</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->telefono_fijo ?? 'No especificado' }}</dd>
                                         </div>
                                         <div>
                                             <dt class="font-medium text-gray-800">Correo Electrónico</dt>
@@ -402,6 +411,7 @@
                             </section>
                         </div>
                     </div>
+
                     <!-- Tab: Información Laboral -->
                     <div x-show="activeTab === 'laboral'" class="space-y-6">
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -414,191 +424,190 @@
                                     <path d="M12 22h-2" />
                                     <path d="M12 22h2" />
                                 </svg>
-                                <h3 class="text-lg font-medium text-white">Información Laboral </h3>
+                                <h3 class="text-lg font-medium text-white">Información Laboral</h3>
                             </header>
                             <div class="p-6">
-                                   @if ($empleado->informacionLaboralActual)
-                                        @php
-                                            $fechaIngreso = $empleado->informacionLaboralActual->fecha_ingreso;
-                                            $fechaSalida = $empleado->informacionLaboralActual->fecha_salida;
+                                @if ($empleado->informacionLaboralActual)
+                                    @php
+                                        $fechaIngreso = $empleado->informacionLaboralActual->fecha_ingreso;
+                                        $fechaSalida = $empleado->informacionLaboralActual->fecha_salida;
 
-                                            $duracion = [
-                                                'diasTotales' => 0,
-                                                'diasActuales' => 0,
-                                                'texto' => 'Sin datos'
-                                            ];
+                                        $duracion = [
+                                            'diasTotales' => 0,
+                                            'diasActuales' => 0,
+                                            'texto' => 'Sin datos'
+                                        ];
 
-                                            $porcentaje = 0;
+                                        $porcentaje = 0;
 
-                                            if ($fechaIngreso) {
-                                                $inicio = \Carbon\Carbon::parse($fechaIngreso);
-                                                $hoy = \Carbon\Carbon::now();
-                                                $fin = $fechaSalida ? \Carbon\Carbon::parse($fechaSalida) : $hoy;
+                                        if ($fechaIngreso) {
+                                            $inicio = \Carbon\Carbon::parse($fechaIngreso);
+                                            $hoy = \Carbon\Carbon::now();
+                                            $fin = $fechaSalida ? \Carbon\Carbon::parse($fechaSalida) : $hoy;
 
-                                                $diasTotales = $inicio->diffInDays($fin);
+                                            $diasTotales = $inicio->diffInDays($fin);
 
-                                                if ($inicio->isFuture()) {
-                                                    $diasActuales = $hoy->diffInDays($inicio);
-                                                    $duracion['texto'] = "Comienza en " . intval($diasActuales) . " días";
-                                                    $porcentaje = 0;
-                                                } else {
-                                                    $diasActuales = $inicio->diffInDays($hoy);
+                                            if ($inicio->isFuture()) {
+                                                $diasActuales = $hoy->diffInDays($inicio);
+                                                $duracion['texto'] = "Comienza en " . intval($diasActuales) . " días";
+                                                $porcentaje = 0;
+                                            } else {
+                                                $diasActuales = $inicio->diffInDays($hoy);
 
-                                                    $diff = $inicio->diff($hoy);
-                                                    $años = $diff->y;
-                                                    $meses = $diff->m;
-                                                    $días = $diff->d;
+                                                $diff = $inicio->diff($hoy);
+                                                $años = $diff->y;
+                                                $meses = $diff->m;
+                                                $días = $diff->d;
 
-                                                    $duracion['texto'] = "{$años} años, {$meses} meses y {$días} días";
-                                                    $porcentaje = $diasTotales > 0 ? min(100, round(($diasActuales / $diasTotales) * 100)) : 0;
-                                                }
-
-                                                $duracion['diasTotales'] = $diasTotales;
-                                                $duracion['diasActuales'] = $diasActuales;
+                                                $duracion['texto'] = "{$años} años, {$meses} meses y {$días} días";
+                                                $porcentaje = $diasTotales > 0 ? min(100, round(($diasActuales / $diasTotales) * 100)) : 0;
                                             }
-                                        @endphp
-                                    @endif
-                                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                        <!-- Columna Izquierda: Tiempo en la Empresa -->
-                                        <div class="lg:col-span-1 bg-blue-50 p-4 rounded-lg flex flex-col items-center justify-center text-center shadow-inner">
-                                            <div class="w-20 h-20 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 text-3xl font-bold mb-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700">
-                                                    <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
-                                                    <path d="M9 22v-4h6v4" />
-                                                    <path d="M8 6h.01" />
-                                                    <path d="M16 6h.01" />
-                                                    <path d="M8 10h.01" />
-                                                    <path d="M16 10h.01" />
-                                                    <path d="M8 14h.01" />
-                                                    <path d="M16 14h.01" />
-                                                    <path d="M12 6h.01" />
-                                                    <path d="M12 10h.01" />
-                                                    <path d="M12 14h.01" />
-                                                </svg>
-                                            </div>
-                                            <div class="w-full">
-                                                <p class="text-sm text-gray-500 mb-1">Tiempo en la empresa</p>
-                                                <div class="w-full bg-blue-200 rounded-full h-2.5 dark:bg-blue-700">
-                                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $porcentaje }}%;"></div>
-                                                </div>
-                                                <p class="text-sm text-gray-900 mt-1">{{ $duracion['texto'] }}</p>
-                                            </div>
+
+                                            $duracion['diasTotales'] = $diasTotales;
+                                            $duracion['diasActuales'] = $diasActuales;
+                                        }
+                                    @endphp
+                                @endif
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <!-- Columna Izquierda: Tiempo en la Empresa -->
+                                    <div class="lg:col-span-1 bg-blue-50 p-4 rounded-lg flex flex-col items-center justify-center text-center shadow-inner">
+                                        <div class="w-20 h-20 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 text-3xl font-bold mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700">
+                                                <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
+                                                <path d="M9 22v-4h6v4" />
+                                                <path d="M8 6h.01" />
+                                                <path d="M16 6h.01" />
+                                                <path d="M8 10h.01" />
+                                                <path d="M16 10h.01" />
+                                                <path d="M8 14h.01" />
+                                                <path d="M16 14h.01" />
+                                                <path d="M12 6h.01" />
+                                                <path d="M12 10h.01" />
+                                                <path d="M12 14h.01" />
+                                            </svg>
                                         </div>
-                                        <!-- Columnas Derechas: Detalles Laborales -->
-                                        <dl class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700">
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Cargo</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->estadoCargo->cargo->nombre_cargo ?? 'Sin cargo asignado' }}</dd>
+                                        <div class="w-full">
+                                            <p class="text-sm text-gray-500 mb-1">Tiempo en la empresa</p>
+                                            <div class="w-full bg-blue-200 rounded-full h-2.5 dark:bg-blue-700">
+                                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $porcentaje }}%;"></div>
                                             </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Fecha de Ingreso</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->fecha_ingreso->format('d/m/Y') }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Fecha de Salida</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ optional($empleado->informacionLaboralActual->fecha_salida)->format('d/m/Y') ?? 'No especificada' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Tipo de Contrato</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_contrato ?? 'No especificado' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Tipo de Vinculacion</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_vinculacion ?? 'No especificado' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Ciudad Laboral</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ $empleado->informacionLaboralActual->ciudadLaboral->nombre ?? 'No especificada' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">¿Aplica Dotación?</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ $empleado->informacionLaboralActual->aplica_dotacion ? 'Sí' : 'No' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Talla de Camisa</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ $empleado->informacionLaboralActual->talla_camisa ?? 'No especificada' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Talla de Pantalón</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ $empleado->informacionLaboralActual->talla_pantalon ?? 'No especificada' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Talla de Zapatos</dt>
-                                                <dd class="mt-1 text-gray-900">
-                                                    {{ $empleado->informacionLaboralActual->talla_zapatos ?? 'No especificada' }}
-                                                </dd>
-                                            </div>
-                                            <div>
-                                                  @php
-                                                        $informacion = $empleado->informacionLaboral->first();
-                                                    @endphp
-                                                <dt class="text-left font-semibold">Relación Laboral</dt>
-                                                <dd>{{ $informacion?->relacion_laboral ?? 'No especificada' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="text-left font-semibold">Relación Sindical</dt>
-                                                <dd> {{ $informacion?->relacion_sindical ? 'Sí' : 'No' }}</dd>
-                                            </div>
-                                        </dl>
+                                            <p class="text-sm text-gray-900 mt-1">{{ $duracion['texto'] }}</p>
+                                        </div>
                                     </div>
+                                    <!-- Columnas Derechas: Detalles Laborales -->
+                                    <dl class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700">
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Cargo</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->estadoCargo->cargo->nombre_cargo ?? 'Sin cargo asignado' }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Fecha de Ingreso</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->fecha_ingreso->format('d/m/Y') }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Fecha de Salida</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ optional($empleado->informacionLaboralActual->fecha_salida)->format('d/m/Y') ?? 'No especificada' }}
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Tipo de Contrato</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_contrato ?? 'No especificado' }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Tipo de Vinculacion</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_vinculacion ?? 'No especificado' }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Ciudad Laboral</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ $empleado->informacionLaboralActual->ciudadLaboral->nombre ?? 'No especificada' }}
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">¿Aplica Dotación?</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ $empleado->informacionLaboralActual->aplica_dotacion ? 'Sí' : 'No' }}
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Talla de Camisa</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ $empleado->informacionLaboralActual->talla_camisa ?? 'No especificada' }}
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Talla de Pantalón</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ $empleado->informacionLaboralActual->talla_pantalon ?? 'No especificada' }}
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Talla de Zapatos</dt>
+                                            <dd class="mt-1 text-gray-900">
+                                                {{ $empleado->informacionLaboralActual->talla_zapatos ?? 'No especificada' }}
+                                            </dd>
+                                        </div>
+                                        @php
+                                            $informacion = $empleado->informacionLaboral->first();
+                                        @endphp
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Relación Laboral</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $informacion?->relacion_laboral ?? 'No especificada' }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-800">Relación Sindical</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $informacion?->relacion_sindical ? 'Sí' : 'No' }}</dd>
+                                        </div>
+                                    </dl>
                                 </div>
                             </div>
-                        <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
-                        <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-                            @php
-                                $nombresArchivos = [
-                                    'adjunto1' => 'Ver contrato',
-                                    'adjunto2' => 'Ver cédula',
-                                    'adjunto3' => 'Ver hoja de vida',
-                                    'adjunto4' => 'Ver certificado',
-                                ];
-                            @endphp
+                            <!-- Archivos Adjuntos -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
+                                <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                                    @php
+                                        $nombresArchivos = [
+                                            'adjunto1' => 'Ver contrato',
+                                            'adjunto2' => 'Ver cédula',
+                                            'adjunto3' => 'Ver hoja de vida',
+                                            'adjunto4' => 'Ver certificado',
+                                        ];
+                                    @endphp
 
-                            @forelse($empleado->archivosAdjuntos as $archivo)
-                                @php
-                                    // Extraer el nombre del campo (adjunto1, adjunto2...) desde la ruta
-                                    $campo = basename(dirname($archivo->ruta));
-                                    $nombreMostrar = $nombresArchivos[$campo] ?? 'Ver archivo';
-                                @endphp
+                                    @forelse($empleado->archivosAdjuntos as $archivo)
+                                        @php
+                                            $campo = basename(dirname($archivo->ruta));
+                                            $nombreMostrar = $nombresArchivos[$campo] ?? 'Ver archivo';
+                                        @endphp
 
-                                <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-6 py-6 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[140px] w-full">
-                                    <div class="flex flex-col items-center text-center">
-                                        <!-- Ícono -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-                                        </svg>
-                                        <!-- Nombre del archivo -->
-                                        <span class="font-semibold text-gray-800 text-sm text-center break-words">
-                                            {{ $nombreMostrar }}
-                                        </span>
-                                    </div>
-                                    <!-- Botón para ver el archivo -->
-                                    <a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium rounded text-blue-600 hover:bg-blue-50 transition">
-                                        Abrir archivo
-                                    </a>
+                                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-6 py-6 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[140px] w-full">
+                                            <div class="flex flex-col items-center text-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <span class="font-semibold text-gray-800 text-sm text-center break-words">
+                                                    {{ $nombreMostrar }}
+                                                </span>
+                                            </div>
+                                            <a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium rounded text-blue-600 hover:bg-blue-50 transition">
+                                                Abrir archivo
+                                            </a>
+                                        </div>
+                                    @empty
+                                        <p class="text-gray-500 text-sm italic">No hay archivos adjuntos disponibles.</p>
+                                    @endforelse
                                 </div>
-                            @empty
-                                <p class="text-gray-500 text-sm italic">No hay archivos adjuntos disponibles.</p>
-                            @endforelse
+                            </div>
                         </div>
                     </div>
-                    <!-- Tab: Datos Adicionales -->
+
+                    <!-- Tab: Beneficiarios -->
                     <div x-show="activeTab === 'beneficiario'" class="space-y-6">
                         <section aria-label="Beneficiarios del empleado" class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
                             <div class="bg-gradient-to-r from-pink-500 to-rose-500 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-white">Beneficiarios</h3>
                             </div>
@@ -609,7 +618,7 @@
                                             <div class="bg-pink-50 rounded-lg p-4 border border-pink-200 relative">
                                                 <h4 class="text-md font-semibold text-gray-900 flex items-center gap-2 mb-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                                                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                                                     </svg>
                                                     {{ $beneficiario->nombre_beneficiario }}
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 ml-auto">
@@ -674,109 +683,100 @@
                         </section>
                         <hr class="my-6 border-gray-200">
                     </div>
-                    <!-- Tab: Datos Extras -->
+
+                    <!-- Tab: Datos Adicionales -->
                     <div x-show="activeTab === 'extra'" class="space-y-6">
-                            <section aria-label="Información adicional del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
-                                <header class="bg-gradient-to-r from-indigo-600 to-blue-700 p-4 flex items-center gap-3 rounded-t-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="text-white">
-                                        <path d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm0 0v8m0 0H4m8 0h8m0 0v-8m0 0c0-1.105-.895-2-2-2s-2 .895-2 2"/>
+                        <section aria-label="Información adicional del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                            <header class="bg-gradient-to-r from-indigo-600 to-blue-700 p-4 flex items-center gap-3 rounded-t-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                                    <path d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm0 0v8m0 0H4m8 0h8m0 0v-8m0 0c0-1.105-.895-2-2-2s-2 .895-2 2" />
+                                </svg>
+                                <h3 class="text-lg font-medium text-white">Información Adicional</h3>
+                            </header>
+                            <div class="p-6">
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Etnia</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->etnia->nombre ?? 'No especificado' }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Estado Civil</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->estado_civil ?? 'No especificado' }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">¿Es padre o madre?</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->padre_o_madre ? 'Sí' : 'No' }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Tipo de Vivienda</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vivienda }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Estrato</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->estrato }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">¿Vehículo propio?</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->vehiculo_propio ? 'Sí' : 'No' }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Tipo de Vehículo</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vehiculo }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Medio de Movilidad</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->movilidad }}</dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-800">Institución Educativa</dt>
+                                        <dd class="mt-1 text-gray-900">{{ $empleado->institucion_educativa }}</dd>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <dt class="font-medium text-gray-800">Idiomas</dt>
+                                        <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->idiomas }}</dd>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <dt class="font-medium text-gray-800">Intereses Personales</dt>
+                                        <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->intereses_personales }}</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </section>
+
+                        <div class="grid grid-cols-1">
+                            <section aria-label="Seguridad Social" class="bg-white rounded-lg shadow-sm border border-rose-200">
+                                <header class="bg-gradient-to-r from-pink-600 to-rose-600 p-4 flex items-center gap-3 rounded-t-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path d="M9 21V8a4 4 0 0 1 8 0v13" />
+                                        <path d="M5 21V12a4 4 0 0 1 8 0v9" />
                                     </svg>
-                                    <h3 class="text-lg font-medium text-white">Información Adicional</h3>
+                                    <h3 class="text-lg font-medium text-white">Afiliaciones a Seguridad Social</h3>
                                 </header>
                                 <div class="p-6">
-                                    <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 relative">
                                         <div>
-                                            <dt class="font-medium text-gray-800">Etnia</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->etnia->nombre ?? 'No especificado' }}</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Estado Civil</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->estado_civil ?? 'No especificado' }}</dd>
+                                            <dt class="font-medium text-gray-800">EPS</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->eps->nombre ?? 'No especificada' }}</dd>
                                         </div>
                                         <div>
-                                            <dt class="font-medium text-gray-800">¿Es padre o madre?</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->padre_o_madre ? 'Sí' : 'No' }}</dd>
+                                            <dt class="font-medium text-gray-800">ARL</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->arl->nombre ?? 'No especificada' }}</dd>
                                         </div>
-
                                         <div>
-                                            <dt class="font-medium text-gray-800">Tipo de Vivienda</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vivienda }}</dd>
+                                            <dt class="font-medium text-gray-800">AFP</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->afp->nombre ?? 'No especificada' }}</dd>
                                         </div>
-
                                         <div>
-                                            <dt class="font-medium text-gray-800">Estrato</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->estrato }}</dd>
+                                            <dt class="font-medium text-gray-800">AFC</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->afc->nombre ?? 'No especificada' }}</dd>
                                         </div>
-
                                         <div>
-                                            <dt class="font-medium text-gray-800">¿Vehículo propio?</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->vehiculo_propio ? 'Sí' : 'No' }}</dd>
-                                        </div>
-
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Tipo de Vehículo</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vehiculo }}</dd>
-                                        </div>
-
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Medio de Movilidad</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->movilidad }}</dd>
-                                        </div>
-
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Institución Educativa</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->institucion_educativa }}</dd>
-                                        </div>
-
-                                        <div class="sm:col-span-2">
-                                            <dt class="font-medium text-gray-800">Idiomas</dt>
-                                            <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->idiomas }}</dd>
-                                        </div>
-
-                                        <div class="sm:col-span-2">
-                                            <dt class="font-medium text-gray-800">Intereses Personales</dt>
-                                            <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->intereses_personales }}</dd>
+                                            <dt class="font-medium text-gray-800">Caja de Compensación</dt>
+                                            <dd class="mt-1 text-gray-900">{{ $empleado->ccf->nombre ?? 'No especificada' }}</dd>
                                         </div>
                                     </dl>
                                 </div>
                             </section>
-                            <div class="grid grid-cols-1">
-                                <section aria-label="Seguridad Social" class="bg-white rounded-lg shadow-sm border border-rose-200">
-                                    <header class="bg-gradient-to-r from-pink-600 to-rose-600 p-4 flex items-center gap-3 rounded-t-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path d="M9 21V8a4 4 0 0 1 8 0v13" />
-                                            <path d="M5 21V12a4 4 0 0 1 8 0v9" />
-                                        </svg>
-                                        <h3 class="text-lg font-medium text-white">Afiliaciones a Seguridad Social</h3>
-                                    </header>
-                                    <div class="p-6">
-                                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 relative">
-                                            <div>
-                                                <dt class="font-medium text-gray-800">EPS</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->eps->nombre ?? 'No especificada' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">ARL</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->arl->nombre ?? 'No especificada' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">AFP</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->afp->nombre ?? 'No especificada' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">AFC</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->afc->nombre ?? 'No especificada' }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="font-medium text-gray-800">Caja de Compensación</dt>
-                                                <dd class="mt-1 text-gray-900">{{ $empleado->ccf->nombre ?? 'No especificada' }}</dd>
-                                            </div>
-                                        </dl>
-                                    </div>
-                                </section>
-                            </div>
                         </div>
                     </div>
                 </div>

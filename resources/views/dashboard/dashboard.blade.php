@@ -104,39 +104,5 @@
                 @endforelse
             </div>
         </div>
-        <div class="bg-white rounded-lg shadow-sm p-5">
-            <h2 class="text-lg font-medium text-gray-900 mb-6">Descargar Documentos</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Botón: Descargar Reporte PDF -->
-                <a href="{{ route('empleados.report.pdf') }}" target="_blank" class="flex w-full items-center bg-blue-50 hover:bg-blue-100 transition-colors rounded-lg shadow p-6">
-                    <div class="flex-shrink-0 h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center">
-                        <!-- Ícono PDF -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-blue-600" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10 9 9 9 8 9"/>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-base font-semibold text-gray-900">Descargar Reporte</h3>
-                        <p class="text-sm text-gray-500">Reporte mensual en PDF</p>
-                    </div>
-                </a>
-                <a href="{{ route('reporte.centros-costos') }}" target="_blank" class="flex w-full items-center bg-green-50 hover:bg-green-100 transition-colors rounded-lg shadow p-6">
-                    <div class="flex-shrink-0 h-14 w-14 rounded-full bg-green-100 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#38c172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-base font-semibold text-gray-900">Centros de Costos</h3>
-                        <p class="text-sm text-gray-500">Exportar estructura organizacional</p>
-                    </div>
-                </a>
-            </div>
-        </div>
     </div>
 @endsection

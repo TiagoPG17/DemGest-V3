@@ -648,7 +648,7 @@
                                     <label for="talla_zapatos" class="block text-sm font-medium text-gray-700">Talla de zapatos</label>
                                     <input type="text" name="talla_zapatos" id="talla_zapatos" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" placeholder="Ej. 38, 40" value="{{ old('talla_zapatos', $informacionLaboral->talla_zapatos ?? '') }}">
                                 </div>
-
+                                <!-- Tipo de vinculacion -->
                                 <div>
                                     <label for="tipo_vinculacion" class="block text-sm font-medium text-gray-700">Tipo de vinculacion</label> 
                                     <select name="tipo_vinculacion" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
@@ -657,6 +657,7 @@
                                         <option value="Indirecto" {{ old('tipo_vinculacion', $informacionLaboral->tipo_vinculacion ?? '') == 'Indirecto' ? 'selected' : '' }}>Indirecto</option>
                                     </select>
                                 </div>
+                                <!-- Tiene relacion sindical -->
                                 <div>
                                     <label for="relacion_sindical" class="block text-sm font-medium text-gray-700">¿Tiene relación sindical?</label>
                                     <select name="relacion_sindical" id="relacion_sindical" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
@@ -694,43 +695,37 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Datos Adicionales -->
+                         <!-- Beneficiarios -->
                         <div x-show="activeTab === 'adicional'" >
-                            <!-- Beneficiarios -->
                             <div x-data="{ beneficiarios: [] }" x-init="beneficiarios = {{ json_encode(old('beneficiarios', [])) }}; " class="p-6 border-t border-gray-200">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-lg font-medium text-gray-900">Beneficiarios</h3>
                                     <button type="button" @click="beneficiarios.push({ nombre_beneficiario: '', parentesco: '', fecha_nacimiento: '', tipo_documento_id: '', numero_documento: '', nivel_educativo: '' })"
                                         class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                         </svg>
                                         Agregar
                                     </button>
                                 </div>
                                 <div class="space-y-4">
                                     <template x-for="(item, index) in beneficiarios" :key="index">
-                                        <div class="bg-gray-50 rounded-lg p-4 relative">
+                                        <div class="bg-gray-50 rounded-lg p-4 relative" x-data="{ tipoUnion: '' }">
                                             <button type="button" @click="beneficiarios.splice(index, 1)" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd" />
+                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                 </svg>
                                             </button>
+
+                                            <!-- Campos comunes -->
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                     <label :for="'beneficiarios['+index+'][nombre_beneficiario]'" class="block text-sm font-medium text-gray-700">Nombre Completo <span class="text-red-500">*</span></label>
-                                                    <input type="text" :name="'beneficiarios['+index+'][nombre_beneficiario]'" :id="'beneficiarios['+index+'][nombre_beneficiario]'" x-model="item.nombre_beneficiario"
-                                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                                    <input type="text" :name="'beneficiarios['+index+'][nombre_beneficiario]'" x-model="item.nombre_beneficiario" class="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm">
                                                 </div>
-
                                                 <div>
                                                     <label :for="'beneficiarios['+index+'][parentesco]'" class="block text-sm font-medium text-gray-700">Parentesco <span class="text-red-500">*</span></label>
-                                                    <select :name="'beneficiarios['+index+'][parentesco]'" :id="'beneficiarios['+index+'][parentesco]'" x-model="item.parentesco"
-                                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                                    <select :name="'beneficiarios['+index+'][parentesco]'" x-model="item.parentesco" class="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm">
                                                         <option value="">Seleccione parentesco</option>
                                                         <option value="Cónyuge">Cónyuge</option>
                                                         <option value="Hijo/a">Hijo/a</option>
@@ -740,81 +735,116 @@
                                                         <option value="Otro">Otro</option>
                                                     </select>
                                                 </div>
+                                                <!-- Más campos comunes aquí si necesitas -->
+                                            </div>
 
+                                            <!-- Hijo/a -->
+                                            <div x-show="item.parentesco === 'Hijo/a'" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                                 <div>
-                                                    <label :for="'beneficiarios['+index+'][fecha_nacimiento]'" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-                                                    <input type="date" :name="'beneficiarios['+index+'][fecha_nacimiento]'" :id="'beneficiarios['+index+'][fecha_nacimiento]'" x-model="item.fecha_nacimiento"
-                                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
+                                                    <label class="block text-sm font-medium text-gray-700">Registro civil del hijo *</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][registro_hijo]'" class="w-full rounded border border-gray-300">
                                                 </div>
-
                                                 <div>
-                                                    <label :for="'beneficiarios['+index+'][tipo_documento_id]'" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
-                                                    <select :name="'beneficiarios['+index+'][tipo_documento_id]'" :id="'beneficiarios['+index+'][tipo_documento_id]'" x-model="item.tipo_documento_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                        <option value="">Seleccione tipo</option>
-                                                        @foreach($tiposDocumento as $tipo)
-                                                            <option value="{{ $tipo->id_tipo_documento }}">{{ $tipo->nombre_tipo_documento }}</option>
-                                                        @endforeach
+                                                    <label class="block text-sm font-medium text-gray-700">Tarjeta de identidad / Cédula</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][cedula_hijo]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Certificado de estudio</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][certificado_estudio_hijo]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Certificado EPS</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][eps_hijo]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                            </div>
+
+                                            <!-- Padre / Madre -->
+                                            <div x-show="item.parentesco === 'Padre' || item.parentesco === 'Madre'" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Registro civil del empleado</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][registro_empleado]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Cédula del padre/madre</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][cedula_padre_madre]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Certificado EPS</label>
+                                                    <input type="file" :name="'beneficiarios['+index+'][eps_padre_madre]'" class="w-full rounded border border-gray-300">
+                                                </div>
+                                            </div>
+
+                                            <!-- Cónyuge -->
+                                            <div x-show="item.parentesco === 'Cónyuge'" class="space-y-4 mt-4">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Tipo de unión</label>
+                                                    <select x-model="tipoUnion" class="w-full rounded border border-gray-300">
+                                                        <option value="">Seleccione</option>
+                                                        <option value="casado">Casados</option>
+                                                        <option value="union">Unión libre</option>
                                                     </select>
                                                 </div>
-
-                                                <div>
-                                                    <label :for="'beneficiarios['+index+'][numero_documento]'" class="block text-sm font-medium text-gray-700">Número de Documento</label>
-                                                    <input type="text" :name="'beneficiarios['+index+'][numero_documento]'" :id="'beneficiarios['+index+'][numero_documento]'" x-model="item.numero_documento" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                </div>
-                                                <div>
-                                                    <label :for="'beneficiarios['+index+'][nivel_educativo]'" class="block text-sm font-medium text-gray-700">Nivel Educativo</label>
-                                                    <select :name="'beneficiarios['+index+'][nivel_educativo]'" :id="'beneficiarios['+index+'][nivel_educativo]'" x-model="item.nivel_educativo" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                        <option value="">Seleccione nivel</option>
-                                                        <option value="Ninguno">Ninguno</option>
-                                                        <option value="Preescolar">Preescolar</option>
-                                                        <option value="Primaria">Primaria</option>
-                                                        <option value="Secundaria">Secundaria</option>
-                                                        <option value="Técnico">Técnico</option>
-                                                        <option value="Profesional">Profesional</option>
-                                                    </select>
-                                                </div>
-                                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                <div x-show="tipoUnion === 'casado'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700">¿Reside con el trabajador?</label>
-                                                        <select :name="'beneficiarios[' + index + '][reside_con_empleado]'" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="1">Sí</option>
-                                                            <option value="0">No</option>
-                                                        </select>
+                                                        <label class="block text-sm font-medium text-gray-700">Registro civil de matrimonio *</label>
+                                                        <input type="file" :name="'beneficiarios['+index+'][registro_matrimonio]'" class="w-full rounded border border-gray-300">
                                                     </div>
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700">¿Depende económicamente?</label>
-                                                        <select :name="'beneficiarios[' + index + '][depende_economicamente]'" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="1">Sí</option>
-                                                            <option value="0">No</option>
-                                                        </select>
+                                                        <label class="block text-sm font-medium text-gray-700">Cédula del cónyuge *</label>
+                                                        <input type="file" :name="'beneficiarios['+index+'][cedula_conyuge]'" class="w-full rounded border border-gray-300">
+                                                    </div>
+                                                </div>
+                                                <div x-show="tipoUnion === 'union'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">Declaración extra-juicio *</label>
+                                                        <input type="file" :name="'beneficiarios['+index+'][declaracion_union]'" class="w-full rounded border border-gray-300">
                                                     </div>
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700">Contacto de emergencia</label>
-                                                        <input :name="'beneficiarios[' + index + '][contacto_emergencia]'" type="text" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
+                                                        <label class="block text-sm font-medium text-gray-700">Cédula del compañero *</label>
+                                                        <input type="file" :name="'beneficiarios['+index+'][cedula_companero]'" class="w-full rounded border border-gray-300">
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>      
+                                        </div>
                                     </template>
+
                                     <div x-show="beneficiarios.length === 0" class="text-center py-4 text-sm text-gray-500">
                                         No se han agregado beneficiarios
                                     </div>
                                 </div>
-                                <div>
-                                    <label for="adjunto1" class="block font-medium text-sm text-gray-700">Adjunto 1</label>
-                                    <input type="file" name="adjunto1" id="adjunto1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="adjunto2" class="block font-medium text-sm text-gray-700">Adjunto 2</label>
-                                    <input type="file" name="adjunto2" id="adjunto2" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="adjunto3" class="block font-medium text-sm text-gray-700">Adjunto 3</label>
-                                    <input type="file" name="adjunto3" id="adjunto3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="adjunto4" class="block font-medium text-sm text-gray-700">Adjunto 4</label>
-                                    <input type="file" name="adjunto4" id="adjunto4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+
+                                <!-- DOCUMENTACIÓN GENERAL -->
+                                <div class="bg-white border border-gray-200 rounded-xl shadow p-6 mb-6 mt-6">
+                                    <h2 class="text-lg font-semibold text-gray-800 mb-4">📎 Documentación General del Empleado</h2>
+                                    
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+                                        @php
+                                            $documentos = [
+                                                'cedula_ampliada' => 'Cédula ampliada al 150% *',
+                                                'libreta_militar' => 'Libreta Militar',
+                                                'certificados_estudio' => 'Diplomas / Certificados de estudio *',
+                                                'tarjeta_profesional' => 'Tarjeta Profesional',
+                                                'certificado_ultimo_empleo' => 'Certificación del último empleo *',
+                                                'certificado_eps' => 'Certificado afiliación EPS *',
+                                                'certificado_afp' => 'Certificado afiliación AFP *',
+                                                'certificado_cesantias' => 'Certificado afiliación Cesantías *',
+                                                'certificado_alturas' => 'Certificado curso alturas',
+                                                'foto_digital' => 'Foto digital 3x4 (JPG) *',
+                                                'certificacion_bancaria' => 'Certificación Bancaria (Bancolombia) *',
+                                            ];
+                                        @endphp
+                                        @foreach ($documentos as $campo => $etiqueta)
+                                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                                                <div class="flex items-center gap-2 mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M7 8h10M7 12h10m-5 4h5M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z" />
+                                                    </svg>
+                                                    <span class="text-sm font-semibold text-gray-700">{{ $etiqueta }}</span>
+                                                </div>
+                                                <input type="file" name="{{ $campo }}" id="{{ $campo }}" class="block w-full text-sm text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" />
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -823,7 +853,6 @@
             </div>
         </form>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             fetch("{{ url('/api/barrios') }}")

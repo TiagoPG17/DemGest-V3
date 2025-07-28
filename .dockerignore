@@ -1,0 +1,65 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# PHP
+/vendor/
+.phpunit.result.cache
+.phpunit.cache
+.php-cs-fixer.cache
+.php-cs-fixer.dist.php
+.phpcs.xml
+
+# Laravel
+bootstrap/cache/*.php
+storage/*.key
+storage/debugbar/
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+
+# Testing
+/coverage
+/tests/
+.phpunit.cache/
+.phpunit.result.cache
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+
+# Environment files
+.env
+.env.*.local
+!.env.example
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose*.yml
+docker-compose*.yaml
+
+# Version control
+.git/
+.gitattributes
+.gitignore
+.gitkeep
+
+# Documentation
+*.md
+*.txt
+
+# Build files
+/public/build/
+/public/hot/
+
+# Local development
+Homestead.json
+Homestead.yaml
+Homestead.yaml.bak
+Vagrantfile
