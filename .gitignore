@@ -9,3 +9,5 @@ storage/*.key
 public/storage
 storage/app/public
 demgest-app.tar
+/demgest-app.tar
+*.tar
