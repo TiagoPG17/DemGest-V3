@@ -49,6 +49,7 @@ docker-compose*.yaml
 .gitattributes
 .gitignore
 .gitkeep
+ demgest-app.tar
 
 # Documentation
 *.md
