@@ -98,7 +98,7 @@ class StoreEmpleadoRequest extends FormRequest
                 'in:Física,Visual,Auditiva,Intelectual,Psicosocial,Múltiple',
             ],
             'discapacidades.*.enfermedad_base' => [
-                'required_with:discapacidades',
+                'nullable',
                 'string',
                 'max:255',
             ],
@@ -144,7 +144,6 @@ class StoreEmpleadoRequest extends FormRequest
             'beneficiarios.*.fecha_nacimiento' => 'nullable|date',
             'beneficiarios.*.tipo_documento_id' => 'nullable|exists:tipo_documento,id_tipo_documento',
             'beneficiarios.*.numero_documento' => 'nullable|string|max:50',
-            'beneficiarios.*.nivel_educativo' => 'nullable|in:Ninguno,Preescolar,Primaria,Secundaria,Técnico,Profesional',
             'idiomas' => 'nullable|string|max:500',
             'tipo_vivienda' => 'nullable|string|max:100',
             'estrato' => 'nullable|integer|min:1|max:6',
@@ -257,7 +256,6 @@ class StoreEmpleadoRequest extends FormRequest
             'discapacidades.*.fecha_diagnostico_discapacidad.after_or_equal' => 'La fecha de diagnóstico de discapacidad no puede ser anterior a 80 años.',
             'discapacidades.*.enfermedad_base.string' => 'La enfermedad base debe ser una cadena de texto.',
             'discapacidades.*.enfermedad_base.max' => 'La enfermedad base no puede exceder los 255 caracteres.',
-            'discapacidades.*.enfermedad_base.required_with' => 'La enfermedad base es obligatoria cuando se proporcionan discapacidades.',
 
             'discapacidades.*.certificado_discapacidad.nullable' => 'El certificado de discapacidad puede estar vacío.',
             'patologias.nullable' => 'Las patologías pueden estar vacías.',

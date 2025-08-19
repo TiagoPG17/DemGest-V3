@@ -1,0 +1,621 @@
+2025-07-30 20:41:56,658 INFO Set uid to user 0 succeeded
+2025-07-30 20:41:56,662 INFO supervisord started with pid 1
+2025-07-30 20:41:57,669 INFO spawned: 'nginx' with pid 7
+2025-07-30 20:41:57,680 INFO spawned: 'php-fpm' with pid 8
+2025-07-30 20:41:57,727 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:41:58,911 INFO spawned: 'nginx' with pid 11
+2025-07-30 20:41:58,913 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-30 20:41:58,946 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:42:00,956 INFO spawned: 'nginx' with pid 12
+2025-07-30 20:42:00,993 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:42:04,004 INFO spawned: 'nginx' with pid 13
+2025-07-30 20:42:04,043 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:42:05,046 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-30 20:48:41,623 WARN received SIGQUIT indicating exit request
+2025-07-30 20:48:41,624 INFO waiting for php-fpm to die
+2025-07-30 20:48:41,648 INFO stopped: php-fpm (exit status 0)
+2025-07-30 20:51:50,009 INFO Set uid to user 0 succeeded
+2025-07-30 20:51:50,014 INFO supervisord started with pid 1
+2025-07-30 20:51:51,022 INFO spawned: 'nginx' with pid 6
+2025-07-30 20:51:51,031 INFO spawned: 'php-fpm' with pid 7
+2025-07-30 20:51:51,083 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:51:52,288 INFO spawned: 'nginx' with pid 10
+2025-07-30 20:51:52,291 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-30 20:51:52,325 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:51:54,335 INFO spawned: 'nginx' with pid 11
+2025-07-30 20:51:54,375 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:51:57,386 INFO spawned: 'nginx' with pid 12
+2025-07-30 20:51:57,424 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:51:58,426 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-30 20:56:15,800 WARN received SIGQUIT indicating exit request
+2025-07-30 20:56:15,801 INFO waiting for php-fpm to die
+2025-07-30 20:56:15,826 INFO stopped: php-fpm (exit status 0)
+2025-07-30 20:56:16,766 INFO Set uid to user 0 succeeded
+2025-07-30 20:56:16,768 INFO supervisord started with pid 1
+2025-07-30 20:56:17,776 INFO spawned: 'nginx' with pid 7
+2025-07-30 20:56:17,785 INFO spawned: 'php-fpm' with pid 8
+2025-07-30 20:56:17,823 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:56:19,052 INFO spawned: 'nginx' with pid 11
+2025-07-30 20:56:19,054 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-30 20:56:19,092 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:56:21,102 INFO spawned: 'nginx' with pid 12
+2025-07-30 20:56:21,142 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:56:24,154 INFO spawned: 'nginx' with pid 13
+2025-07-30 20:56:24,192 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 20:56:25,195 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-30 21:00:00,501 WARN received SIGQUIT indicating exit request
+2025-07-30 21:00:00,501 INFO waiting for php-fpm to die
+2025-07-30 21:00:00,507 INFO stopped: php-fpm (exit status 0)
+2025-07-30 21:00:57,587 INFO Set uid to user 0 succeeded
+2025-07-30 21:00:57,589 INFO supervisord started with pid 1
+2025-07-30 21:00:58,596 INFO spawned: 'nginx' with pid 7
+2025-07-30 21:00:58,606 INFO spawned: 'php-fpm' with pid 8
+2025-07-30 21:00:58,654 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 21:00:59,829 INFO spawned: 'nginx' with pid 11
+2025-07-30 21:00:59,832 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-30 21:00:59,865 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 21:01:01,875 INFO spawned: 'nginx' with pid 12
+2025-07-30 21:01:01,914 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 21:01:04,925 INFO spawned: 'nginx' with pid 13
+2025-07-30 21:01:04,963 WARN exited: nginx (exit status 1; not expected)
+2025-07-30 21:01:05,966 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-30 21:22:10,820 INFO reaped unknown pid 190 (exit status 0)
+2025-07-31 14:33:03,183 WARN received SIGQUIT indicating exit request
+2025-07-31 14:33:03,185 INFO waiting for php-fpm to die
+2025-07-31 14:33:03,219 INFO stopped: php-fpm (exit status 0)
+2025-07-31 14:33:24,916 INFO Set uid to user 0 succeeded
+2025-07-31 14:33:24,919 INFO supervisord started with pid 1
+2025-07-31 14:33:25,929 INFO spawned: 'nginx' with pid 7
+2025-07-31 14:33:25,948 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 14:33:25,984 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:33:27,038 INFO spawned: 'nginx' with pid 11
+2025-07-31 14:33:27,040 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:33:27,075 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:33:29,085 INFO spawned: 'nginx' with pid 12
+2025-07-31 14:33:29,123 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:33:32,133 INFO spawned: 'nginx' with pid 13
+2025-07-31 14:33:32,170 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:33:33,173 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 14:35:23,330 WARN received SIGQUIT indicating exit request
+2025-07-31 14:35:23,331 INFO waiting for php-fpm to die
+2025-07-31 14:35:23,355 INFO stopped: php-fpm (exit status 0)
+2025-07-31 14:35:26,865 INFO Set uid to user 0 succeeded
+2025-07-31 14:35:26,868 INFO supervisord started with pid 1
+2025-07-31 14:35:27,870 INFO spawned: 'nginx' with pid 6
+2025-07-31 14:35:27,872 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 14:35:27,895 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:28,937 INFO spawned: 'nginx' with pid 10
+2025-07-31 14:35:28,939 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:35:29,949 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:35:29,949 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:30,953 INFO spawned: 'nginx' with pid 11
+2025-07-31 14:35:30,967 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:31,975 INFO spawned: 'nginx' with pid 12
+2025-07-31 14:35:32,014 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:34,025 INFO spawned: 'nginx' with pid 13
+2025-07-31 14:35:34,072 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:37,081 INFO spawned: 'nginx' with pid 14
+2025-07-31 14:35:37,150 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:35:38,154 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 14:36:01,186 WARN received SIGQUIT indicating exit request
+2025-07-31 14:36:01,187 INFO waiting for php-fpm to die
+2025-07-31 14:36:01,210 INFO stopped: php-fpm (exit status 0)
+2025-07-31 14:36:25,507 INFO Set uid to user 0 succeeded
+2025-07-31 14:36:25,510 INFO supervisord started with pid 1
+2025-07-31 14:36:26,517 INFO spawned: 'nginx' with pid 7
+2025-07-31 14:36:26,538 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 14:36:26,606 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:36:27,653 INFO spawned: 'nginx' with pid 11
+2025-07-31 14:36:27,654 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:36:27,675 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:36:29,684 INFO spawned: 'nginx' with pid 12
+2025-07-31 14:36:29,726 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:36:32,738 INFO spawned: 'nginx' with pid 13
+2025-07-31 14:36:32,773 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:36:32,775 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 14:37:17,835 WARN received SIGQUIT indicating exit request
+2025-07-31 14:37:17,837 INFO waiting for php-fpm to die
+2025-07-31 14:37:17,862 INFO stopped: php-fpm (exit status 0)
+2025-07-31 14:37:23,688 INFO Set uid to user 0 succeeded
+2025-07-31 14:37:23,691 INFO supervisord started with pid 1
+2025-07-31 14:37:24,694 INFO spawned: 'nginx' with pid 6
+2025-07-31 14:37:24,699 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 14:37:24,709 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:37:25,774 INFO spawned: 'nginx' with pid 10
+2025-07-31 14:37:25,775 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:37:25,796 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:37:27,804 INFO spawned: 'nginx' with pid 11
+2025-07-31 14:37:27,843 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:37:30,856 INFO spawned: 'nginx' with pid 12
+2025-07-31 14:37:30,880 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:37:31,882 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 14:38:14,942 WARN received SIGQUIT indicating exit request
+2025-07-31 14:38:14,943 INFO waiting for php-fpm to die
+2025-07-31 14:38:14,968 INFO stopped: php-fpm (exit status 0)
+2025-07-31 14:48:37,697 INFO Set uid to user 0 succeeded
+2025-07-31 14:48:37,699 INFO supervisord started with pid 1
+2025-07-31 14:48:38,702 INFO spawned: 'nginx' with pid 7
+2025-07-31 14:48:38,705 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 14:48:38,726 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:48:39,777 INFO spawned: 'nginx' with pid 11
+2025-07-31 14:48:39,781 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 14:48:39,798 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:48:41,804 INFO spawned: 'nginx' with pid 12
+2025-07-31 14:48:41,818 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:48:44,829 INFO spawned: 'nginx' with pid 13
+2025-07-31 14:48:44,869 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 14:48:45,872 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 14:53:26,280 WARN received SIGQUIT indicating exit request
+2025-07-31 14:53:26,281 INFO waiting for php-fpm to die
+2025-07-31 14:53:26,288 INFO stopped: php-fpm (exit status 0)
+2025-07-31 15:00:18,585 INFO Set uid to user 0 succeeded
+2025-07-31 15:00:18,588 INFO supervisord started with pid 1
+2025-07-31 15:00:19,596 INFO spawned: 'nginx' with pid 7
+2025-07-31 15:00:19,608 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 15:00:20,040 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:21,049 INFO spawned: 'nginx' with pid 11
+2025-07-31 15:00:21,053 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 15:00:21,090 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:23,099 INFO spawned: 'nginx' with pid 12
+2025-07-31 15:00:23,136 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:26,142 INFO spawned: 'nginx' with pid 13
+2025-07-31 15:00:27,154 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 15:00:27,155 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:28,164 INFO spawned: 'nginx' with pid 14
+2025-07-31 15:00:28,203 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:29,211 INFO spawned: 'nginx' with pid 15
+2025-07-31 15:00:29,250 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:31,260 INFO spawned: 'nginx' with pid 16
+2025-07-31 15:00:31,301 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:34,313 INFO spawned: 'nginx' with pid 17
+2025-07-31 15:00:34,355 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:00:35,358 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 15:07:47,980 WARN received SIGQUIT indicating exit request
+2025-07-31 15:07:47,980 INFO waiting for php-fpm to die
+2025-07-31 15:07:47,987 INFO stopped: php-fpm (exit status 0)
+2025-07-31 15:17:15,522 INFO Set uid to user 0 succeeded
+2025-07-31 15:17:15,524 INFO supervisord started with pid 1
+2025-07-31 15:17:16,527 INFO spawned: 'nginx' with pid 7
+2025-07-31 15:17:16,530 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 15:17:16,560 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:17:17,603 INFO spawned: 'nginx' with pid 11
+2025-07-31 15:17:17,605 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 15:17:17,628 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:17:19,638 INFO spawned: 'nginx' with pid 12
+2025-07-31 15:17:19,650 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:17:22,657 INFO spawned: 'nginx' with pid 13
+2025-07-31 15:17:22,673 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:17:22,673 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 15:23:32,205 WARN received SIGQUIT indicating exit request
+2025-07-31 15:23:32,206 INFO waiting for php-fpm to die
+2025-07-31 15:23:32,231 INFO stopped: php-fpm (exit status 0)
+2025-07-31 15:28:55,518 INFO Set uid to user 0 succeeded
+2025-07-31 15:28:55,520 INFO supervisord started with pid 1
+2025-07-31 15:28:56,529 INFO spawned: 'nginx' with pid 8
+2025-07-31 15:28:56,543 INFO spawned: 'php-fpm' with pid 9
+2025-07-31 15:28:57,140 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:28:58,148 INFO spawned: 'nginx' with pid 12
+2025-07-31 15:28:58,151 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 15:28:58,187 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:29:00,198 INFO spawned: 'nginx' with pid 13
+2025-07-31 15:29:00,239 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:29:03,250 INFO spawned: 'nginx' with pid 14
+2025-07-31 15:29:03,290 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 15:29:04,292 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 15:35:36,854 INFO reaped unknown pid 126 (exit status 0)
+2025-07-31 16:43:55,754 WARN received SIGQUIT indicating exit request
+2025-07-31 16:43:55,756 INFO waiting for php-fpm to die
+2025-07-31 16:43:55,784 INFO stopped: php-fpm (exit status 0)
+2025-07-31 16:44:07,011 INFO Set uid to user 0 succeeded
+2025-07-31 16:44:07,014 INFO supervisord started with pid 1
+2025-07-31 16:44:08,021 INFO spawned: 'nginx' with pid 13
+2025-07-31 16:44:08,032 INFO spawned: 'php-fpm' with pid 14
+2025-07-31 16:44:08,188 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 16:44:09,197 INFO spawned: 'nginx' with pid 17
+2025-07-31 16:44:09,201 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 16:44:09,238 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 16:44:11,248 INFO spawned: 'nginx' with pid 18
+2025-07-31 16:44:11,286 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 16:44:14,298 INFO spawned: 'nginx' with pid 19
+2025-07-31 16:44:14,340 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 16:44:15,343 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 16:46:08,502 INFO reaped unknown pid 124 (exit status 0)
+2025-07-31 18:03:18,111 WARN received SIGQUIT indicating exit request
+2025-07-31 18:03:18,112 INFO waiting for php-fpm to die
+2025-07-31 18:03:18,144 INFO stopped: php-fpm (exit status 0)
+2025-07-31 18:03:37,161 INFO Set uid to user 0 succeeded
+2025-07-31 18:03:37,165 INFO supervisord started with pid 1
+2025-07-31 18:03:38,172 INFO spawned: 'nginx' with pid 7
+2025-07-31 18:03:38,184 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 18:03:38,436 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:03:39,444 INFO spawned: 'nginx' with pid 11
+2025-07-31 18:03:39,447 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 18:03:39,479 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:03:41,489 INFO spawned: 'nginx' with pid 12
+2025-07-31 18:03:41,526 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:03:44,537 INFO spawned: 'nginx' with pid 13
+2025-07-31 18:03:44,579 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:03:45,582 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 18:13:42,438 WARN received SIGQUIT indicating exit request
+2025-07-31 18:13:42,440 INFO waiting for php-fpm to die
+2025-07-31 18:13:42,468 INFO stopped: php-fpm (exit status 0)
+2025-07-31 18:13:48,713 INFO Set uid to user 0 succeeded
+2025-07-31 18:13:48,716 INFO supervisord started with pid 1
+2025-07-31 18:13:49,722 INFO spawned: 'nginx' with pid 6
+2025-07-31 18:13:49,731 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 18:13:49,792 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:13:50,932 INFO spawned: 'nginx' with pid 10
+2025-07-31 18:13:50,936 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 18:13:50,970 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:13:52,980 INFO spawned: 'nginx' with pid 11
+2025-07-31 18:13:53,020 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:13:56,030 INFO spawned: 'nginx' with pid 12
+2025-07-31 18:13:56,070 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:13:57,073 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 18:16:45,315 WARN received SIGQUIT indicating exit request
+2025-07-31 18:16:45,316 INFO waiting for php-fpm to die
+2025-07-31 18:16:45,330 INFO stopped: php-fpm (exit status 0)
+2025-07-31 18:16:50,855 INFO Set uid to user 0 succeeded
+2025-07-31 18:16:50,858 INFO supervisord started with pid 1
+2025-07-31 18:16:51,889 INFO spawned: 'nginx' with pid 7
+2025-07-31 18:16:51,935 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 18:16:52,003 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:16:53,083 INFO spawned: 'nginx' with pid 11
+2025-07-31 18:16:53,087 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 18:16:53,122 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:16:55,131 INFO spawned: 'nginx' with pid 12
+2025-07-31 18:16:55,172 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:16:58,183 INFO spawned: 'nginx' with pid 13
+2025-07-31 18:16:58,221 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:16:58,222 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 18:23:32,793 WARN received SIGQUIT indicating exit request
+2025-07-31 18:23:32,794 INFO waiting for php-fpm to die
+2025-07-31 18:23:32,818 INFO stopped: php-fpm (exit status 0)
+2025-07-31 18:23:47,757 INFO Set uid to user 0 succeeded
+2025-07-31 18:23:47,760 INFO supervisord started with pid 1
+2025-07-31 18:23:48,768 INFO spawned: 'nginx' with pid 7
+2025-07-31 18:23:48,780 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 18:23:48,920 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:23:49,953 INFO spawned: 'nginx' with pid 11
+2025-07-31 18:23:49,957 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 18:23:49,989 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:23:51,999 INFO spawned: 'nginx' with pid 12
+2025-07-31 18:23:52,036 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:23:55,047 INFO spawned: 'nginx' with pid 13
+2025-07-31 18:23:55,083 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 18:23:55,084 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 19:02:52,402 WARN received SIGQUIT indicating exit request
+2025-07-31 19:02:52,403 INFO waiting for php-fpm to die
+2025-07-31 19:02:52,411 INFO stopped: php-fpm (exit status 0)
+2025-07-31 19:02:58,161 INFO Set uid to user 0 succeeded
+2025-07-31 19:02:58,163 INFO supervisord started with pid 1
+2025-07-31 19:02:59,171 INFO spawned: 'nginx' with pid 7
+2025-07-31 19:02:59,181 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 19:02:59,232 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:03:00,380 INFO spawned: 'nginx' with pid 11
+2025-07-31 19:03:00,384 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 19:03:00,418 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:03:02,427 INFO spawned: 'nginx' with pid 12
+2025-07-31 19:03:02,464 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:03:05,475 INFO spawned: 'nginx' with pid 13
+2025-07-31 19:03:05,513 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:03:05,514 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 19:08:54,009 WARN received SIGQUIT indicating exit request
+2025-07-31 19:08:54,010 INFO waiting for php-fpm to die
+2025-07-31 19:08:54,033 INFO stopped: php-fpm (exit status 0)
+2025-07-31 19:11:23,525 INFO Set uid to user 0 succeeded
+2025-07-31 19:11:23,527 INFO supervisord started with pid 1
+2025-07-31 19:11:24,549 INFO spawned: 'nginx' with pid 6
+2025-07-31 19:11:24,577 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 19:11:24,988 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:11:25,997 INFO spawned: 'nginx' with pid 10
+2025-07-31 19:11:25,999 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 19:11:26,052 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:11:28,062 INFO spawned: 'nginx' with pid 11
+2025-07-31 19:11:28,112 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:11:31,124 INFO spawned: 'nginx' with pid 12
+2025-07-31 19:11:31,181 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:11:32,183 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 19:19:44,891 WARN received SIGQUIT indicating exit request
+2025-07-31 19:19:44,892 INFO waiting for php-fpm to die
+2025-07-31 19:19:44,915 INFO stopped: php-fpm (exit status 0)
+2025-07-31 19:19:50,681 INFO Set uid to user 0 succeeded
+2025-07-31 19:19:50,684 INFO supervisord started with pid 1
+2025-07-31 19:19:51,692 INFO spawned: 'nginx' with pid 6
+2025-07-31 19:19:51,701 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 19:19:51,768 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:19:52,906 INFO spawned: 'nginx' with pid 10
+2025-07-31 19:19:52,911 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 19:19:53,000 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:19:55,014 INFO spawned: 'nginx' with pid 11
+2025-07-31 19:19:55,064 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:19:58,076 INFO spawned: 'nginx' with pid 12
+2025-07-31 19:19:58,134 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:19:59,136 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 19:26:02,660 WARN received SIGQUIT indicating exit request
+2025-07-31 19:26:02,662 INFO waiting for php-fpm to die
+2025-07-31 19:26:02,688 INFO stopped: php-fpm (exit status 0)
+2025-07-31 19:28:34,466 INFO Set uid to user 0 succeeded
+2025-07-31 19:28:34,469 INFO supervisord started with pid 1
+2025-07-31 19:28:35,477 INFO spawned: 'nginx' with pid 7
+2025-07-31 19:28:35,488 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 19:28:35,540 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:28:36,676 INFO spawned: 'nginx' with pid 11
+2025-07-31 19:28:36,678 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 19:28:36,715 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:28:38,724 INFO spawned: 'nginx' with pid 12
+2025-07-31 19:28:38,764 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:28:41,776 INFO spawned: 'nginx' with pid 13
+2025-07-31 19:28:41,812 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 19:28:41,813 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:18:36,093 WARN received SIGQUIT indicating exit request
+2025-07-31 20:18:36,094 INFO waiting for php-fpm to die
+2025-07-31 20:18:36,119 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:23:06,707 INFO Set uid to user 0 succeeded
+2025-07-31 20:23:06,713 INFO supervisord started with pid 1
+2025-07-31 20:23:07,721 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:23:07,730 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:23:07,782 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:23:08,884 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:23:08,887 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:23:08,922 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:23:10,931 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:23:10,969 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:23:13,979 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:23:14,019 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:23:15,022 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:32:00,363 WARN received SIGQUIT indicating exit request
+2025-07-31 20:32:00,365 INFO waiting for php-fpm to die
+2025-07-31 20:32:00,399 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:32:03,658 INFO Set uid to user 0 succeeded
+2025-07-31 20:32:03,664 INFO supervisord started with pid 1
+2025-07-31 20:32:04,672 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:32:04,683 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:32:04,730 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:32:05,884 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:32:05,887 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:32:05,920 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:32:07,930 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:32:07,966 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:32:10,977 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:32:11,014 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:32:12,017 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:35:23,211 INFO reaped unknown pid 79 (exit status 0)
+2025-07-31 20:36:02,266 WARN received SIGQUIT indicating exit request
+2025-07-31 20:36:02,267 INFO waiting for php-fpm to die
+2025-07-31 20:36:02,299 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:36:06,475 INFO Set uid to user 0 succeeded
+2025-07-31 20:36:06,478 INFO supervisord started with pid 1
+2025-07-31 20:36:07,485 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:36:07,495 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:36:08,647 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:36:08,647 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:36:09,537 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:36:10,204 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:36:10,212 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:36:11,219 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:36:11,256 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:36:13,266 INFO spawned: 'nginx' with pid 14
+2025-07-31 20:36:13,303 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:36:16,314 INFO spawned: 'nginx' with pid 15
+2025-07-31 20:36:16,349 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:36:17,352 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:41:11,773 WARN received SIGQUIT indicating exit request
+2025-07-31 20:41:11,774 INFO waiting for php-fpm to die
+2025-07-31 20:41:11,816 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:41:13,609 INFO Set uid to user 0 succeeded
+2025-07-31 20:41:13,612 INFO supervisord started with pid 1
+2025-07-31 20:41:14,619 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:41:14,630 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:41:14,676 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:41:15,787 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:41:15,789 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:41:15,825 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:41:17,834 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:41:17,871 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:41:20,882 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:41:20,920 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:41:21,923 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:43:30,104 INFO reaped unknown pid 58 (exit status 0)
+2025-07-31 20:43:57,143 WARN received SIGQUIT indicating exit request
+2025-07-31 20:43:57,144 INFO waiting for php-fpm to die
+2025-07-31 20:43:57,167 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:43:59,917 INFO Set uid to user 0 succeeded
+2025-07-31 20:43:59,921 INFO supervisord started with pid 1
+2025-07-31 20:44:00,929 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:44:00,940 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:44:00,984 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:44:02,217 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:44:02,219 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:44:02,256 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:44:04,266 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:44:04,307 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:44:07,319 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:44:07,359 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:44:08,361 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:46:52,681 WARN received SIGQUIT indicating exit request
+2025-07-31 20:46:52,682 INFO waiting for php-fpm to die
+2025-07-31 20:46:52,716 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:46:54,992 INFO Set uid to user 0 succeeded
+2025-07-31 20:46:54,999 INFO supervisord started with pid 1
+2025-07-31 20:46:56,007 INFO spawned: 'nginx' with pid 7
+2025-07-31 20:46:56,016 INFO spawned: 'php-fpm' with pid 8
+2025-07-31 20:46:56,061 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:46:57,170 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:46:57,172 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:46:57,206 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:46:59,215 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:46:59,252 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:47:02,263 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:47:02,301 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:47:03,303 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-07-31 20:48:12,406 INFO reaped unknown pid 67 (exit status 0)
+2025-07-31 20:52:23,516 INFO reaped unknown pid 152 (exit status 0)
+2025-07-31 20:52:37,535 INFO reaped unknown pid 197 (exit status 0)
+2025-07-31 20:52:49,551 WARN received SIGQUIT indicating exit request
+2025-07-31 20:52:49,552 INFO waiting for php-fpm to die
+2025-07-31 20:52:49,586 INFO stopped: php-fpm (exit status 0)
+2025-07-31 20:52:55,545 INFO Set uid to user 0 succeeded
+2025-07-31 20:52:55,551 INFO supervisord started with pid 1
+2025-07-31 20:52:56,559 INFO spawned: 'nginx' with pid 6
+2025-07-31 20:52:56,568 INFO spawned: 'php-fpm' with pid 7
+2025-07-31 20:52:57,843 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:52:57,844 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-31 20:52:58,355 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:52:59,366 INFO spawned: 'nginx' with pid 10
+2025-07-31 20:52:59,402 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:53:00,410 INFO spawned: 'nginx' with pid 11
+2025-07-31 20:53:00,447 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:53:02,457 INFO spawned: 'nginx' with pid 12
+2025-07-31 20:53:02,494 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:53:05,505 INFO spawned: 'nginx' with pid 13
+2025-07-31 20:53:05,545 WARN exited: nginx (exit status 1; not expected)
+2025-07-31 20:53:06,548 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-08-01 15:26:44,261 WARN received SIGQUIT indicating exit request
+2025-08-01 15:26:44,263 INFO waiting for php-fpm to die
+2025-08-01 15:26:44,308 INFO stopped: php-fpm (exit status 0)
+2025-08-01 15:35:13,261 INFO Set uid to user 0 succeeded
+2025-08-01 15:35:13,265 INFO supervisord started with pid 1
+2025-08-01 15:35:14,272 INFO spawned: 'nginx' with pid 6
+2025-08-01 15:35:14,283 INFO spawned: 'php-fpm' with pid 7
+2025-08-01 15:35:14,332 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:35:15,448 INFO spawned: 'nginx' with pid 10
+2025-08-01 15:35:15,450 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-01 15:35:15,484 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:35:17,493 INFO spawned: 'nginx' with pid 11
+2025-08-01 15:35:17,532 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:35:20,543 INFO spawned: 'nginx' with pid 12
+2025-08-01 15:35:20,580 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:35:21,582 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-08-01 15:52:27,138 WARN received SIGQUIT indicating exit request
+2025-08-01 15:52:27,140 INFO waiting for php-fpm to die
+2025-08-01 15:52:27,176 INFO stopped: php-fpm (exit status 0)
+2025-08-01 15:52:28,221 INFO Set uid to user 0 succeeded
+2025-08-01 15:52:28,225 INFO supervisord started with pid 1
+2025-08-01 15:52:29,232 INFO spawned: 'nginx' with pid 7
+2025-08-01 15:52:29,243 INFO spawned: 'php-fpm' with pid 8
+2025-08-01 15:52:29,277 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:52:30,462 INFO spawned: 'nginx' with pid 11
+2025-08-01 15:52:30,465 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-01 15:52:30,500 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:52:32,509 INFO spawned: 'nginx' with pid 12
+2025-08-01 15:52:32,549 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:52:35,560 INFO spawned: 'nginx' with pid 13
+2025-08-01 15:52:35,597 WARN exited: nginx (exit status 1; not expected)
+2025-08-01 15:52:36,600 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-08-05 17:49:25,225 WARN received SIGQUIT indicating exit request
+2025-08-05 17:49:25,226 INFO waiting for php-fpm to die
+2025-08-05 17:49:26,258 INFO stopped: php-fpm (exit status 0)
+2025-08-11 15:42:49,707 INFO Set uid to user 0 succeeded
+2025-08-11 15:42:49,717 INFO supervisord started with pid 1
+2025-08-11 15:42:50,728 INFO spawned: 'nginx' with pid 6
+2025-08-11 15:42:50,739 INFO spawned: 'php-fpm' with pid 7
+2025-08-11 15:42:50,808 WARN exited: nginx (exit status 1; not expected)
+2025-08-11 15:42:52,433 INFO spawned: 'nginx' with pid 10
+2025-08-11 15:42:52,436 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 15:42:52,473 WARN exited: nginx (exit status 1; not expected)
+2025-08-11 15:42:54,484 INFO spawned: 'nginx' with pid 11
+2025-08-11 15:42:54,523 WARN exited: nginx (exit status 1; not expected)
+2025-08-11 15:42:57,535 INFO spawned: 'nginx' with pid 12
+2025-08-11 15:42:57,575 WARN exited: nginx (exit status 1; not expected)
+2025-08-11 15:42:58,578 INFO gave up: nginx entered FATAL state, too many start retries too quickly
+2025-08-11 16:24:08,117 WARN received SIGQUIT indicating exit request
+2025-08-11 16:24:08,118 INFO waiting for php-fpm to die
+2025-08-11 16:24:08,156 INFO stopped: php-fpm (exit status 0)
+2025-08-11 16:24:08,921 INFO Set uid to user 0 succeeded
+2025-08-11 16:24:08,924 INFO supervisord started with pid 1
+2025-08-11 16:24:09,931 INFO spawned: 'nginx' with pid 13
+2025-08-11 16:24:09,940 INFO spawned: 'php-fpm' with pid 14
+2025-08-11 16:24:11,170 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:24:11,170 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:26:14,286 WARN received SIGQUIT indicating exit request
+2025-08-11 16:26:14,287 INFO waiting for nginx, php-fpm to die
+2025-08-11 16:26:14,327 INFO stopped: php-fpm (exit status 0)
+2025-08-11 16:26:14,354 INFO stopped: nginx (exit status 0)
+2025-08-11 16:26:14,972 INFO Set uid to user 0 succeeded
+2025-08-11 16:26:14,974 INFO supervisord started with pid 1
+2025-08-11 16:26:15,982 INFO spawned: 'nginx' with pid 7
+2025-08-11 16:26:15,991 INFO spawned: 'php-fpm' with pid 8
+2025-08-11 16:26:17,184 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:26:17,184 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:40:14,551 WARN received SIGQUIT indicating exit request
+2025-08-11 16:40:14,552 INFO waiting for nginx, php-fpm to die
+2025-08-11 16:40:14,564 INFO stopped: php-fpm (exit status 0)
+2025-08-11 16:40:15,577 INFO stopped: nginx (exit status 0)
+2025-08-11 16:40:24,719 INFO Set uid to user 0 succeeded
+2025-08-11 16:40:24,722 INFO supervisord started with pid 1
+2025-08-11 16:40:25,728 INFO spawned: 'nginx' with pid 7
+2025-08-11 16:40:25,739 INFO spawned: 'php-fpm' with pid 8
+2025-08-11 16:40:26,983 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:40:26,984 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:42:20,154 WARN received SIGQUIT indicating exit request
+2025-08-11 16:42:20,155 INFO waiting for nginx, php-fpm to die
+2025-08-11 16:42:20,181 INFO stopped: php-fpm (exit status 0)
+2025-08-11 16:42:20,211 INFO stopped: nginx (exit status 0)
+2025-08-11 16:42:36,777 INFO Set uid to user 0 succeeded
+2025-08-11 16:42:36,783 INFO supervisord started with pid 1
+2025-08-11 16:42:37,793 INFO spawned: 'nginx' with pid 7
+2025-08-11 16:42:37,802 INFO spawned: 'php-fpm' with pid 8
+2025-08-11 16:42:39,000 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-11 16:42:39,001 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:22:01,797 WARN received SIGQUIT indicating exit request
+2025-08-14 17:22:01,798 INFO waiting for nginx, php-fpm to die
+2025-08-14 17:22:01,868 INFO stopped: php-fpm (exit status 0)
+2025-08-14 17:22:01,895 INFO stopped: nginx (exit status 0)
+2025-08-14 17:22:02,681 INFO Set uid to user 0 succeeded
+2025-08-14 17:22:02,683 INFO supervisord started with pid 1
+2025-08-14 17:22:03,690 INFO spawned: 'nginx' with pid 7
+2025-08-14 17:22:03,699 INFO spawned: 'php-fpm' with pid 8
+2025-08-14 17:22:04,861 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:22:04,861 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:23:23,879 WARN received SIGQUIT indicating exit request
+2025-08-14 17:23:23,880 INFO waiting for nginx, php-fpm to die
+2025-08-14 17:23:23,920 INFO stopped: php-fpm (exit status 0)
+2025-08-14 17:23:23,964 INFO stopped: nginx (exit status 0)
+2025-08-14 17:23:29,012 INFO Set uid to user 0 succeeded
+2025-08-14 17:23:29,016 INFO supervisord started with pid 1
+2025-08-14 17:23:30,023 INFO spawned: 'nginx' with pid 7
+2025-08-14 17:23:30,032 INFO spawned: 'php-fpm' with pid 8
+2025-08-14 17:23:31,228 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:23:31,229 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:24:53,775 WARN received SIGQUIT indicating exit request
+2025-08-14 17:24:53,776 INFO waiting for nginx, php-fpm to die
+2025-08-14 17:24:54,815 INFO stopped: php-fpm (exit status 0)
+2025-08-14 17:24:54,837 INFO stopped: nginx (exit status 0)
+2025-08-14 17:25:10,285 INFO Set uid to user 0 succeeded
+2025-08-14 17:25:10,291 INFO supervisord started with pid 1
+2025-08-14 17:25:11,294 INFO spawned: 'nginx' with pid 7
+2025-08-14 17:25:11,297 INFO spawned: 'php-fpm' with pid 8
+2025-08-14 17:25:12,594 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:25:12,594 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:39:21,022 WARN received SIGQUIT indicating exit request
+2025-08-14 17:39:21,023 INFO waiting for nginx, php-fpm to die
+2025-08-14 17:39:21,071 INFO stopped: php-fpm (exit status 0)
+2025-08-14 17:39:21,103 INFO stopped: nginx (exit status 0)
+2025-08-14 17:39:21,688 INFO Set uid to user 0 succeeded
+2025-08-14 17:39:21,690 INFO supervisord started with pid 1
+2025-08-14 17:39:22,697 INFO spawned: 'nginx' with pid 6
+2025-08-14 17:39:22,708 INFO spawned: 'php-fpm' with pid 7
+2025-08-14 17:39:23,887 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 17:39:23,888 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 18:54:57,634 INFO reaped unknown pid 45 (exit status 0)
+2025-08-14 18:56:30,769 WARN received SIGQUIT indicating exit request
+2025-08-14 18:56:30,770 INFO waiting for nginx, php-fpm to die
+2025-08-14 18:56:30,811 INFO stopped: php-fpm (exit status 0)
+2025-08-14 18:56:30,840 INFO stopped: nginx (exit status 0)
+2025-08-14 18:56:31,374 INFO Set uid to user 0 succeeded
+2025-08-14 18:56:31,376 INFO supervisord started with pid 1
+2025-08-14 18:56:32,383 INFO spawned: 'nginx' with pid 7
+2025-08-14 18:56:32,393 INFO spawned: 'php-fpm' with pid 8
+2025-08-14 18:56:33,597 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 18:56:33,597 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 20:07:00,168 WARN received SIGQUIT indicating exit request
+2025-08-14 20:07:00,170 INFO waiting for nginx, php-fpm to die
+2025-08-14 20:07:00,216 INFO stopped: php-fpm (exit status 0)
+2025-08-14 20:07:00,249 INFO stopped: nginx (exit status 0)
+2025-08-14 20:07:00,905 INFO Set uid to user 0 succeeded
+2025-08-14 20:07:00,907 INFO supervisord started with pid 1
+2025-08-14 20:07:01,914 INFO spawned: 'nginx' with pid 7
+2025-08-14 20:07:01,923 INFO spawned: 'php-fpm' with pid 8
+2025-08-14 20:07:03,110 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-08-14 20:07:03,111 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

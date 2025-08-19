@@ -1,54 +1,78 @@
-# Etapa de construcción para assets
-FROM node:18-alpine as build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY resources/ ./resources/
-COPY vite.config.js ./
-RUN npm run build
+FROM php:8.2-fpm
 
-# Etapa de producción
-FROM php:8.2-fpm-alpine
+# Argumentos
+ARG user=www-data
+ARG uid=1000
 
 # Instalar dependencias del sistema
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
     libzip-dev \
-    oniguruma-dev \
-    nginx \
-    supervisor \
-    && docker-php-ext-install -j$(nproc) \
-        pdo_mysql \
-        mbstring \
-        zip \
-        opcache \
-    && docker-php-ext-enable opcache
+    libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libxpm-dev \
+    libmagickwand-dev \
+    libgd-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
+
+# Limpiar caché
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Instalar extensiones PHP
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm
+RUN docker-php-ext-install -j$(nproc) \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    intl \
+    zip \
+    opcache
 
 # Instalar Composer
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar directorio de trabajo
+# Configuración de PHP
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+
+# Crear usuario para ejecutar comandos de Composer y Artisan
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+# Establecer directorio de trabajo
 WORKDIR /var/www
 
-# Copiar solo los archivos necesarios
-COPY . .
-COPY --from=build /app/public/build /var/www/public/build
+# Copiar archivos de la aplicación
+COPY --chown=$user:www-data . /var/www
 
-# Instalar dependencias de PHP y optimizar
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Configurar permisos
+RUN chown -R $user:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Configuración de Nginx
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Instalar dependencias
+USER $user
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Configuración de Supervisor
-COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Generar clave de la aplicación
+RUN php artisan key:generate
 
-# Establecer permisos
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache \
-    && php artisan storage:link
+# Usuario para ejecutar los comandos
+USER root
 
 # Puerto expuesto
-EXPOSE 80
+EXPOSE 9000
 
 # Comando de inicio
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["php-fpm"]

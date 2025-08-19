@@ -142,6 +142,9 @@
                                         <option value="">Seleccione estado civil</option>
                                         <option value="Soltero(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Soltero(a)' ? 'selected' : '' }}>Soltero(a)</option>
                                         <option value="Casado(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Casado(a)' ? 'selected' : '' }}>Casado(a)</option>
+					<option value="Union Libre" {{ old('estado_civil', $empleado->estado_civil) == 'Union Libre' ? 'selected' : '' }}>Union Libre</option>
+                                        <option value="Viudo(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Viudo(a)' ? 'selected' : '' }}>Viudo(a)</option>
+                                        <option value="Divorciado(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Divorciado(a)' ? 'selected' : '' }}>Divorciado(a)</option>
                                     </select>
                                 </div>
                                 <div>
@@ -878,22 +881,48 @@
                                         <div x-show="beneficiarios.length === 0" class="text-center py-4 text-sm text-gray-500">
                                             No se han agregado beneficiarios
                                         </div>
-                                        <div>
-                                            <label for="adjunto1" class="block font-medium text-sm text-gray-700">Adjunto 1</label>
-                                            <input type="file" name="adjunto1" id="adjunto1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="adjunto2" class="block font-medium text-sm text-gray-700">Adjunto 2</label>
-                                            <input type="file" name="adjunto2" id="adjunto2" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="adjunto3" class="block font-medium text-sm text-gray-700">Adjunto 3</label>
-                                            <input type="file" name="adjunto3" id="adjunto3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="adjunto4" class="block font-medium text-sm text-gray-700">Adjunto 4</label>
-                                            <input type="file" name="adjunto4" id="adjunto4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                        </div>
+                                        <div class="mb-8">
+    <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">Documento Principal</h3>
+
+    <div class="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200">
+        <div class="flex items-start gap-3 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span class="text-base font-medium text-gray-700">
+                Documento principal
+            </span>
+        </div>
+
+        <input 
+            type="file" 
+            name="documento_principal" 
+            id="documento_principal" 
+            @if(!$empleado->documento_principal) @endif
+            class="block w-full text-base text-gray-800 
+                   file:mr-4 file:py-3 file:px-6 
+                   file:rounded-md file:border-0 
+                   file:text-base file:font-semibold 
+                   file:bg-sky-50 file:text-sky-700 
+                   hover:file:bg-sky-100 
+                   focus:outline-none focus:ring-2 
+                   focus:ring-sky-500 focus:border-sky-500 
+                   transition" 
+        />
+
+        @if($empleado->documento_principal)
+            <p class="mt-2 text-sm text-gray-500">
+                Documento actual: 
+                <a href="{{ asset('storage/' . $empleado->documento_principal) }}" target="_blank" class="text-sky-600 underline">
+                    Ver
+                </a>
+            </p>
+        @endif
+
+        <p class="mt-2 text-sm text-gray-500">Solo PDF, JPG o PNG. Máx 5MB.</p>
+    </div>
+</div>
+
                                     </div>
                                 </div>
                     <!-- Navegación entre pestañas -->

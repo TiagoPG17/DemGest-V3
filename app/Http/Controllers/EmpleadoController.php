@@ -222,27 +222,58 @@ class EmpleadoController extends Controller
             'afc_id' => $validated['afc_id'] ?? null,
         ]);
 
-        //Guardar archivos adjuntos
-        foreach (['adjunto1', 'adjunto2', 'adjunto3', 'adjunto4'] as $campo) {
-            if ($request->hasFile($campo)) {
-                $archivo = $request->file($campo);
-                $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+    	$documentosGenerales = [
+	
+    'cedula_ampliada' => 'Cédula ampliada',
+    'libreta_militar' => 'Libreta militar',
+    'diplomas_certificados' => 'Diplomas y certificados',
+    'tarjeta_profesional' => 'Tarjeta profesional',
+    'certificado_ultimo_empleo' => 'Certificado último empleo',
+    'certificado_eps' => 'Certificado EPS',
+    'certificado_afp' => 'Certificado AFP',
+    'certificado_cesantias' => 'Certificado cesantías',
+    'certificado_alturas' => 'Certificado alturas',
+    'foto_digital' => 'Foto digital',
+    'certificacion_bancaria' => 'Certificación bancaria'
+];
 
-                // Guardar el archivo en storage/public/adjuntos_empleados/ID/adjuntoX/
-                $ruta = $archivo->storeAs("adjuntos_empleados/{$empleado->id_empleado}/{$campo}", $nombreArchivo, 'public');
-
-                // Guardar en la base de datos
-                ArchivoAdjunto::create([
-                    'empleado_id' => $empleado->id_empleado,
-                    'beneficiario_id' => null, // si aplica
-                    'nombre' => $nombreArchivo,
-                    'ruta' => $ruta,
-                    'tipo' => $archivo->getClientOriginalExtension(),
-                ]);
-
-                Log::info("Archivo {$campo} guardado y registrado en base de datos para el empleado {$empleado->id_empleado}");
-            }
+//Guardar archivos adjuntos
+foreach($documentosGenerales as $campo => $nombre) {
+    if ($request->hasFile($campo)) {
+        $archivo = $request->file($campo);
+        $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+        $directorio = "empleados/{$empleado->id_empleado}/documentos";
+        
+        // Crear directorio si no existe
+        if (!Storage::disk('public')->exists($directorio)) {
+            Storage::disk('public')->makeDirectory($directorio, 0775, true);
         }
+
+        // Guardar el archivo con permisos explícitos
+        $ruta = $archivo->storeAs($directorio, $nombreArchivo, 'public');
+        
+        // Asegurar permisos
+        $rutaCompleta = storage_path('app/public/' . $ruta);
+        chmod($rutaCompleta, 0664);
+        chmod(dirname($rutaCompleta), 0775);
+
+        // Guardar en la base de datos
+        ArchivoAdjunto::create([
+            'empleado_id' => $empleado->id_empleado,
+            'beneficiario_id' => null,
+            'nombre' => $nombre,  // Usamos el nombre descriptivo en lugar del nombre del archivo
+            'nombre_archivo' => $nombreArchivo,  // Guardamos el nombre del archivo
+            'ruta' => $ruta,
+            'tipo' => $archivo->getClientOriginalExtension(),
+            'tipo_documento' => $campo,  // Guardamos el tipo de documento
+            'fecha_subida' => now()  // Añadimos la fecha de subida
+        ]);
+
+        Log::info("Archivo {$campo} guardado y registrado en base de datos para el empleado {$empleado->id_empleado}");
+    } else {
+        Log::info("No se encontró archivo para el campo: {$campo}");
+    }
+}
 
             // Guardar ubicación de nacimiento
             EmpleadoUbicacion::create([
@@ -263,7 +294,7 @@ class EmpleadoController extends Controller
                 'pais_id' => $validated['pais_id_residencia'],
                 'departamento_id' => $validated['departamento_id_residencia'],
                 'municipio_id' => $validated['municipio_id_residencia'],
-                'barrio_id' => $validated['barrio_id_residencia'],
+                'barrio_id' => $validated['barrio_id_residencia'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -319,7 +350,7 @@ class EmpleadoController extends Controller
                             ],
                             [
                                 'fecha_diagnostico_discapacidad' => $discapacidadData['fecha_diagnostico_discapacidad'],
-                                'enfermedad_base' => $discapacidadData['enfermedad_base'],
+                                'enfermedad_base' => $discapacidadData['enfermedad_base'] ?? null,
                             ]
                         );
                         Log::info("Discapacidad creada/Encontrada con ID: {$discapacidad->id_discapacidad}");
