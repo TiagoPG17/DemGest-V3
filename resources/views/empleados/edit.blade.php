@@ -142,7 +142,7 @@
                                         <option value="">Seleccione estado civil</option>
                                         <option value="Soltero(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Soltero(a)' ? 'selected' : '' }}>Soltero(a)</option>
                                         <option value="Casado(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Casado(a)' ? 'selected' : '' }}>Casado(a)</option>
-					<option value="Union Libre" {{ old('estado_civil', $empleado->estado_civil) == 'Union Libre' ? 'selected' : '' }}>Union Libre</option>
+                                        <option value="Union Libre" {{ old('estado_civil', $empleado->estado_civil) == 'Union Libre' ? 'selected' : '' }}>Union Libre</option>
                                         <option value="Viudo(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Viudo(a)' ? 'selected' : '' }}>Viudo(a)</option>
                                         <option value="Divorciado(a)" {{ old('estado_civil', $empleado->estado_civil) == 'Divorciado(a)' ? 'selected' : '' }}>Divorciado(a)</option>
                                     </select>
@@ -764,7 +764,11 @@
                                             beneficiarios: [],
                                             init() {
                                                 // Inicializar con los beneficiarios del empleado o los valores de old()
-                                                this.beneficiarios = window.__beneficiarios.length > 0 ? window.__beneficiarios : [];
+                                                this.beneficiarios = window.__beneficiarios.length > 0 ? 
+                                                    window.__beneficiarios.map(b => ({
+                                                        ...b,
+                                                        tipo_union: b.tipo_union || ''
+                                                    })) : [];
                                                 console.log('Beneficiarios cargados:', this.beneficiarios);
                                             },
                                             agregar() {
@@ -774,11 +778,28 @@
                                                     fecha_nacimiento: '',
                                                     tipo_documento_id: '',
                                                     numero_documento: '',
-                                                    nivel_educativo: ''
+                                                    nivel_educativo: '',
+                                                    tipo_union: '',
+                                                    // Campos para archivos
+                                                    registro_nacimiento: null,
+                                                    certificado_escolar: null,
+                                                    eps_hijo: null,
+                                                    eps_padre_madre: null,
+                                                    registro_matrimonio: null,
+                                                    cedula_conyuge: null,
+                                                    declaracion_union: null,
+                                                    cedula_companero: null
                                                 });
                                             },
                                             eliminar(index) {
                                                 this.beneficiarios.splice(index, 1);
+                                            },
+                                            // Función para manejar la carga de archivos
+                                            handleFileUpload(event, index, field) {
+                                                const file = event.target.files[0];
+                                                if (file) {
+                                                    this.beneficiarios[index][field] = file;
+                                                }
                                             }
                                         };
                                     }
@@ -878,52 +899,55 @@
                                                 </div>
                                             </div>
                                         </template>
-                                        <div x-show="beneficiarios.length === 0" class="text-center py-4 text-sm text-gray-500">
-                                            No se han agregado beneficiarios
+                                        <div class="bg-white border border-gray-200 rounded-xl shadow p-6 mb-6 mt-6">
+                                    <h2 class="text-lg font-semibold text-gray-800 mb-4">📎 Documentación General del Empleado</h2> 
+                                    <!-- Documentos del Empleado -->
+                                    <div class="mb-8">
+                                        <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">1. Documentación General</h3>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+                                            @php
+                                                $documentosGenerales = [
+                                                    'cedula_ampliada' => ['label' => 'Fotocopia de la cédula ampliada al 150%', 'requerido' => true],
+                                                    'libreta_militar' => ['label' => 'Fotocopia de la Libreta Militar', 'requerido' => false],
+                                                    'diplomas_certificados' => ['label' => 'Fotocopia de diplomas o acta de grado y certificación de estudios', 'requerido' => true],
+                                                    'tarjeta_profesional' => ['label' => 'Fotocopia de la Tarjeta Profesional (cuando aplique)', 'requerido' => false],
+                                                    'certificado_ultimo_empleo' => ['label' => 'Certificación del último empleo', 'requerido' => true],
+                                                    'certificado_eps' => ['label' => 'Certificado de afiliación a EPS (Salud)', 'requerido' => true],
+                                                    'certificado_afp' => ['label' => 'Certificado de afiliación a AFP (Fondo de Pensiones)', 'requerido' => true],
+                                                    'certificado_cesantias' => ['label' => 'Certificado de afiliación a Fondo de Cesantías', 'requerido' => true],
+                                                    'certificado_alturas' => ['label' => 'Certificado curso de alturas (si el cargo lo requiere)', 'requerido' => false],
+                                                    'foto_digital' => ['label' => 'Foto tamaño 3x4 a color fondo blanco o azul (JPG)', 'requerido' => true],
+                                                    'certificacion_bancaria' => ['label' => 'Certificación bancaria (Bancolombia)', 'requerido' => true],
+                                                ];
+                                            @endphp
+                                            @foreach ($documentosGenerales as $campo => $documento)
+                                                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                                                    <div class="flex items-start gap-2 mb-3">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                        <span class="text-sm font-medium text-gray-700">
+                                                            {{ $documento['label'] }}
+                                                            @if($documento['requerido'])
+                                                                <span class="text-red-500">*</span>
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                    <input 
+                                                        type="file" 
+                                                        name="{{ $campo }}" 
+                                                        id="{{ $campo }}" 
+                                                        @if($documento['requerido']) required @endif
+                                                        class="block w-full text-sm text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" 
+                                                    />
+                                                    @if($documento['requerido'])
+                                                        <p class="mt-1 text-xs text-red-500">Campo obligatorio</p>
+                                                    @endif
+                                                </div>
+                                            @endforeach
                                         </div>
-                                        <div class="mb-8">
-    <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">Documento Principal</h3>
-
-    <div class="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200">
-        <div class="flex items-start gap-3 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span class="text-base font-medium text-gray-700">
-                Documento principal
-            </span>
-        </div>
-
-        <input 
-            type="file" 
-            name="documento_principal" 
-            id="documento_principal" 
-            @if(!$empleado->documento_principal) @endif
-            class="block w-full text-base text-gray-800 
-                   file:mr-4 file:py-3 file:px-6 
-                   file:rounded-md file:border-0 
-                   file:text-base file:font-semibold 
-                   file:bg-sky-50 file:text-sky-700 
-                   hover:file:bg-sky-100 
-                   focus:outline-none focus:ring-2 
-                   focus:ring-sky-500 focus:border-sky-500 
-                   transition" 
-        />
-
-        @if($empleado->documento_principal)
-            <p class="mt-2 text-sm text-gray-500">
-                Documento actual: 
-                <a href="{{ asset('storage/' . $empleado->documento_principal) }}" target="_blank" class="text-sky-600 underline">
-                    Ver
-                </a>
-            </p>
-        @endif
-
-        <p class="mt-2 text-sm text-gray-500">Solo PDF, JPG o PNG. Máx 5MB.</p>
-    </div>
-</div>
-
                                     </div>
+                                </div>
                                 </div>
                     <!-- Navegación entre pestañas -->
                     <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
