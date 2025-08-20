@@ -30,6 +30,7 @@ use App\Models\CiudadLaboral;
 use App\Models\ArchivoAdjunto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -222,58 +223,37 @@ class EmpleadoController extends Controller
             'afc_id' => $validated['afc_id'] ?? null,
         ]);
 
-    	$documentosGenerales = [
-	
-    'cedula_ampliada' => 'Cédula ampliada',
-    'libreta_militar' => 'Libreta militar',
-    'diplomas_certificados' => 'Diplomas y certificados',
-    'tarjeta_profesional' => 'Tarjeta profesional',
-    'certificado_ultimo_empleo' => 'Certificado último empleo',
-    'certificado_eps' => 'Certificado EPS',
-    'certificado_afp' => 'Certificado AFP',
-    'certificado_cesantias' => 'Certificado cesantías',
-    'certificado_alturas' => 'Certificado alturas',
-    'foto_digital' => 'Foto digital',
-    'certificacion_bancaria' => 'Certificación bancaria'
-];
+          // Guardar archivo único de documentación general
+            if ($request->hasFile('documento_principal')) {
+                $archivo = $request->file('documento_principal');
+                $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                $directorio = "empleados/{$empleado->id_empleado}/documentos";
 
-//Guardar archivos adjuntos
-foreach($documentosGenerales as $campo => $nombre) {
-    if ($request->hasFile($campo)) {
-        $archivo = $request->file($campo);
-        $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
-        $directorio = "empleados/{$empleado->id_empleado}/documentos";
-        
-        // Crear directorio si no existe
-        if (!Storage::disk('public')->exists($directorio)) {
-            Storage::disk('public')->makeDirectory($directorio, 0775, true);
-        }
+                // Crear directorio si no existe
+                if (!Storage::disk('public')->exists($directorio)) {
+                    Storage::disk('public')->makeDirectory($directorio, 0775, true);
+                }
 
-        // Guardar el archivo con permisos explícitos
-        $ruta = $archivo->storeAs($directorio, $nombreArchivo, 'public');
-        
-        // Asegurar permisos
-        $rutaCompleta = storage_path('app/public/' . $ruta);
-        chmod($rutaCompleta, 0664);
-        chmod(dirname($rutaCompleta), 0775);
+                // Guardar el archivo
+                $ruta = $archivo->storeAs($directorio, $nombreArchivo, 'public');
 
-        // Guardar en la base de datos
-        ArchivoAdjunto::create([
-            'empleado_id' => $empleado->id_empleado,
-            'beneficiario_id' => null,
-            'nombre' => $nombre,  // Usamos el nombre descriptivo en lugar del nombre del archivo
-            'nombre_archivo' => $nombreArchivo,  // Guardamos el nombre del archivo
-            'ruta' => $ruta,
-            'tipo' => $archivo->getClientOriginalExtension(),
-            'tipo_documento' => $campo,  // Guardamos el tipo de documento
-            'fecha_subida' => now()  // Añadimos la fecha de subida
-        ]);
+                // Registrar en BD
+                ArchivoAdjunto::create([
+                    'empleado_id'      => $empleado->id_empleado,
+                    'beneficiario_id'  => null,
+                    'nombre'           => 'Documentación General',  // Nombre descriptivo
+                    'nombre_archivo'   => $nombreArchivo,
+                    'ruta'             => $ruta,
+                    'tipo'             => $archivo->getClientOriginalExtension(),
+                    'tipo_documento'   => 'documento_principal',
+                    'fecha_subida'     => now()
+                ]);
 
-        Log::info("Archivo {$campo} guardado y registrado en base de datos para el empleado {$empleado->id_empleado}");
-    } else {
-        Log::info("No se encontró archivo para el campo: {$campo}");
-    }
-}
+                Log::info("Archivo de documentación general guardado para el empleado {$empleado->id_empleado}");
+            } else {
+                Log::warning("No se encontró archivo en el campo documento_principal para el empleado {$empleado->id_empleado}");
+            }
+
 
             // Guardar ubicación de nacimiento
             EmpleadoUbicacion::create([
@@ -773,7 +753,47 @@ foreach($documentosGenerales as $campo => $nombre) {
                 $empleado->beneficiarios()->delete();
             }
 
-            Log::info('Datos recibidos del request:', $request->all());
+            // Manejar la actualización de archivos adjuntos
+            if ($request->hasFile('documento_principal')) {
+                // Eliminar archivo adjunto existente si existe
+                $archivoExistente = ArchivoAdjunto::where('empleado_id', $empleado->id_empleado)
+                    ->where('nombre', 'Documentación General')
+                    ->first();
+
+                if ($archivoExistente) {
+                    // Eliminar archivo físico
+                    if (Storage::disk('public')->exists($archivoExistente->ruta)) {
+                        Storage::disk('public')->delete($archivoExistente->ruta);
+                    }
+                    // Eliminar registro de la base de datos
+                    $archivoExistente->delete();
+                }
+
+                // Guardar el nuevo archivo
+                $archivo = $request->file('documento_principal');
+                $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                $directorio = "empleados/{$empleado->id_empleado}/documentos";
+
+                // Crear directorio si no existe
+                if (!Storage::disk('public')->exists($directorio)) {
+                    Storage::disk('public')->makeDirectory($directorio, 0775, true);
+                }
+
+                // Guardar el archivo
+                $ruta = $archivo->storeAs($directorio, $nombreArchivo, 'public');
+
+                // Registrar en BD
+                ArchivoAdjunto::create([
+                    'empleado_id'      => $empleado->id_empleado,
+                    'beneficiario_id'  => null,
+                    'nombre'           => 'Documentación General',
+                    'ruta'             => $ruta,
+                    'tipo'             => $archivo->getClientOriginalExtension()
+                ]);
+
+                Log::info("Archivo de documentación general actualizado para el empleado {$empleado->id_empleado}");
+            }
+
             DB::commit();
             Log::info('Empleado actualizado exitosamente');
 

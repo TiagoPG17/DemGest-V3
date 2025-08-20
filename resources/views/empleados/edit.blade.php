@@ -85,7 +85,7 @@
                     </div>
 
                     <!-- Contenido de las pestañas -->
-                    <div class="p-6">
+                    <div>
                         <!-- Información Personal -->
                         <div x-show="activeTab === 'personal'" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -748,7 +748,6 @@
                                                     <span>{{ $opcion }}</span>
                                                 </label>
                                             @endforeach
-
                                         </div>
                                     </div>               
                                 </div>
@@ -900,83 +899,25 @@
                                             </div>
                                         </template>
                                         <div class="bg-white border border-gray-200 rounded-xl shadow p-6 mb-6 mt-6">
-                                    <h2 class="text-lg font-semibold text-gray-800 mb-4">📎 Documentación General del Empleado</h2> 
-                                    <!-- Documentos del Empleado -->
+                                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Documentación General del Empleado</h2> 
+                                    <!-- Campo único para subir documento -->
                                     <div class="mb-8">
-                                        <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">1. Documentación General</h3>
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
-                                            @php
-                                                $documentosGenerales = [
-                                                    'cedula_ampliada' => ['label' => 'Fotocopia de la cédula ampliada al 150%', 'requerido' => true],
-                                                    'libreta_militar' => ['label' => 'Fotocopia de la Libreta Militar', 'requerido' => false],
-                                                    'diplomas_certificados' => ['label' => 'Fotocopia de diplomas o acta de grado y certificación de estudios', 'requerido' => true],
-                                                    'tarjeta_profesional' => ['label' => 'Fotocopia de la Tarjeta Profesional (cuando aplique)', 'requerido' => false],
-                                                    'certificado_ultimo_empleo' => ['label' => 'Certificación del último empleo', 'requerido' => true],
-                                                    'certificado_eps' => ['label' => 'Certificado de afiliación a EPS (Salud)', 'requerido' => true],
-                                                    'certificado_afp' => ['label' => 'Certificado de afiliación a AFP (Fondo de Pensiones)', 'requerido' => true],
-                                                    'certificado_cesantias' => ['label' => 'Certificado de afiliación a Fondo de Cesantías', 'requerido' => true],
-                                                    'certificado_alturas' => ['label' => 'Certificado curso de alturas (si el cargo lo requiere)', 'requerido' => false],
-                                                    'foto_digital' => ['label' => 'Foto tamaño 3x4 a color fondo blanco o azul (JPG)', 'requerido' => true],
-                                                    'certificacion_bancaria' => ['label' => 'Certificación bancaria (Bancolombia)', 'requerido' => true],
-                                                ];
-                                            @endphp
-                                            @foreach ($documentosGenerales as $campo => $documento)
-                                                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
-                                                    <div class="flex items-start gap-2 mb-3">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                        </svg>
-                                                        <span class="text-sm font-medium text-gray-700">
-                                                            {{ $documento['label'] }}
-                                                            @if($documento['requerido'])
-                                                                <span class="text-red-500">*</span>
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                    <input 
-                                                        type="file" 
-                                                        name="{{ $campo }}" 
-                                                        id="{{ $campo }}" 
-                                                        @if($documento['requerido']) required @endif
-                                                        class="block w-full text-sm text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" 
-                                                    />
-                                                    @if($documento['requerido'])
-                                                        <p class="mt-1 text-xs text-red-500">Campo obligatorio</p>
-                                                    @endif
-                                                </div>
-                                            @endforeach
+                                        <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">1. Documento Principal</h3>
+
+                                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                                            <div class="flex items-center gap-4 mb-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <span class="text-base font-medium text-gray-700">Documento principal</span>
+                                            </div>
+                                            <input type="file" name="documento_principal" id="documento_principal" class="block w-full text-base text-gray-800 file:mr-6 file:py-4 file:px-8 file:rounded-md file:border-0 file:text-base file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 transition" />
+                                            <p class="mt-4 text-sm text-gray-500">Solo PDF, JPG o PNG. Máx 5MB.</p>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
-                    <!-- Navegación entre pestañas -->
-                    <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
-                        <button type="button"
-                                @click="
-                                    if (activeTab === 'ubicacion') activeTab = 'personal';
-                                    else if (activeTab === 'laboral') activeTab = 'ubicacion';
-                                    else if (activeTab === 'adicional') activeTab = 'laboral';
-                                "
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800"
-                                x-show="activeTab !== 'personal'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                            </svg>
-                            Anterior
-                        </button>
-                        <button type="button"
-                                @click="
-                                    if (activeTab === 'personal') activeTab = 'ubicacion';
-                                    else if (activeTab === 'ubicacion') activeTab = 'laboral';
-                                    else if (activeTab === 'laboral') activeTab = 'adicional';
-                                "
-                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800"
-                                x-show="activeTab !== 'adicional'">
-                            Siguiente
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

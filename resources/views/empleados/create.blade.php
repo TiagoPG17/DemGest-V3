@@ -896,43 +896,23 @@
 
                                 <!-- DOCUMENTACIÓN GENERAL -->
                                <div class="bg-white border border-gray-200 rounded-xl shadow p-6 mb-6 mt-6">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">Documentación General del Empleado</h2> 
+                                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Documentación General del Empleado</h2> 
 
-    <!-- Campo único para subir documento -->
-    <div class="mb-8">
-        <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">1. Documento Principal</h3>
-
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200">
-            <div class="flex items-start gap-3 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span class="text-base font-medium text-gray-700">
-                    Documento principal
-                </span>
-            </div>
-
-            <input 
-                type="file" 
-                name="documento_principal" 
-                id="documento_principal" 
-               
-                class="block w-full text-base text-gray-800 
-                       file:mr-4 file:py-3 file:px-6 
-                       file:rounded-md file:border-0 
-                       file:text-base file:font-semibold 
-                       file:bg-sky-50 file:text-sky-700 
-                       hover:file:bg-sky-100 
-                       focus:outline-none focus:ring-2 
-                       focus:ring-sky-500 focus:border-sky-500 
-                       transition" 
-            />
-
-            <p class="mt-2 text-sm text-gray-500">Solo PDF, JPG o PNG. Máx 5MB.</p>
-        </div>
-    </div>
-</div>
-
+                                    <!-- Campo único para subir documento -->
+                                    <div class="mb-8">
+                                        <h3 class="text-md font-medium text-gray-700 mb-4 border-b pb-2">1. Documento Principal</h3>
+                                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                                            <div class="flex items-center gap-4 mb-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <span class="text-base font-medium text-gray-700">Documento principal</span>
+                                            </div>
+                                            <input type="file" name="documento_principal" id="documento_principal" class="block w-full text-base text-gray-800 file:mr-6 file:py-4 file:px-8 file:rounded-md file:border-0 file:text-base file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 transition" />
+                                            <p class="mt-4 text-sm text-gray-500">Solo PDF, JPG o PNG. Máx 5MB.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -125,9 +125,6 @@
                     <button type="button" @click="activeTab = 'personal'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'personal', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-500': activeTab !== 'personal' }">
                         Información Personal
                     </button>
-                    <button type="button" @click="activeTab = 'ubicacion'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'ubicacion' }">
-                        Salud
-                    </button>
                     <button type="button" @click="activeTab = 'laboral'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'laboral', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'laboral' }">
                         Información Laboral
                     </button>
@@ -136,6 +133,9 @@
                     </button>
                     <button type="button" @click="activeTab = 'extra'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'extra', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'extra' }">
                         Datos Adicionales
+                    </button>
+                    <button type="button" @click="activeTab = 'ubicacion'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'ubicacion' }">
+                        Salud
                     </button>
                 </nav>
 
@@ -168,6 +168,28 @@
                                     <dd class="mt-1 text-gray-900">{{ $empleado->fecha_nacimiento ? $empleado->fecha_nacimiento->format('d/m/Y') : 'No especificada' }}</dd>
                                 </div>
                                 <div>
+                                    <dt class="font-medium text-gray-800">Edad</dt>
+                                    <dd class="mt-1 text-gray-900">{{ $empleado->edad ?? 'No calculada' }} años</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-medium text-gray-800">Rango de Edad</dt>
+                                    <dd class="mt-1 text-gray-900">
+                                        {{ $empleado->rangoEdad ? $empleado->rangoEdad->edad_minima . ' a ' . $empleado->rangoEdad->edad_maxima . ' años' : 'No especificado' }}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="font-medium text-gray-800">País</dt>
+                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->pais->nombre_pais ?? 'No especificado' }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-medium text-gray-800">Departamento</dt>
+                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->departamento->nombre_departamento ?? 'No especificado' }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-medium text-gray-800">Municipio</dt>
+                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->municipio->nombre_municipio ?? 'No especificado' }}</dd>
+                                </div>
+                                <div>
                                     <dt class="font-medium text-gray-800">Género</dt>
                                     <dd class="mt-1 text-gray-900">{{ $empleado->sexo ?? 'No especificado' }}</dd>
                                 </div>
@@ -179,16 +201,7 @@
                                     <dt class="font-medium text-gray-800">Nivel Educativo</dt>
                                     <dd class="mt-1 text-gray-900">{{ $empleado->nivel_educativo ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Edad</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->edad ?? 'No calculada' }} años</dd>
-                                </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Rango de Edad</dt>
-                                    <dd class="mt-1 text-gray-900">
-                                        {{ $empleado->rangoEdad ? $empleado->rangoEdad->edad_minima . ' a ' . $empleado->rangoEdad->edad_maxima . ' años' : 'No especificado' }}
-                                    </dd>
-                                </div>
+                                
                                 <div>
                                     <dt class="font-medium text-gray-800">Estado Civil</dt>
                                     <dd class="mt-1 text-gray-900">{{ $empleado->estado_civil ?? 'No especificado' }}</dd>
@@ -229,33 +242,7 @@
                                 </div>
                             </section>
                         </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <section aria-label="Lugar de Nacimiento del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
-                                <header class="bg-blue-700 p-4 flex items-center gap-3 rounded-t-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="text-white">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                    </svg>
-                                    <h3 class="text-lg font-medium text-white">Lugar de Nacimiento</h3>
-                                </header>
-                                <div class="p-6">
-                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 relative">
-                                        <div>
-                                            <dt class="font-medium text-gray-800">País</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->pais->nombre_pais ?? 'No especificado' }}</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Departamento</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->departamento->nombre_departamento ?? 'No especificado' }}</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Municipio</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->municipio->nombre_municipio ?? 'No especificado' }}</dd>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </section>
+                        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
                             <section aria-label="Lugar de Residencia del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
                                 <header class="bg-cyan-600 p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -568,9 +555,9 @@
                                 </div>
                             </div>
                             <!-- Archivos Adjuntos -->
-                            <div>
+                            <div class="space-y-6">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
-                                <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                                <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 space-y-6">
                                     @php
                                         $nombresArchivos = [
                                             'adjunto1' => 'Ver contrato',
@@ -595,8 +582,11 @@
                                                     {{ $nombreMostrar }}
                                                 </span>
                                             </div>
-                                            <a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium rounded text-blue-600 hover:bg-blue-50 transition">
-                                                Abrir archivo
+                                            <a href="{{ Storage::url($archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                Ver archivo
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
                                             </a>
                                         </div>
                                     @empty
@@ -732,11 +722,11 @@
                                         <dt class="font-medium text-gray-800">Institución Educativa</dt>
                                         <dd class="mt-1 text-gray-900">{{ $empleado->institucion_educativa }}</dd>
                                     </div>
-                                    <div class="sm:col-span-2">
+                                    <div>
                                         <dt class="font-medium text-gray-800">Idiomas</dt>
                                         <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->idiomas }}</dd>
                                     </div>
-                                    <div class="sm:col-span-2">
+                                    <div>
                                         <dt class="font-medium text-gray-800">Intereses Personales</dt>
                                         <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->intereses_personales }}</dd>
                                     </div>
