@@ -70,6 +70,13 @@ class EmpleadoController extends Controller
             });
         }
 
+        // Filtro por nombre de empleado
+        if ($request->filled('buscar')) {
+            $busqueda = $request->input('buscar');
+            $query->where('nombre_completo', 'like', '%' . $busqueda . '%')
+                  ->orWhere('numero_documento', 'like', '%' . $busqueda . '%');
+        }
+
         $filtroEmpresa = $request->get('empresa', 'todos');
         if ($filtroEmpresa !== 'todos') {
             $query->whereHas('empresa', function ($q) use ($filtroEmpresa) {

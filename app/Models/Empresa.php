@@ -61,6 +61,12 @@ class Empresa extends Model
             ->pluck('empleado');
     }
 
+    public function cargos()
+    {
+        return $this->hasMany(Cargo::class, 'empresa_id', 'id_empresa');
+    }
+
+
     /**
      * Contar empleados activos
      */

@@ -314,23 +314,23 @@
                                     <button type="button" @click="patologias.push({ nombre_patologia: '', fecha_diagnostico: '', gravedad_patologia: '', descripcion_patologia: '', tratamiento_actual_patologia: '' })" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                                        </svg>
-                                        Agregar
-                                    </button>
-                                </div>
+                                    </svg>
+                                    Agregar
+                                </button>
+                            </div>
 
-                                <div class="space-y-4">
-                                    <template x-for="(item, index) in patologias" :key="index">
-                                        <div class="bg-gray-50 rounded-lg p-4 relative">
-                                            <button type="button" @click="patologias.splice(index, 1)" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
+                            <div class="space-y-4">
+                                <template x-for="(item, index) in patologias" :key="index">
+                                    <div class="bg-gray-50 rounded-lg p-4 relative">
+                                        <button type="button" @click="patologias.splice(index, 1)" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <label :for="'patologias['+index+'][nombre_patologia]'" class="block text-sm font-medium text-gray-700">Nombre de la Patología</label>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label :for="'patologias['+index+'][nombre_patologia]'" class="block text-sm font-medium text-gray-700">Nombre de la Patología</label>
                                                     <input type="text" x-model="item.nombre_patologia" :name="'patologias['+index+'][nombre_patologia]'" :id="'patologias['+index+'][nombre_patologia]'" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" placeholder="Nombre de la patología">
                                                 </div>
                                                 <div>
@@ -484,32 +484,28 @@
                         <!-- Información Laboral -->
                         <div x-show="activeTab === 'laboral'" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="empresa_id" class="block text-sm font-medium text-gray-700">
-                                        Empresa <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="empresa_id" id="empresa_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
-                                        <option value="">Seleccione empresa</option>
-                                        @foreach($empresas as $empresa)
+                                <div class="mb-4">
+                                    <label for="empresa_id" class="block text-sm font-medium text-gray-700">Empresa</label>
+                                    <select id="empresa_id" name="empresa_id"
+                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
+                                        <option value="">Selecciona Empresa</option>
+                                        @foreach ($empresas as $empresa)
                                             <option value="{{ $empresa->id_empresa }}" {{ old('empresa_id') == $empresa->id_empresa ? 'selected' : '' }}>
                                                 {{ $empresa->nombre_empresa }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div>
-                                    <label for="cargo_id" class="block text-sm font-medium text-gray-700">
-                                        Cargo <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="cargo_id" id="cargo_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
-                                        <option value="">Seleccione cargo</option>
-                                        @foreach($cargos as $cargo)
-                                            <option value="{{ $cargo->id_cargo }}" {{ old('cargo_id') == $cargo->id_cargo ? 'selected' : '' }}>
-                                                {{ $cargo->nombre_cargo }}
-                                            </option>
-                                        @endforeach
+
+                                <div class="mb-4">
+                                    <label for="cargo_id" class="block text-sm font-medium text-gray-700">Cargo</label>
+                                    <select id="cargo_id" name="cargo_id"
+                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
+                                        <option value="">Selecciona Cargo</option>
                                     </select>
+                                    <p id="cargo_error" class="mt-1 text-sm text-red-600" style="display:none;">Error al cargar cargos. Intenta nuevamente.</p>
                                 </div>
+                                
                                 <div>
                                     <label for="fecha_ingreso" class="block text-sm font-medium text-gray-700">
                                         Fecha de Ingreso <span class="text-red-500">*</span>
@@ -740,85 +736,80 @@
                                                         <option value="Otro">Otro</option>
                                                     </select>
                                                 </div>
-						<!-- Agregar esto justo después del cierre del div de campos comunes -->
-</div> <!-- Cierre del div de grid de campos comunes -->
-
-<!-- Agregar esta sección -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-    <!-- Fecha de Nacimiento -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-        <input type="date" :name="'beneficiarios['+index+'][fecha_nacimiento]'" x-model="item.fecha_nacimiento" 
-               class="w-full rounded border border-gray-300 px-3 py-2">
-    </div>
-    
-    <!-- Tipo de Documento -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
-        <select :name="'beneficiarios['+index+'][tipo_documento_id]'" x-model="item.tipo_documento_id" 
-                class="w-full rounded border border-gray-300 px-3 py-2">
-            <option value="">Seleccione tipo de documento</option>
-            @foreach($tiposDocumento as $tipo)
-                <option value="{{ $tipo->id_tipo_documento }}">{{ $tipo->nombre_tipo_documento }}</option>
-            @endforeach
-        </select>
-    </div>
-    
-    <!-- Número de Documento -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">Número de Documento</label>
-        <input type="text" :name="'beneficiarios['+index+'][numero_documento]'" x-model="item.numero_documento" 
-               class="w-full rounded border border-gray-300 px-3 py-2" placeholder="Número de documento">
-    </div>
-    
-    <!-- Nivel Educativo -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">Nivel Educativo</label>
-        <select :name="'beneficiarios['+index+'][nivel_educativo]'" x-model="item.nivel_educativo" 
-                class="w-full rounded border border-gray-300 px-3 py-2">
-            <option value="">Seleccione nivel</option>
-            <option value="Primaria">Primaria</option>
-            <option value="Bachillerato Incompleto">Bachillerato Incompleto</option>
-            <option value="Bachillerato Completo">Bachillerato Completo</option>
-            <option value="Técnico">Técnico</option>
-            <option value="Tecnológico">Tecnológico</option>
-            <option value="Universitario">Universitario</option>
-            <option value="Posgrado">Posgrado</option>
-        </select>
-    </div>
-    
-    <!-- Reside con empleado -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">¿Reside con el empleado?</label>
-        <select :name="'beneficiarios['+index+'][reside_con_empleado]'" x-model="item.reside_con_empleado" 
-                class="w-full rounded border border-gray-300 px-3 py-2">
-            <option value="1">Sí</option>
-            <option value="0">No</option>
-        </select>
-    </div>
-    
-    <!-- Depende económicamente -->
-    <div>
-        <label class="block text-sm font-medium text-gray-700">¿Depende económicamente?</label>
-        <select :name="'beneficiarios['+index+'][depende_economicamente]'" x-model="item.depende_economicamente" 
-                class="w-full rounded border border-gray-300 px-3 py-2">
-            <option value="1">Sí</option>
-            <option value="0">No</option>
-        </select>
-    </div>
-    
-    <!-- Contacto de emergencia -->
-    <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700">Contacto de emergencia</label>
-        <input type="text" :name="'beneficiarios['+index+'][contacto_emergencia]'" x-model="item.contacto_emergencia" 
-               class="w-full rounded border border-gray-300 px-3 py-2" placeholder="Número de contacto">
-    </div>
-</div>
-
-<!-- Aquí continúan las secciones de Hijo/a, Padre/Madre, Cónyuge, etc. -->
-                                                <!-- Más campos comunes aquí si necesitas -->
+                                                </div> 
+                                                <!-- Agregar esta sección -->
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                                    <!-- Fecha de Nacimiento -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                                                        <input type="date" :name="'beneficiarios['+index+'][fecha_nacimiento]'" x-model="item.fecha_nacimiento" 
+                                                            class="w-full rounded border border-gray-300 px-3 py-2">
+                                                    </div>
+                                                    
+                                                    <!-- Tipo de Documento -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
+                                                        <select :name="'beneficiarios['+index+'][tipo_documento_id]'" x-model="item.tipo_documento_id" 
+                                                                class="w-full rounded border border-gray-300 px-3 py-2">
+                                                            <option value="">Seleccione tipo de documento</option>
+                                                            @foreach($tiposDocumento as $tipo)
+                                                                <option value="{{ $tipo->id_tipo_documento }}">{{ $tipo->nombre_tipo_documento }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <!-- Número de Documento -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">Número de Documento</label>
+                                                        <input type="text" :name="'beneficiarios['+index+'][numero_documento]'" x-model="item.numero_documento" 
+                                                            class="w-full rounded border border-gray-300 px-3 py-2" placeholder="Número de documento">
+                                                    </div>
+                                                    
+                                                    <!-- Nivel Educativo -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">Nivel Educativo</label>
+                                                        <select :name="'beneficiarios['+index+'][nivel_educativo]'" x-model="item.nivel_educativo" 
+                                                                class="w-full rounded border border-gray-300 px-3 py-2">
+                                                            <option value="">Seleccione nivel</option>
+                                                            <option value="Primaria">Primaria</option>
+                                                            <option value="Bachillerato Incompleto">Bachillerato Incompleto</option>
+                                                            <option value="Bachillerato Completo">Bachillerato Completo</option>
+                                                            <option value="Técnico">Técnico</option>
+                                                            <option value="Tecnológico">Tecnológico</option>
+                                                            <option value="Universitario">Universitario</option>
+                                                            <option value="Posgrado">Posgrado</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <!-- Reside con empleado -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">¿Reside con el empleado?</label>
+                                                        <select :name="'beneficiarios['+index+'][reside_con_empleado]'" x-model="item.reside_con_empleado" 
+                                                                class="w-full rounded border border-gray-300 px-3 py-2">
+                                                            <option value="1">Sí</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <!-- Depende económicamente -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700">¿Depende económicamente?</label>
+                                                        <select :name="'beneficiarios['+index+'][depende_economicamente]'" x-model="item.depende_economicamente" 
+                                                                class="w-full rounded border border-gray-300 px-3 py-2">
+                                                            <option value="1">Sí</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <!-- Contacto de emergencia -->
+                                                    <div class="md:col-span-2">
+                                                        <label class="block text-sm font-medium text-gray-700">Contacto de emergencia</label>
+                                                        <input type="text" :name="'beneficiarios['+index+'][contacto_emergencia]'" x-model="item.contacto_emergencia" 
+                                                            class="w-full rounded border border-gray-300 px-3 py-2" placeholder="Número de contacto">
+                                                    </div>
+                                                </div>
+                                           
                                             </div>
-
                                             <!-- Hijo/a -->
                                             <div x-show="item.parentesco === 'Hijo/a'" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                                 <div>
@@ -888,12 +879,10 @@
                                             </div>
                                         </div>
                                     </template>
-
                                     <div x-show="beneficiarios.length === 0" class="text-center py-4 text-sm text-gray-500">
                                         No se han agregado beneficiarios
                                     </div>
                                 </div>
-
                                 <!-- DOCUMENTACIÓN GENERAL -->
                                <div class="bg-white border border-gray-200 rounded-xl shadow p-6 mb-6 mt-6">
                                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Documentación General del Empleado</h2> 
@@ -949,79 +938,247 @@
     </script>
 @endsection
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Para Lugar de Nacimiento
-            const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
-            const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
-            const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Para Lugar de Nacimiento
+    const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
+    const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
+    const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
+    
+    if (paisSelectNacimiento) {
+        paisSelectNacimiento.addEventListener('change', function() {
+            const paisId = this.value;
+            departamentoSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
+            municipioSelectNacimiento.innerHTML = '<option value="">Seleccione municipio</option>';
 
-            paisSelectNacimiento.addEventListener('change', function () {
-                const paisId = this.value;
-                departamentoSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-                municipioSelectNacimiento.innerHTML = '<option value="">Seleccione municipio</option>';
-
-                fetch(`/api/departamentos/${paisId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let options = '<option value="">Seleccione departamento</option>';
-                        data.forEach(dep => {
-                            options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                        });
-                        departamentoSelectNacimiento.innerHTML = options;
+            fetch(`{{ url('/api/departamentos') }}/${paisId}`)
+                .then(res => res.json())
+                .then(data => {
+                    let options = '<option value="">Seleccione departamento</option>';
+                    data.forEach(dep => {
+                        options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
                     });
-            });
-
-            departamentoSelectNacimiento.addEventListener('change', function () {
-                const departamentoId = this.value;
-                municipioSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-
-                fetch(`/api/municipios/${departamentoId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let options = '<option value="">Seleccione municipio</option>';
-                        data.forEach(mun => {
-                            options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                        });
-                        municipioSelectNacimiento.innerHTML = options;
-                    });
-            });
-
-            // Para Lugar de Residencia
-            const paisSelectResidencia = document.getElementById('pais_id_residencia');
-            const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
-            const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
-
-            paisSelectResidencia.addEventListener('change', function () {
-                const paisId = this.value;
-                departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-                municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
-
-                fetch(`/api/departamentos/${paisId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let options = '<option value="">Seleccione departamento</option>';
-                        data.forEach(dep => {
-                            options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                        });
-                        departamentoSelectResidencia.innerHTML = options;
-                    });
-            });
-
-            departamentoSelectResidencia.addEventListener('change', function () {
-                const departamentoId = this.value;
-                municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-
-                fetch(`/api/municipios/${departamentoId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let options = '<option value="">Seleccione municipio</option>';
-                        data.forEach(mun => {
-                            options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                        });
-                        municipioSelectResidencia.innerHTML = options;
-                    });
-            });
+                    departamentoSelectNacimiento.innerHTML = options;
+                })
+                .catch(() => {
+                    departamentoSelectNacimiento.innerHTML = '<option value="">Error al cargar departamentos</option>';
+                });
         });
-    </script>
+    }
+
+    if (departamentoSelectNacimiento) {
+        departamentoSelectNacimiento.addEventListener('change', function() {
+            const departamentoId = this.value;
+            municipioSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
+
+            fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
+                .then(res => res.json())
+                .then(data => {
+                    let options = '<option value="">Seleccione municipio</option>';
+                    data.forEach(mun => {
+                        options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
+                    });
+                    municipioSelectNacimiento.innerHTML = options;
+                })
+                .catch(() => {
+                    municipioSelectNacimiento.innerHTML = '<option value="">Error al cargar municipios</option>';
+                });
+        });
+    }
+
+    // Para Lugar de Residencia
+    const paisSelectResidencia = document.getElementById('pais_id_residencia');
+    const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
+    const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
+    const barrioSelectResidencia = document.getElementById('barrio_id_residencia');
+
+    paisSelectResidencia?.addEventListener('change', function() {
+        const paisId = this.value;
+        departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+        municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
+
+        fetch(`{{ url('/api/departamentos') }}/${paisId}`)
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Seleccione departamento</option>';
+                data.forEach(dep => {
+                    options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
+                });
+                departamentoSelectResidencia.innerHTML = options;
+            });
+    });
+
+    departamentoSelectResidencia?.addEventListener('change', function() {
+        const departamentoId = this.value;
+        municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+
+        fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Seleccione municipio</option>';
+                data.forEach(mun => {
+                    options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
+                });
+                municipioSelectResidencia.innerHTML = options;
+            });
+    });
+
+    municipioSelectResidencia?.addEventListener('change', function() {
+        const municipioId = this.value;
+        barrioSelectResidencia.innerHTML = '<option value="">Cargando barrios...</option>';
+        
+        if (municipioId) {
+            fetch(`{{ url('/api/barrios') }}/${municipioId}`)
+                .then(res => res.json())
+                .then(barrios => {
+                    let options = '<option value="">Seleccione barrio</option>';
+                    barrios.forEach(barrio => {
+                        options += `<option value="${barrio.id_barrio}">${barrio.nombre_barrio}</option>`;
+                    });
+                    barrioSelectResidencia.innerHTML = options;
+                })
+                .catch(() => {
+                    barrioSelectResidencia.innerHTML = '<option value="">Error al cargar barrios</option>';
+                });
+        } else {
+            barrioSelectResidencia.innerHTML = '<option value="">Seleccione un municipio primero</option>';
+        }
+    });
+
+    // Para Información Laboral → Empresa → Cargo
+    const empresaSelect = document.getElementById('empresa_id');
+    const cargoSelect   = document.getElementById('cargo_id');
+
+    empresaSelect?.addEventListener('change', function() {
+        const empresaId = this.value;
+        cargoSelect.innerHTML = '<option value="">Cargando cargos...</option>';
+        cargoSelect.disabled = true;
+
+        if (empresaId) {
+            fetch(`{{ url('/api/cargos') }}/${empresaId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Error en la petición');
+                    return res.json();
+                })
+                .then(cargos => {
+                    let options = '<option value="">Seleccione cargo</option>';
+                    cargos.forEach(cargo => {
+                        options += `<option value="${cargo.id_cargo}">${cargo.nombre_cargo}</option>`;
+                    });
+                    cargoSelect.innerHTML = options;
+                    cargoSelect.disabled = false;
+
+                    // Mantener valor previo (en caso de validación fallida)
+                    const oldValue = "{{ old('cargo_id') }}";
+                    if (oldValue) {
+                        cargoSelect.value = oldValue;
+                    }
+                })
+                .catch(() => {
+                    cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+                    cargoSelect.disabled = false;
+                });
+        } else {
+            cargoSelect.innerHTML = '<option value="">Seleccione empresa primero</option>';
+            cargoSelect.disabled = false;
+        }
+    });
+
+    // Triggers iniciales si hay valores preseleccionados
+    if (paisSelectNacimiento?.value) paisSelectNacimiento.dispatchEvent(new Event('change'));
+    if (departamentoSelectNacimiento?.value) departamentoSelectNacimiento.dispatchEvent(new Event('change'));
+
+    if (empresaSelect?.value) empresaSelect.dispatchEvent(new Event('change'));
+});
+</script>
+
+<script>
+document.getElementById('empresa_id').addEventListener('change', function() {
+    let empresaId = this.value;
+    let cargoSelect = document.getElementById('cargo_id');
+
+    cargoSelect.innerHTML = '<option value="">Cargando...</option>';
+
+    if (empresaId) {
+        fetch(`/empresas/${empresaId}/cargos`)
+            .then(res => res.json())
+            .then(data => {
+                cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+                data.forEach(cargo => {
+                    let option = document.createElement('option');
+                    option.value = cargo.id_cargo;
+                    option.textContent = cargo.nombre_cargo;
+                    cargoSelect.appendChild(option);
+                });
+            })
+            .catch(() => {
+                cargoSelect.innerHTML = '<option value="">Error cargando cargos</option>';
+            });
+    } else {
+        cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+    }
+});
+</script>
+<script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const empresaSelect = document.getElementById('empresa_id');
+                                        const cargoSelect = document.getElementById('cargo_id');
+                                        const cargoError  = document.getElementById('cargo_error');
+                                        let requestSeq = 0; // controla concurrencia de cargas
+
+                                        async function cargarCargos(empresaId, preselectId = null) {
+                                            cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+                                            cargoError && (cargoError.style.display = 'none');
+                                            if (!empresaId) return;
+                                            const currentSeq = ++requestSeq;
+                                            try {
+                                                const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
+                                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                                                if (!res.ok) throw new Error('Error al cargar cargos');
+                                                const data = await res.json();
+                                                // Ignorar respuestas antiguas si hubo otra solicitud posterior
+                                                if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
+                                                    return;
+                                                }
+                                                if (!Array.isArray(data) || data.length === 0) {
+                                                    const opt = document.createElement('option');
+                                                    opt.value = '';
+                                                    opt.textContent = 'No hay cargos disponibles';
+                                                    opt.disabled = true;
+                                                    cargoSelect.appendChild(opt);
+                                                    return;
+                                                }
+                                                data.forEach(c => {
+                                                    const opt = document.createElement('option');
+                                                    opt.value = c.id_cargo;
+                                                    opt.textContent = c.nombre_cargo;
+                                                    if (preselectId && String(preselectId) === String(c.id_cargo)) {
+                                                        opt.selected = true;
+                                                    }
+                                                    cargoSelect.appendChild(opt);
+                                                });
+                                            } catch (e) {
+                                                console.error(e);
+                                                // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
+                                                if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
+                                                    cargoError.style.display = '';
+                                                }
+                                            }
+                                        }
+
+                                        empresaSelect.addEventListener('change', function () {
+                                            cargarCargos(this.value);
+                                        });
+
+                                        const oldEmpresa = "{{ old('empresa_id') }}";
+                                        const oldCargo = "{{ old('cargo_id') }}";
+                                        if (oldEmpresa) {
+                                            cargarCargos(oldEmpresa, oldCargo);
+                                        }
+                                    });
+                                </script>
 @endpush
+
+
+
+

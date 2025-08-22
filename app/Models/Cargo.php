@@ -13,6 +13,8 @@ class Cargo extends Model
     protected $primaryKey = 'id_cargo';
     protected $fillable = [
         'nombre_cargo',
+        'id_dependencia',
+        'empresa_id'
     ];
     public $timestamps = false;
 
@@ -46,4 +48,10 @@ class Cargo extends Model
     {
         return $this->belongsTo(Departamento::class, 'departamento_id', 'id_departamento');
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id', 'id_empresa');
+    }
+
 }

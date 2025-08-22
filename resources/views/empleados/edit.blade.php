@@ -79,7 +79,9 @@
                                 Información Laboral
                             </button>
                             <button type="button" @click="activeTab = 'adicional'" :class="{'border-slate-800 text-slate-800': activeTab === 'adicional', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'adicional'}" class="py-4 px-6 border-b-2 font-medium text-sm">
-                                Datos Adicionales
+                         
+                         
+                            Datos Adicionales
                             </button>
                         </nav>
                     </div>
