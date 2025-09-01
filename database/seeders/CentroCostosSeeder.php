@@ -22,7 +22,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '10000',
                 'nombre' => 'Administración',
-                'descripcion' => 'Departamento de Administración',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -30,7 +29,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '20000',
                 'nombre' => 'Ventas',
-                'descripcion' => 'Departamento de Ventas',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -38,7 +36,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '20001',
                 'nombre' => 'Comercial (Vendedores)',
-                'descripcion' => 'Equipo de ventas comerciales',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -46,7 +43,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '20002',
                 'nombre' => 'Despachos y bodega',
-                'descripcion' => 'Área de logística y almacén',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -54,7 +50,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '30000',
                 'nombre' => 'Producción',
-                'descripcion' => 'Área de producción',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -62,7 +57,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '30001',
                 'nombre' => 'Impresora NP1',
-                'descripcion' => 'Máquina de impresión NP1',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -70,7 +64,6 @@ class CentroCostosSeeder extends Seeder
             [
                 'codigo' => '30002',
                 'nombre' => 'Impresora NP2',
-                'descripcion' => 'Máquina de impresión NP2',
                 'activo' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

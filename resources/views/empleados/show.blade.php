@@ -280,64 +280,7 @@
                     <!-- Tab: Ubicación -->
                     <div x-show="activeTab === 'ubicacion'" class="space-y-6">
                             <!-- Sección: Discapacidades -->
-                            <section aria-label="Discapacidades del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
-                                <header class="bg-orange-500 p-4 flex items-center gap-3 rounded-t-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-                                        <path d="M12 2a3 3 0 0 0-3 3v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V5a3 3 0 0 0-3-3Z" />
-                                        <path d="M14 14l-2 2-2-2" />
-                                        <path d="M8 22h8" />
-                                        <path d="M12 18v4" />
-                                    </svg>
-                                    <h3 class="text-lg font-medium text-white">Discapacidades</h3>
-                                </header>
-                                @if ($empleado->discapacidades->count() > 0)
-                                    <div class="p-6 space-y-6">
-                                        @foreach ($empleado->discapacidades as $index => $discapacidad)
-                                            <div class="p-4 bg-orange-50 border border-orange-200 rounded-lg p-4 relative">
-                                                <h4 class="text-sm font-semibold text-gray-600 mb-2">Discapacidad {{ $index + 1 }}</h4>
-                                                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-700">
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Tipo</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $discapacidad->tipo_discapacidad ?? 'No especificado' }}</dd>
-                                                    </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Grado</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $discapacidad->grado_discapacidad ?? 'No especificado' }}</dd>
-                                                    </div>
-                                                    @if (isset($discapacidad->fecha_diagnostico_discapacidad))
-                                                        <div>
-                                                            <dt class="font-medium text-gray-800">Fecha de Diagnóstico</dt>
-                                                            <dd class="mt-1 text-gray-900">{{ \Carbon\Carbon::parse($discapacidad->fecha_diagnostico_discapacidad)->format('d/m/Y') }}</dd>
-                                                        </div>
-                                                    @endif
-                                                    @if (isset($discapacidad->certificado_discapacidad))
-                                                        <div>
-                                                            <dt class="font-medium text-gray-800">Certificado</dt>
-                                                            <dd class="mt-1 text-gray-900">{{ $discapacidad->certificado_discapacidad }}</dd>
-                                                        </div>
-                                                    @endif
-                                                    @if (isset($discapacidad->entidad_certificadora_discapacidad))
-                                                        <div class="col-span-1 sm:col-span-2">
-                                                            <dt class="font-medium text-gray-800">Entidad Certificadora</dt>
-                                                            <dd class="mt-1 text-gray-900">{{ $discapacidad->entidad_certificadora_discapacidad }}</dd>
-                                                        </div>
-                                                    @endif
-                                                </dl>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="flex flex-col items-center justify-center py-8 text-gray-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                            <path d="M9 12l2 2l4-4" />
-                                            <line x1="9" y1="6" x2="15" y2="6" />
-                                            <line x1="9" y1="18" x2="15" y2="18" />
-                                        </svg>
-                                        <p class="mt-2 text-sm">No se han registrado discapacidades.</p>
-                                    </div>
-                                @endif
-                            </section>
+
                             <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
                             <header class="bg-emerald-500 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -570,7 +513,7 @@
                                     @forelse($empleado->archivosAdjuntos as $archivo)
                                         @php
                                             $campo = basename(dirname($archivo->ruta));
-                                            $nombreMostrar = $nombresArchivos[$campo] ?? 'Ver archivo';
+                                            $nombreMostrar = $nombresArchivos[$campo] ?? 'Documentos Iniciales';
                                         @endphp
 
                                         <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-6 py-6 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[140px] w-full">

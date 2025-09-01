@@ -33,8 +33,14 @@ return new class extends Migration
             $table->string('relacion_laboral', 255)->nullable()->comment('Relación laboral actual');
             $table->boolean('relacion_sindical')->nullable()->comment('1 = Sí, 0 = No');
             $table->enum('tipo_vinculacion', ['Directo', 'Indirecto'])->default('Directo');
+            $table->unsignedBigInteger('centro_costo_id')->nullable()->after('tipo_vinculacion');
 
             // Índices y claves foráneas
+            $table->foreign('centro_costo_id')
+                ->references('id')
+                ->on('centro_costos')
+                ->onDelete('set null');
+                
             $table->foreign('empleado_id')
                 ->references('id_empleado')
                 ->on('empleados')

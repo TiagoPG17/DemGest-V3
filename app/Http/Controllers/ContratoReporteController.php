@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\InformacionLaboral;
 use App\Services\ProrrogaService;
+use App\Models\Estado;
 use Carbon\Carbon;
 
 class ContratoReporteController extends Controller
@@ -18,7 +19,11 @@ class ContratoReporteController extends Controller
         $sort = $request->input('sort', 'fecha_corte');
         $direction = $request->input('direction', 'asc');
 
-        $empleados = Empleado::with(['informacionLaboral.estadoCargo.cargo', 'empresa'])
+        $empleados = Empleado::with(['informacionLaboral.estadoCargo', 'empresa'])
+            ->whereHas('informacionLaboralActual', function($query) {
+                // Filtra por empleados que no tienen fecha de salida (activos)
+                $query->whereNull('fecha_salida');
+            })
             ->get()
             ->filter(function ($empleado) use ($fechaInicio, $fechaFin) {
                 $estado = $empleado->informacionLaboralActual;
