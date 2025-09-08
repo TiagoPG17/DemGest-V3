@@ -323,35 +323,6 @@ class EmpleadoController extends Controller
             ]);
             Log::info('Estado cargo creado para estado ID: ' . $informacionLaboral->id_estado);
 
-            // Sincronizar discapacidades
-            if ($request->has('discapacidades') && is_array($request->discapacidades)) {
-                $discapacidadIdsToSync = [];
-                foreach ($validated['discapacidades'] as $index => $discapacidadData) {
-                    Log::info("Procesando discapacidad #{$index}:", $discapacidadData);
-                    if (!empty($discapacidadData['tipo_discapacidad']) && !empty($discapacidadData['grado_discapacidad'])) {
-                        $discapacidad = Discapacidad::firstOrCreate(
-                            [
-                                'tipo_discapacidad' => $discapacidadData['tipo_discapacidad'],
-                                'grado_discapacidad' => $discapacidadData['grado_discapacidad'],
-                            ],
-                            [
-                                'fecha_diagnostico_discapacidad' => $discapacidadData['fecha_diagnostico_discapacidad'],
-                                'enfermedad_base' => $discapacidadData['enfermedad_base'] ?? null,
-                            ]
-                        );
-                        Log::info("Discapacidad creada/Encontrada con ID: {$discapacidad->id_discapacidad}");
-                        $discapacidadIdsToSync[] = $discapacidad->id_discapacidad;
-                    } else {
-                        Log::warning("Discapacidad #{$index} no válida: tipo o grado vacío", $discapacidadData);
-                    }
-                }
-                Log::info('Discapacidades a sincronizar:', $discapacidadIdsToSync);
-                $empleado->discapacidades()->sync($discapacidadIdsToSync);
-            } else {
-                Log::info('No se recibieron discapacidades para sincronizar.');
-                $empleado->discapacidades()->sync([]);
-            }
-
             // Sincronizar patologías
             if ($request->has('patologias') && is_array($request->patologias)) {
                 $empleado->patologias()->detach();
@@ -674,31 +645,6 @@ class EmpleadoController extends Controller
             $prorrogaService->calcular($informacionLaboral);
             $informacionLaboral->save();
 
-            // Sincronizar discapacidades
-            if ($request->has('discapacidades') && is_array($request->discapacidades)) {
-                $discapacidadIdsToSync = [];
-                foreach ($request->discapacidades as $index => $discapacidadData) {
-                    Log::info("Procesando discapacidad #{$index}:", $discapacidadData);
-                    if (!empty($discapacidadData['tipo_discapacidad']) && !empty($discapacidadData['grado_discapacidad'])) {
-                        $discapacidad = Discapacidad::create([
-                            'tipo_discapacidad' => $discapacidadData['tipo_discapacidad'],
-                            'grado_discapacidad' => $discapacidadData['grado_discapacidad'] ?? null,
-                            'fecha_diagnostico_discapacidad' => $discapacidadData['fecha_diagnostico_discapacidad'] ?? null,
-                            'enfermedad_base' => $discapacidadData['enfermedad_base'] ?? null,
-
-                        ]);
-                        Log::info("Discapacidad creada con ID: {$discapacidad->id_discapacidad}");
-                        $discapacidadIdsToSync[] = $discapacidad->id_discapacidad;
-                    } else {
-                        Log::warning("Discapacidad #{$index} no válida: tipo o grado vacío", $discapacidadData);
-                    }
-                }
-                Log::info('Discapacidades a sincronizar:', $discapacidadIdsToSync);
-                $empleado->discapacidades()->sync($discapacidadIdsToSync);
-            } else {
-                Log::info('No se recibieron discapacidades para sincronizar.');
-                $empleado->discapacidades()->sync([]);
-            }
 
             // Sincronizar patologías
             if ($request->has('patologias') && is_array($request->patologias)) {
