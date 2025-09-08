@@ -61,7 +61,6 @@
             <!-- Componente Alpine.js para tabs y datos -->
             <div x-data="{
                     activeTab: 'personal',
-                    discapacidades: {{ Js::from(old('discapacidades', $discapacidades ?? [])) }},
                     patologias: {{ Js::from(old('patologias', $patologias ?? [])) }},
                     beneficiarios: {{ Js::from(old('beneficiarios', $beneficiarios ?? [])) }}
                 }">
@@ -279,61 +278,7 @@
                                         class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
                                 </div>
                             </div>
-                            <hr class="my-6 border-gray-200">
-                            <!-- Discapacidades -->
-                            <div>
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Discapacidades</h3>
-                                    <button type="button" @click="discapacidades.push({})" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                                        </svg>
-                                        Agregar
-                                    </button>
-                                </div>
-                                <div class="space-y-4">
-                                    <template x-for="(item, index) in discapacidades" :key="index">
-                                            <div class="bg-gray-50 rounded-lg p-4 relative shadow-sm border border-gray-200">
-                                                <button type="button" @click="discapacidades.splice(index, 1)" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][tipo_discapacidad]'" class="block text-sm font-medium text-gray-700">Tipo de Discapacidad</label>
-                                                        <select :name="'discapacidades['+index+'][tipo_discapacidad]'" :id="'discapacidades['+index+'][tipo_discapacidad]'" x-model="item.tipo_discapacidad" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="">Seleccione tipo</option>
-                                                            <option value="Física">Física</option>
-                                                            <option value="Visual">Visual</option>
-                                                            <option value="Intelectual">Intelectual</option>
-                                                            <option value="Psicosocial">Psicosocial</option>
-                                                            <option value="Múltiple">Múltiple</option>
-                                                        </select>
-                                                    </div>
 
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][grado_discapacidad]'" class="block text-sm font-medium text-gray-700">Grado de Discapacidad</label>
-                                                        <select :name="'discapacidades['+index+'][grado_discapacidad]'" :id="'discapacidades['+index+'][grado_discapacidad]'" x-model="item.grado_discapacidad" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="">Seleccione grado</option>
-                                                            <option value="Leve">Leve</option>
-                                                            <option value="Moderada">Moderada</option>
-                                                            <option value="Severa">Severa</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" class="block text-sm font-medium text-gray-700">Fecha de Diagnóstico</label>
-                                                        <input type="date" :name="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" :id="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" x-model="item.fecha_diagnostico_discapacidad" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                     <div x-show="discapacidades.length === 0" class="text-center py-4 text-sm text-gray-500">
-                                        No se han agregado discapacidades
-                                    </div>
-                                </div>
-                            </div>
                             <hr class="my-6 border-gray-200">
                             <!-- Patologías -->
                            <div>
@@ -928,61 +873,20 @@
 @endsection
 
 @push('scripts')
-    <script>
-        console.log('JS de ubicaciones cargado');
-        document.addEventListener('DOMContentLoaded', function () {
-            const paisSelect = document.getElementById('pais_id_nacimiento');
-            const departamentoSelect = document.getElementById('departamento_id_nacimiento');
-            const municipioSelect = document.getElementById('municipio_id_nacimiento');
-            const barrioSelect = document.getElementById('barrio_id_residencia');
-
-            paisSelect.addEventListener('change', function () {
-                const paisId = this.value;
-                departamentoSelect.innerHTML = '<option value="">Cargando...</option>';
-                municipioSelect.innerHTML = '<option value="">Seleccione municipio</option>';
-                fetch(`/api/departamentos/${paisId}`)
-                    .then(res => res.json())
-                    .then((data) => {
-                        let options = '<option value="">Seleccione departamento</option>';
-                        data.forEach(dep => {
-                            options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                        });
-                        departamentoSelect.innerHTML = options;
-                    });
-            });
-
-            departamentoSelect.addEventListener('change', function () {
-                const departamentoId = this.value;
-                municipioSelect.innerHTML = '<option value="">Cargando...</option>';
-                fetch(`/api/municipios/${departamentoId}`)
-                    .then(res => res.json())
-                    .then((data) => {
-                        let options = '<option value="">Seleccione municipio</option>';
-                        data.forEach(mun => {
-                            options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                        });
-                        municipioSelect.innerHTML = options;
-                    });
-            });
-        });
-    </script>
-@endpush
-
-
-@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Lugar de Nacimiento
-        const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
-        const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
-        const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
-
-        paisSelectNacimiento.addEventListener('change', function () {
+document.addEventListener('DOMContentLoaded', function () {
+    // Para Lugar de Nacimiento
+    const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
+    const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
+    const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
+    
+    if (paisSelectNacimiento) {
+        paisSelectNacimiento.addEventListener('change', function() {
             const paisId = this.value;
             departamentoSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
             municipioSelectNacimiento.innerHTML = '<option value="">Seleccione municipio</option>';
 
-            fetch(`/api/departamentos/${paisId}`)
+            fetch(`{{ url('/api/departamentos') }}/${paisId}`)
                 .then(res => res.json())
                 .then(data => {
                     let options = '<option value="">Seleccione departamento</option>';
@@ -990,14 +894,19 @@
                         options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
                     });
                     departamentoSelectNacimiento.innerHTML = options;
+                })
+                .catch(() => {
+                    departamentoSelectNacimiento.innerHTML = '<option value="">Error al cargar departamentos</option>';
                 });
         });
+    }
 
-        departamentoSelectNacimiento.addEventListener('change', function () {
+    if (departamentoSelectNacimiento) {
+        departamentoSelectNacimiento.addEventListener('change', function() {
             const departamentoId = this.value;
             municipioSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
 
-            fetch(`/api/municipios/${departamentoId}`)
+            fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
                 .then(res => res.json())
                 .then(data => {
                     let options = '<option value="">Seleccione municipio</option>';
@@ -1005,104 +914,202 @@
                         options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
                     });
                     municipioSelectNacimiento.innerHTML = options;
+                })
+                .catch(() => {
+                    municipioSelectNacimiento.innerHTML = '<option value="">Error al cargar municipios</option>';
                 });
         });
+    }
 
-        // Lugar de Residencia
-        const paisSelectResidencia = document.getElementById('pais_id_residencia');
-        const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
-        const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
+    // Para Lugar de Residencia
+    const paisSelectResidencia = document.getElementById('pais_id_residencia');
+    const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
+    const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
+    const barrioSelectResidencia = document.getElementById('barrio_id_residencia');
 
-        paisSelectResidencia.addEventListener('change', function () {
-            const paisId = this.value;
-            departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-            municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
+    paisSelectResidencia?.addEventListener('change', function() {
+        const paisId = this.value;
+        departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+        municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
 
-            fetch(`/api/departamentos/${paisId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione departamento</option>';
-                    data.forEach(dep => {
-                        options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                    });
-                    departamentoSelectResidencia.innerHTML = options;
+        fetch(`{{ url('/api/departamentos') }}/${paisId}`)
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Seleccione departamento</option>';
+                data.forEach(dep => {
+                    options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
                 });
-        });
-
-        departamentoSelectResidencia.addEventListener('change', function () {
-            const departamentoId = this.value;
-            municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-
-            fetch(`/api/municipios/${departamentoId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione municipio</option>';
-                    data.forEach(mun => {
-                        options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                    });
-                    municipioSelectResidencia.innerHTML = options;
-                });
-        });
-
-        // Precargar valores si ya hay datos (solo en edit)
-        const selectedDepartamentoNacimiento = departamentoSelectNacimiento.getAttribute('data-selected');
-        const selectedMunicipioNacimiento = municipioSelectNacimiento.getAttribute('data-selected');
-
-        const selectedDepartamentoResidencia = departamentoSelectResidencia.getAttribute('data-selected');
-        const selectedMunicipioResidencia = municipioSelectResidencia.getAttribute('data-selected');
-
-        if (selectedDepartamentoNacimiento && paisSelectNacimiento.value) {
-            fetch(`/api/departamentos/${paisSelectNacimiento.value}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione departamento</option>';
-                    data.forEach(dep => {
-                        const selected = dep.id_departamento == selectedDepartamentoNacimiento ? 'selected' : '';
-                        options += `<option value="${dep.id_departamento}" ${selected}>${dep.nombre_departamento}</option>`;
-                    });
-                    departamentoSelectNacimiento.innerHTML = options;
-
-                    if (selectedMunicipioNacimiento) {
-                        fetch(`/api/municipios/${selectedDepartamentoNacimiento}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                let options = '<option value="">Seleccione municipio</option>';
-                                data.forEach(mun => {
-                                    const selected = mun.id_municipio == selectedMunicipioNacimiento ? 'selected' : '';
-                                    options += `<option value="${mun.id_municipio}" ${selected}>${mun.nombre_municipio}</option>`;
-                                });
-                                municipioSelectNacimiento.innerHTML = options;
-                            });
-                    }
-                });
-        }
-
-        if (selectedDepartamentoResidencia && paisSelectResidencia.value) {
-            fetch(`/api/departamentos/${paisSelectResidencia.value}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione departamento</option>';
-                    data.forEach(dep => {
-                        const selected = dep.id_departamento == selectedDepartamentoResidencia ? 'selected' : '';
-                        options += `<option value="${dep.id_departamento}" ${selected}>${dep.nombre_departamento}</option>`;
-                    });
-                    departamentoSelectResidencia.innerHTML = options;
-
-                    if (selectedMunicipioResidencia) {
-                        fetch(`/api/municipios/${selectedDepartamentoResidencia}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                let options = '<option value="">Seleccione municipio</option>';
-                                data.forEach(mun => {
-                                    const selected = mun.id_municipio == selectedMunicipioResidencia ? 'selected' : '';
-                                    options += `<option value="${mun.id_municipio}" ${selected}>${mun.nombre_municipio}</option>`;
-                                });
-                                municipioSelectResidencia.innerHTML = options;
-                            });
-                    }
-                });
-        }
-
+                departamentoSelectResidencia.innerHTML = options;
+            });
     });
+
+    departamentoSelectResidencia?.addEventListener('change', function() {
+        const departamentoId = this.value;
+        municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+
+        fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
+            .then(res => res.json())
+            .then(data => {
+                let options = '<option value="">Seleccione municipio</option>';
+                data.forEach(mun => {
+                    options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
+                });
+                municipioSelectResidencia.innerHTML = options;
+            });
+    });
+
+    municipioSelectResidencia?.addEventListener('change', function() {
+        const municipioId = this.value;
+        barrioSelectResidencia.innerHTML = '<option value="">Cargando barrios...</option>';
+        
+        if (municipioId) {
+            fetch(`{{ url('/api/barrios') }}/${municipioId}`)
+                .then(res => res.json())
+                .then(barrios => {
+                    let options = '<option value="">Seleccione barrio</option>';
+                    barrios.forEach(barrio => {
+                        options += `<option value="${barrio.id_barrio}">${barrio.nombre_barrio}</option>`;
+                    });
+                    barrioSelectResidencia.innerHTML = options;
+                })
+                .catch(() => {
+                    barrioSelectResidencia.innerHTML = '<option value="">Error al cargar barrios</option>';
+                });
+        } else {
+            barrioSelectResidencia.innerHTML = '<option value="">Seleccione un municipio primero</option>';
+        }
+    });
+
+    // Para Información Laboral → Empresa → Cargo
+    const empresaSelect = document.getElementById('empresa_id');
+    const cargoSelect   = document.getElementById('cargo_id');
+
+    empresaSelect?.addEventListener('change', function() {
+        const empresaId = this.value;
+        cargoSelect.innerHTML = '<option value="">Cargando cargos...</option>';
+        cargoSelect.disabled = true;
+
+        if (empresaId) {
+            fetch(`{{ url('/api/cargos') }}/${empresaId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Error en la petición');
+                    return res.json();
+                })
+                .then(cargos => {
+                    let options = '<option value="">Seleccione cargo</option>';
+                    cargos.forEach(cargo => {
+                        options += `<option value="${cargo.id_cargo}">${cargo.nombre_cargo}</option>`;
+                    });
+                    cargoSelect.innerHTML = options;
+                    cargoSelect.disabled = false;
+
+                    // Mantener valor previo (en caso de validación fallida)
+                    const oldValue = "{{ old('cargo_id') }}";
+                    if (oldValue) {
+                        cargoSelect.value = oldValue;
+                    }
+                })
+                .catch(() => {
+                    cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+                    cargoSelect.disabled = false;
+                });
+        } else {
+            cargoSelect.innerHTML = '<option value="">Seleccione empresa primero</option>';
+            cargoSelect.disabled = false;
+        }
+    });
+
+    // Triggers iniciales si hay valores preseleccionados
+    if (paisSelectNacimiento?.value) paisSelectNacimiento.dispatchEvent(new Event('change'));
+    if (departamentoSelectNacimiento?.value) departamentoSelectNacimiento.dispatchEvent(new Event('change'));
+
+    if (empresaSelect?.value) empresaSelect.dispatchEvent(new Event('change'));
+});
 </script>
+
+<script>
+document.getElementById('empresa_id').addEventListener('change', function() {
+    let empresaId = this.value;
+    let cargoSelect = document.getElementById('cargo_id');
+
+    cargoSelect.innerHTML = '<option value="">Cargando...</option>';
+
+    if (empresaId) {
+        fetch(`/empresas/${empresaId}/cargos`)
+            .then(res => res.json())
+            .then(data => {
+                cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+                data.forEach(cargo => {
+                    let option = document.createElement('option');
+                    option.value = cargo.id_cargo;
+                    option.textContent = cargo.nombre_cargo;
+                    cargoSelect.appendChild(option);
+                });
+            })
+            .catch(() => {
+                cargoSelect.innerHTML = '<option value="">Error cargando cargos</option>';
+            });
+    } else {
+        cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+    }
+});
+</script>
+<script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const empresaSelect = document.getElementById('empresa_id');
+                                        const cargoSelect = document.getElementById('cargo_id');
+                                        const cargoError  = document.getElementById('cargo_error');
+                                        let requestSeq = 0; // controla concurrencia de cargas
+
+                                        async function cargarCargos(empresaId, preselectId = null) {
+                                            cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+                                            cargoError && (cargoError.style.display = 'none');
+                                            if (!empresaId) return;
+                                            const currentSeq = ++requestSeq;
+                                            try {
+                                                const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
+                                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                                                if (!res.ok) throw new Error('Error al cargar cargos');
+                                                const data = await res.json();
+                                                // Ignorar respuestas antiguas si hubo otra solicitud posterior
+                                                if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
+                                                    return;
+                                                }
+                                                if (!Array.isArray(data) || data.length === 0) {
+                                                    const opt = document.createElement('option');
+                                                    opt.value = '';
+                                                    opt.textContent = 'No hay cargos disponibles';
+                                                    opt.disabled = true;
+                                                    cargoSelect.appendChild(opt);
+                                                    return;
+                                                }
+                                                data.forEach(c => {
+                                                    const opt = document.createElement('option');
+                                                    opt.value = c.id_cargo;
+                                                    opt.textContent = c.nombre_cargo;
+                                                    if (preselectId && String(preselectId) === String(c.id_cargo)) {
+                                                        opt.selected = true;
+                                                    }
+                                                    cargoSelect.appendChild(opt);
+                                                });
+                                            } catch (e) {
+                                                console.error(e);
+                                                // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
+                                                if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
+                                                    cargoError.style.display = '';
+                                                }
+                                            }
+                                        }
+
+                                        empresaSelect.addEventListener('change', function () {
+                                            cargarCargos(this.value);
+                                        });
+
+                                        const oldEmpresa = "{{ old('empresa_id') }}";
+                                        const oldCargo = "{{ old('cargo_id') }}";
+                                        if (oldEmpresa) {
+                                            cargarCargos(oldEmpresa, oldCargo);
+                                        }
+                                    });
+                                </script>
 @endpush

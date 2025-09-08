@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Assets compilados con Vite (CSS y JS) -->
-    <link href="http://172.20.1.7/build/assets/app-CtDMqRzi.css" rel="stylesheet">
-    <script src="http://172.20.1.7/build/assets/app-C0G0cght.js" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <!-- Alpine.js para interacciones dinámicas -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
@@ -29,7 +29,7 @@
                         <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"></path>
                         <path d="m9 12 2 2 4-4"></path>
                     </svg>
-                    <h1 class="text-2xl font-bold">DemGest</h1>
+                    <h1 class="text-2xl font-bold">GHconnecting</h1>
                 </div>
                 <p class="text-indigo-200 text-sm mt-1">Sistema de Gestión</p>
             </div>

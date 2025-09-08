@@ -38,7 +38,6 @@
             <div
                 x-data="{
                     activeTab: 'personal',
-                    discapacidades: [],
                     patologias: [],
                     beneficiarios: []
                 }"
@@ -228,82 +227,7 @@
                                	</div>
                             </div>
                             <!-- Script JSON oculto para Alpine.js -->
-                                <script type="application/json" id="discapacidades-data">
-                                    {!! json_encode(old('discapacidades', []), JSON_UNESCAPED_UNICODE) !!}
-                                </script>
 
-                                <div 
-                                    x-data="{ discapacidades: [] }" 
-                                    x-init="
-                                        discapacidades = JSON.parse(document.getElementById('discapacidades-data').textContent);
-                                        console.log('DISCAPACIDADES CARGADAS:', discapacidades);
-                                    "
-                                    class="mb-6">
-                                    <div class="flex justify-between items-center mb-4">
-                                        <h3 class="text-lg font-medium text-gray-900">Discapacidades</h3>
-                                        <button type="button" @click="discapacidades.push({ tipo_discapacidad: '', grado_discapacidad: '', fecha_diagnostico_discapacidad: '', certificado_discapacidad: '', entidad_certificadora_discapacidad: '' })" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                                            </svg>
-                                            Agregar
-                                        </button>
-                                    </div>
-
-                                    <!-- Lista dinámica de discapacidades -->
-                                    <div class="space-y-4">
-                                        <template x-for="(item, index) in discapacidades" :key="index">
-                                            <div class="bg-gray-50 rounded-lg p-4 relative">
-                                                <button type="button" 
-                                                        @click="discapacidades.splice(index, 1)" 
-                                                        class="absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][tipo_discapacidad]'" class="block text-sm font-medium text-gray-700">Tipo de Discapacidad</label>
-                                                        <select x-model="item.tipo_discapacidad" 
-                                                                :name="'discapacidades['+index+'][tipo_discapacidad]'" 
-                                                                :id="'discapacidades['+index+'][tipo_discapacidad]'" 
-                                                                class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="">Seleccione tipo</option>
-                                                            <option value="Física">Física</option>
-                                                            <option value="Visual">Visual</option>
-                                                            <option value="Intelectual">Intelectual</option>
-                                                            <option value="Psicosocial">Psicosocial</option>
-                                                            <option value="Múltiple">Múltiple</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][grado_discapacidad]'" class="block text-sm font-medium text-gray-700">Grado de Discapacidad</label>
-                                                        <select x-model="item.grado_discapacidad" 
-                                                                :name="'discapacidades['+index+'][grado_discapacidad]'" 
-                                                                :id="'discapacidades['+index+'][grado_discapacidad]'" 
-                                                                class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                            <option value="">Seleccione grado</option>
-                                                            <option value="Leve">Leve</option>
-                                                            <option value="Moderada">Moderada</option>
-                                                            <option value="Severa">Severa</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label :for="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" class="block text-sm font-medium text-gray-700">Fecha de Diagnóstico</label>
-                                                        <input type="date" x-model="item.fecha_diagnostico_discapacidad" 
-                                                            :name="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" 
-                                                            :id="'discapacidades['+index+'][fecha_diagnostico_discapacidad]'" 
-                                                            class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
-                                                    </div>                                                                                        
-						</div>
-                                            </div>
-                                        </template>
-                                        <div x-show="discapacidades.length === 0" class="text-center py-4 text-sm text-gray-500">
-                                            No se han agregado discapacidades
-                                        </div>
-                                    </div>
-                                </div>
                             <!-- Patologías -->
                             <div 
                                 x-data="{ patologias: [] }" 
@@ -693,21 +617,21 @@
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-lg font-medium text-gray-900">Beneficiarios</h3>
                                     <button type="button" @click="beneficiarios.push({ 
-    nombre_beneficiario: '', 
-    parentesco: '', 
-    fecha_nacimiento: '', 
-    tipo_documento_id: '', 
-    numero_documento: '', 
-    nivel_educativo: '',
-    reside_con_empleado: '0',
-    depende_economicamente: '0',
-    contacto_emergencia: ''
-})" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-    </svg>
-    Agregar
-</button>
+                                        nombre_beneficiario: '', 
+                                        parentesco: '', 
+                                        fecha_nacimiento: '', 
+                                        tipo_documento_id: '', 
+                                        numero_documento: '', 
+                                        nivel_educativo: '',
+                                        reside_con_empleado: '0',
+                                        depende_economicamente: '0',
+                                        contacto_emergencia: ''
+                                         })" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        Agregar
+                                    </button>
                                 </div>
                                 <div class="space-y-4">
                                     <template x-for="(item, index) in beneficiarios" :key="index">

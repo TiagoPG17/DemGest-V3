@@ -6,7 +6,6 @@ use App\Models\Empleado;
 use App\Models\TipoDocumento;
 use App\Models\RangoEdad;
 use App\Models\Pais;
-use App\Models\Discapacidad;
 use App\Models\Departamento;
 use App\Models\Municipio;
 use App\Models\Barrio;
@@ -433,7 +432,7 @@ class EmpleadoController extends Controller
             'residencia.barrio',
             'barrioResidencia',
             'informacionLaboral.empresa',
-            'discapacidades',
+
             'patologias',
             'beneficiarios.tipoDocumento',
             'beneficiarios',
@@ -465,7 +464,6 @@ class EmpleadoController extends Controller
             'informacionLaboral.empresa',
             'informacionLaboral.estadoCargo.cargo',
             'informacionLaboral.ciudadLaboral',
-            'discapacidades',
             'patologias',
             'beneficiarios.tipoDocumento',
             'eps',
@@ -511,16 +509,6 @@ class EmpleadoController extends Controller
                 'contacto_emergencia' => $item->contacto_emergencia,
             ];
         })->toArray();
-
-        $discapacidades = $empleado->discapacidades->map(function ($item) {
-            return [
-                'tipo_discapacidad' => $item->tipo_discapacidad,
-                'grado_discapacidad' => $item->grado_discapacidad,
-                'fecha_diagnostico_discapacidad' => optional($item->fecha_diagnostico_discapacidad)->format('Y-m-d'),
-                'enfermedad_base' => $item->enfermedad_base,
-                'entidad_certificadora_discapacidad' => $item->entidad_certificadora_discapacidad,
-            ];
-        })->toArray();
         
         $patologias = $empleado->patologias->map(function ($item) {
             return [
@@ -544,7 +532,6 @@ class EmpleadoController extends Controller
             'empresas',
             'cargos',
             'beneficiarios',
-            'discapacidades',
             'patologias',
             'eps',
             'arl',

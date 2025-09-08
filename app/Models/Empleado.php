@@ -120,11 +120,6 @@ class Empleado extends Model
     }
 
 
-    public function discapacidades()
-    {
-        return $this->belongsToMany(Discapacidad::class, 'empleado_discapacidad', 'empleado_id', 'discapacidad_id');
-    }
-
     public function patologias()
     {
         return $this->belongsToMany(Patologia::class, 'empleado_patologia', 'empleado_id', 'patologia_id')->using(\App\Models\EmpleadoPatologia::class);
