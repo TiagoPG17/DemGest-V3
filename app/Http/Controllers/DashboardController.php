@@ -163,14 +163,14 @@ class DashboardController extends Controller
                     ->orderBy('e.nombre_completo')
                     ->get();
 
-                \Log::info('\n=== EMPLEADOS EN ADMINISTRACIÓN ===');
+                Log::info('\n=== EMPLEADOS EN ADMINISTRACIÓN ===');
                 foreach ($empleadosAdmin as $empleado) {
                     $estado = $empleado->fecha_salida ? 'INACTIVO' : 'ACTIVO';
-                    \Log::info("ID: {$empleado->id_empleado}, Nombre: {$empleado->nombre_completo}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado}");
+                    Log::info("ID: {$empleado->id_empleado}, Nombre: {$empleado->nombre_completo}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado}");
                 }
                 
                 // Registrar información detallada para depuración
-                \Log::info('=== DETALLE DE EMPLEADOS POR CENTRO DE COSTO ===');
+                Log::info('=== DETALLE DE EMPLEADOS POR CENTRO DE COSTO ===');
                 foreach ($centrosCostos as $centro) {
                     if ($centro->empleados_count > 0) {
                         $empleados = DB::table('empleados as e')
@@ -184,22 +184,22 @@ class DashboardController extends Controller
                             ->select('e.id_empleado', 'e.numero_documento', 'e.nombre_completo', 'il.fecha_ingreso', 'il.fecha_salida')
                             ->get();
                         
-                        \Log::info("\nCentro: {$centro->codigo} - {$centro->nombre} ({$centro->empleados_count} empleados)");
+                        Log::info("\nCentro: {$centro->codigo} - {$centro->nombre} ({$centro->empleados_count} empleados)");
                         foreach ($empleados as $empleado) {
                             $estado = $empleado->fecha_salida ? 'INACTIVO' : 'ACTIVO';
-                            \Log::info("- {$empleado->nombre_completo} (ID: {$empleado->id_empleado}, Doc: {$empleado->numero_documento}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado})");
+                            Log::info("- {$empleado->nombre_completo} (ID: {$empleado->id_empleado}, Doc: {$empleado->numero_documento}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado})");
                         }
                     }
                 }
                 
-                \Log::info('\n=== RESUMEN ===');
-                \Log::info('Total centros: ' . $centrosCostos->count());
-                \Log::info('Total empleados Contiflex: ' . $totalContiflex);
-                \Log::info('Total empleados Formacol: ' . $totalFormacol);
-                \Log::info('=========================');
+                Log::info('\n=== RESUMEN ===');
+                Log::info('Total centros: ' . $centrosCostos->count());
+                Log::info('Total empleados Contiflex: ' . $totalContiflex);
+                Log::info('Total empleados Formacol: ' . $totalFormacol);
+                Log::info('=========================');
                 
             } catch (\Exception $e) {
-                \Log::error('Error en DashboardController: ' . $e->getMessage());
+                Log::error('Error en DashboardController: ' . $e->getMessage());
                 
                 // En caso de error, devolver centros de costos sin conteo
                 $centrosCostos = $centrosCostos->isEmpty() ? collect() : $centrosCostos->map(function($item) {

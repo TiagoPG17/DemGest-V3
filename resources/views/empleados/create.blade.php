@@ -43,6 +43,8 @@
                 }"
             >
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                    
+                    
                     <!-- Tabs -->
                     <div class="border-b border-gray-200">
                         <nav class="flex border-b border-gray-200 bg-slate-50 text-sm font-medium text-gray-600">
@@ -224,7 +226,8 @@
                                 <div class="mb-4">
                                     <label for="intereses_personales" class="block text-sm font-medium text-gray-700">Intereses personales</label>
                                     <textarea name="intereses_personales" id="intereses_personales" rows="2" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">{{ old('intereses_personales') }}</textarea>
-                               	</div>
+                                </div>
+
                             </div>
                             <!-- Script JSON oculto para Alpine.js -->
 
@@ -1102,7 +1105,3 @@ document.getElementById('empresa_id').addEventListener('change', function() {
                                     });
                                 </script>
 @endpush
-
-
-
-

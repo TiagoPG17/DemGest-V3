@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Carbon\Carbon;
 
 class Empleado extends Model
@@ -94,6 +96,7 @@ class Empleado extends Model
         return $this->belongsTo(Cargo::class, 'cargo_id');
     }
 
+
     public function eps()
     {
         return $this->belongsTo(\App\Models\Eps::class, 'eps_id');
@@ -174,6 +177,7 @@ class Empleado extends Model
     {
         return $this->belongsTo(GrupoSanguineo::class, 'grupo_sanguineo_id');
     }
+
 
     public function necesitaAlerta()
     {

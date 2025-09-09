@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,7 @@ class UpdateEmpleadoRequest extends FormRequest
         $empleadoId = is_object($empleado) ? $empleado->id_empleado : $empleado;
 
 
-        \Log::info('Empleado ID en FormRequest:', ['id' => $this->route('empleado')]);
+        Log::info('Empleado ID en FormRequest:', ['id' => $this->route('empleado')]);
 
  
 
@@ -93,35 +94,6 @@ class UpdateEmpleadoRequest extends FormRequest
                 'max:50',
             ],
             'observaciones' => 'nullable|string|max:1000',
-            'discapacidades' => 'nullable|array',
-            'discapacidades.*.tipo_discapacidad' => [
-                'required_with:discapacidades',
-                'string',
-                'max:255',
-                'in:Física,Visual,Auditiva,Intelectual,Psicosocial,Múltiple'
-            ],
-            'discapacidades.*.grado_discapacidad' => [
-                'required_with:discapacidades',
-                'string',
-                'max:255',
-                'in:Leve,Moderada,Severa,Profunda'
-            ],
-            'discapacidades.*.fecha_diagnostico_discapacidad' => [
-                'nullable',
-                'date',
-                'before_or_equal:' . now()->format('Y-m-d'),
-                'after_or_equal:' . now()->subYears(80)->format('Y-m-d')
-            ],
-            'discapacidades.*.certificado_discapacidad' => [
-                'nullable',
-                'string',
-                'max:20',
-            ],
-            'discapacidades.*.entidad_certificadora_discapacidad' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
             'patologias' => 'nullable|array',
             'patologias.*.nombre_patologia' => [
                 'required_with:patologias',
@@ -200,21 +172,7 @@ class UpdateEmpleadoRequest extends FormRequest
             'tipo_contrato.max' => 'El tipo de contrato no puede tener más de 50 caracteres.',
             'observaciones.string' => 'Las observaciones deben ser una cadena de texto.',
             'observaciones.max' => 'Las observaciones no pueden tener más de 1000 caracteres.',
-            'discapacidades.*.tipo_discapacidad.required_with' => 'El tipo de discapacidad es obligatorio cuando hay discapacidades.',
-            'discapacidades.*.tipo_discapacidad.string' => 'El tipo de discapacidad debe ser una cadena de texto.',
-            'discapacidades.*.tipo_discapacidad.max' => 'El tipo de discapacidad no puede tener más de 255 caracteres.',
-            'discapacidades.*.tipo_discapacidad.in' => 'El tipo de discapacidad debe ser uno de: Física, Visual, Auditiva, Intelectual, Psicosocial, Múltiple.',
-            'discapacidades.*.grado_discapacidad.required_with' => 'El grado de discapacidad es obligatorio cuando hay discapacidades.',
-            'discapacidades.*.grado_discapacidad.string' => 'El grado de discapacidad debe ser una cadena de texto.',
-            'discapacidades.*.grado_discapacidad.max' => 'El grado de discapacidad no puede tener más de 255 caracteres.',
-            'discapacidades.*.grado_discapacidad.in' => 'El grado de discapacidad debe ser uno de: Leve, Moderada, Severa, Profunda.',
-            'discapacidades.*.fecha_diagnostico_discapacidad.date' => 'La fecha de diagnóstico de discapacidad debe ser una fecha válida.',
-            'discapacidades.*.fecha_diagnostico_discapacidad.before_or_equal' => 'La fecha de diagnóstico de discapacidad debe ser menor o igual a hoy.',
-            'discapacidades.*.fecha_diagnostico_discapacidad.after_or_equal' => 'La fecha de diagnóstico de discapacidad debe ser mayor o igual a hoy menos 80 años.',
-            'discapacidades.*.certificado_discapacidad.string' => 'El certificado de discapacidad debe ser una cadena de texto.',
-            'discapacidades.*.certificado_discapacidad.max' => 'El certificado de discapacidad no puede tener más de 20 caracteres.',
-            'discapacidades.*.entidad_certificadora_discapacidad.string' => 'La entidad certificadora de discapacidad debe ser una cadena de texto.',
-            'discapacidades.*.entidad_certificadora_discapacidad.max' => 'La entidad certificadora de discapacidad no puede tener más de 255 caracteres.',
+          
             'patologias.array' => 'Las patologías deben ser un array.',
             'patologias.*.nombre_patologia.required_with' => 'El nombre de la patología es obligatorio cuando hay patologías.',
             'patologias.*.nombre_patologia.string' => 'El nombre de la patología debe ser una cadena de texto.',

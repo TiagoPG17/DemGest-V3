@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
     <div class="max-w-4xl mx-auto p-4 space-y-6">
         <!-- Encabezado: Navegación y Acciones -->
@@ -34,6 +38,7 @@
                     </button>
                 </form>
             </div>
+
         </header>
 
         <!-- Mensaje de éxito -->
@@ -52,7 +57,23 @@
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <!-- Encabezado con información básica -->
             <div class="p-6 border-b border-gray-200">
-                <div class="flex flex-col md:flex-row md:items-center gap-6">
+                <div class="flex flex-col md:flex-row md:items-start gap-6">
+                    <!-- Foto de perfil -->
+                    <div class="w-36 h-36 rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                        @if($empleado->fotoPerfilActual)
+                            <img src="{{ $empleado->fotoPerfilActual->url }}" 
+                                 alt="Foto de perfil de {{ $empleado->nombre_completo }}" 
+                                 class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                        @endif
+                    </div>
+                    
+                    <div class="flex-1 min-w-0">
                     <?php
                         // Calcular las iniciales del nombre completo (solo las dos primeras palabras)
                         $iniciales = '';
@@ -68,13 +89,7 @@
                         
                         $infoLaboral = $empleado->informacionLaboralActual;
                     ?>
-                    <div class="flex-shrink-0 w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-white text-2xl font-bold"
-                         @class([
-                             'bg-blue-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'contiflex') !== false,
-                             'bg-red-500' => $infoLaboral?->empresa?->nombre_empresa && stripos(strtolower($infoLaboral->empresa->nombre_empresa), 'formacol') !== false,
-                         ])>
-                        {{ $iniciales }}
-                    </div>
+                    
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold text-gray-900">{{ $empleado->nombre_completo }}</h2>
                         <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6 gap-2">
@@ -279,7 +294,7 @@
                     
                     <!-- Tab: Ubicación -->
                     <div x-show="activeTab === 'ubicacion'" class="space-y-6">
-                            <!-- Sección: Discapacidades -->
+                            <!-- Sección: Patologias -->
 
                             <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
                             <header class="bg-emerald-500 p-4 flex items-center gap-3 rounded-t-lg">
@@ -341,10 +356,6 @@
                                 @endif
                             </div>
                         </div>
-                    
-
-
-
                     </div>
 
                     <!-- Tab: Información Laboral -->

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+use Illuminate\Support\Js;
+@endphp
+
 @section('content')
     <!-- Mensaje de error de validación -->
     @if ($errors->any())
@@ -65,6 +69,25 @@
                     beneficiarios: {{ Js::from(old('beneficiarios', $beneficiarios ?? [])) }}
                 }">
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                    <!-- Foto de perfil (solo visual) -->
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex flex-col sm:flex-row items-start gap-6">
+                            <!-- Contenedor de la foto -->
+                            <div class="w-36 h-36 rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">                      
+                                    <div id="foto-placeholder" class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                            </div>
+                            <!-- Información de la foto -->
+                            <div class="flex-1 w-full">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Foto de perfil</label>
+                                <p class="text-sm text-gray-500">La funcionalidad de carga de fotos está temporalmente deshabilitada.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Navegación de pestañas -->
                     <div class="border-b border-gray-200">
                         <nav class="flex -mb-px overflow-x-auto">
@@ -89,6 +112,7 @@
                     <div>
                         <!-- Información Personal -->
                         <div x-show="activeTab === 'personal'" class="space-y-6">
+                            <br>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="nombre_completo" class="block text-sm font-medium text-gray-700">
@@ -269,7 +293,7 @@
                                         value="{{ old('intereses_personales', $empleado->intereses_personales) }}"
                                         class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
                                 </div>
-
+                                
                                 <!-- Idiomas -->
                                 <div>
                                     <label for="idiomas" class="block text-sm font-medium text-gray-700">Idiomas</label>
@@ -870,7 +894,7 @@
             </div>
         </form>
     </div>
-@endsection
+    @endsection
 
 @push('scripts')
 <script>

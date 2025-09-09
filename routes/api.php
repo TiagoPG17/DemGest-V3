@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\CargoController;
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Empleado;
 use App\Models\TipoDocumento;
 use App\Models\RangoEdad;
@@ -15,10 +16,10 @@ use App\Models\Patologia;
 use App\Models\Beneficiario;
 use App\Models\InformacionLaboral;
 use App\Models\EstadoCargo;
-use App\Models\EmpleadoDiscapacidad;
 use App\Models\EmpleadoPatologia;
 use App\Models\EmpleadoUbicacion;
 use App\Models\GrupoSanguineo;
+
 use App\Models\Etnia;
 use App\Models\Eps;
 use App\Models\Afp;
@@ -30,7 +31,6 @@ use App\Models\ArchivoAdjunto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Services\ProrrogaService;
@@ -197,6 +197,8 @@ class EmpleadoController extends Controller
     DB::beginTransaction();
 
     try {
+     
+
         // Crear el empleado
         $empleado = Empleado::create([
             'tipo_documento_id' => $validated['tipo_documento_id'],
@@ -229,7 +231,8 @@ class EmpleadoController extends Controller
             'afc_id' => $validated['afc_id'] ?? null,
         ]);
 
-          // Guardar archivo único de documentación general
+
+            // Guardar archivo único de documentación general
             if ($request->hasFile('documento_principal')) {
                 $archivo = $request->file('documento_principal');
                 $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
@@ -565,6 +568,8 @@ class EmpleadoController extends Controller
 
             Log::info('Empleado actualizado con ID: ' . $empleado->id_empleado);
 
+          
+
             // Actualizar ubicación de nacimiento
             DB::table('empleado_pais_ubicacion')
                 ->where('empleado_id', $empleado->id_empleado)
@@ -753,7 +758,6 @@ class EmpleadoController extends Controller
     public function destroy(Empleado $empleado)
     {
         try {
-            $empleado->discapacidades()->detach();
             $empleado->patologias()->detach();
             $empleado->beneficiarios()->delete();
             $empleado->informacionLaboral()->delete();
