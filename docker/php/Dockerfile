@@ -1,6 +1,5 @@
 FROM php:8.2-fpm
 
-# Argumentos
 ARG user=www-data
 ARG uid=1000
 
@@ -24,10 +23,14 @@ RUN apt-get update && apt-get install -y \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
-# Limpiar caché
+# Instalar Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Limpiar cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones PHP
+# Extensiones PHP
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm
 RUN docker-php-ext-install -j$(nproc) \
     pdo_mysql \
@@ -40,39 +43,25 @@ RUN docker-php-ext-install -j$(nproc) \
     zip \
     opcache
 
-# Instalar Composer
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configuración de PHP
-COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
 
-# Crear usuario para ejecutar comandos de Composer y Artisan
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-
-# Establecer directorio de trabajo
 WORKDIR /var/www
 
-# Copiar archivos de la aplicación
-COPY --chown=$user:www-data . /var/www
+# Copiar proyecto
+COPY . .
 
-# Configurar permisos
-RUN chown -R $user:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
-# Instalar dependencias
-USER $user
+# Instalar dependencias PHP
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Generar clave de la aplicación
-RUN php artisan key:generate
+# Instalar dependencias Node y compilar assets
+RUN npm install && npm run build
 
-# Usuario para ejecutar los comandos
-USER root
+# Permisos
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Puerto expuesto
 EXPOSE 9000
-
-# Comando de inicio
 CMD ["php-fpm"]
+
