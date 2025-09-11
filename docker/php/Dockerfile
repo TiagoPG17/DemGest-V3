@@ -1,92 +1,66 @@
 FROM php:8.2-fpm
 
-# Argumentos
 ARG user=www-data
 ARG uid=1000
 
-# Variables de entorno
-ENV NODE_VERSION=18.x
-ENV COMPOSER_VERSION=2.7.1
-
-# Instalar dependencias del sistema y extensiones PHP en una sola capa
-RUN set -eux; \
-    # Instalar dependencias del sistema
-    apt-get update && apt-get install -y --no-install-recommends \
-        git \
-        curl \
-        libpng-dev \
-        libonig-dev \
-        libxml2-dev \
-        zip \
-        unzip \
-        libzip-dev \
-        libicu-dev \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libwebp-dev \
-        libxpm-dev \
-        libmagickwand-dev \
-        libgd-dev \
-    # Instalar Node.js
-    && curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - \
-    && apt-get install -y nodejs \
-    # Instalar extensiones PHP
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm \
-    && docker-php-ext-install -j$(nproc) \
-        pdo_mysql \
-        mbstring \
-        exif \
-        pcntl \
-        bcmath \
-        gd \
-        intl \
-        zip \
-        opcache \
-    # Instalar imagick
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libxpm-dev \
+    libmagickwand-dev \
+    libgd-dev \
     && pecl install imagick \
-    && docker-php-ext-enable imagick \
-    # Limpiar cache
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && npm cache clean --force
+    && docker-php-ext-enable imagick
 
-# Instalar Composer
-COPY --from=composer:${COMPOSER_VERSION} /usr/bin/composer /usr/bin/composer
+# Instalar Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
 
-# Configuración PHP
-COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+# Limpiar cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Establecer el directorio de trabajo
+# Extensiones PHP
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm
+RUN docker-php-ext-install -j$(nproc) \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    intl \
+    zip \
+    opcache
+
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+
 WORKDIR /var/www
 
-# Copiar solo los archivos necesarios primero para aprovechar la caché de Docker
-COPY composer.* package*.json ./
-
-# Instalar dependencias PHP
-RUN composer install --no-interaction --optimize-autoloader --no-dev \
-    && composer clear-cache
-
-# Copiar el resto de la aplicación
+# Copiar proyecto
 COPY . .
 
-# Instalar dependencias Node, compilar assets y limpiar caché
-RUN npm ci --only=production \
-    && npm run build \
-    && npm cache clean --force
+# Instalar dependencias PHP
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Configurar permisos
-RUN chown -R www-data:www-data /var/www \
-    && find /var/www -type d -exec chmod 755 {} \; \
-    && find /var/www -type f -exec chmod 644 {} \; \
+# Instalar dependencias Node y compilar assets
+RUN npm install && npm run build
+
+# Permisos
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Configuración de seguridad adicional
-RUN echo "expose_php = Off" >> /usr/local/etc/php/conf.d/security.ini \
-    && echo "display_errors = Off" >> /usr/local/etc/php/conf.d/security.ini \
-    && echo "log_errors = On" >> /usr/local/etc/php/conf.d/security.ini
-
-# Puerto expuesto
 EXPOSE 9000
-
-# Comando de inicio
 CMD ["php-fpm"]

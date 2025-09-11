@@ -1,36 +1,52 @@
 @extends('layouts.app')
 @section('content')
     <div class="max-w-5xl mx-auto py-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-6">
-            <div class="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-auto">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2 md:mb-0">Empleados</h1>
-                <form action="{{ route('empleados.index') }}" method="GET" class="flex flex-row items-center gap-2 w-full md:w-auto">
-                    <select name="empresa" onchange="this.form.submit()"
-                        class="px-4 py-2 bg-gray-100 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 hover:bg-white transition">
+        <!-- Título -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">Empleados</h1>
+        </div>
+        
+        <!-- Barra de búsqueda, filtros y botón en una sola línea -->
+        <div class="mb-4">
+            <form action="{{ route('empleados.index') }}" method="GET" class="flex flex-col lg:flex-row lg:items-center gap-4">
+                <!-- Campo de búsqueda extendido -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input type="text" name="buscar" value="{{ request('buscar') }}" 
+                            class="block w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 transition" 
+                            placeholder="Buscar por nombre o documento..." 
+                            autocomplete="off">
+                        @if(request('buscar'))
+                            <button type="button" onclick="window.location.href='{{ route('empleados.index', array_merge(request()->except('buscar'), ['page' => 1])) }}'" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                
+                <!-- Filtro de empresa -->
+                <div class="lg:w-64">
+                    <select name="empresa" onchange="this.form.submit()" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white transition">
                         <option value="todos" {{ request()->get('empresa', 'todos') === 'todos' ? 'selected' : '' }}>Todos</option>
                         <option value="formacol" {{ request()->get('empresa') === 'formacol' ? 'selected' : '' }}>Formacol</option>
                         <option value="contiflex" {{ request()->get('empresa') === 'contiflex' ? 'selected' : '' }}>Contiflex</option>
                     </select>
-                    <div class="relative w-full md:w-80">
-                        <input type="text" name="buscar" value="{{ request('buscar') }}" class="w-full pl-4 pr-12 py-2.5 bg-slate-100 border border-gray-500 rounded-lg shadow-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base transition" placeholder="Buscar por nombre o documento..." autocomplete="off" style="min-width: 250px;">
-                        @if(request('buscar'))
-                            <a 
-                                href="{{ route('empleados.index', array_merge(request()->except('buscar'), ['page' => 1])) }}" 
-                                class="group absolute right-2 top-1/2 mt-1 -translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100/80 text-gray-900 hover:text-black hover:bg-gray-100 shadow-sm ring-1 ring-gray-200 hover:ring-gray-300 transition" 
-                                title="Limpiar búsqueda"
-                                aria-label="Limpiar búsqueda"
-                            >
-                                <svg class="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </a>
-                        @endif
-                    </div>
-                    <a href="{{ route('empleados.create') }}"class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-bold text-sm text-white uppercase tracking-widest shadow hover:bg-slate-700 transition ml-0 md:ml-8 whitespace-nowrap">
-                        Nuevo Empleado
-                    </a>
-                </form>
-            </div>
+                </div>
+                
+                <!-- Botón de nuevo empleado al lado derecho -->
+                <a href="{{ route('empleados.create') }}" class="inline-flex items-center px-4 py-3 bg-slate-800 border border-transparent rounded-md font-bold text-sm text-white uppercase tracking-widest shadow hover:bg-slate-700 transition whitespace-nowrap">
+                    Nuevo Empleado
+                </a>
+            </form>
         </div>
         <br>
         <!-- Tabla de empleados -->

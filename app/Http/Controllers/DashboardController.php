@@ -109,27 +109,23 @@ class DashboardController extends Controller
             $totalFormacol = 0;
             
             try {
-                // Consulta que cuenta solo un centro de costo por empleado (el de mayor ID en caso de empate)
+                // Consulta compatible con MySQL 5.7 para contar solo un centro de costo por empleado
                 $centrosCostos = DB::table('centro_costos as cc')
                     ->leftJoin('estado_cargo as ec', 'cc.id', '=', 'ec.centro_costo_id')
-                    ->leftJoin(
-                        // Subconsulta para obtener solo un centro de costo por empleado
-                        DB::raw('(SELECT 
-                            il1.empleado_id,
-                            ec1.centro_costo_id,
-                            il1.fecha_ingreso,
-                            -- Usamos ROW_NUMBER para seleccionar solo un registro por empleado
-                            ROW_NUMBER() OVER (PARTITION BY il1.empleado_id ORDER BY il1.fecha_ingreso DESC, ec1.centro_costo_id DESC) as rn
-                          FROM informacion_laboral il1
-                          INNER JOIN estado_cargo ec1 ON il1.id_estado = ec1.estado_id
-                          WHERE il1.fecha_salida IS NULL OR il1.fecha_salida > NOW()
-                        ) as il'), 
-                        function($join) {
-                            $join->on('ec.estado_id', '=', DB::raw('(SELECT id_estado FROM informacion_laboral WHERE empleado_id = il.empleado_id ORDER BY fecha_ingreso DESC, id_estado DESC LIMIT 1)'));
-                        }
-                    )
+                    ->leftJoin('informacion_laboral as il', function($join) {
+                        $join->on('ec.estado_id', '=', 'il.id_estado')
+                              ->whereNull('il.fecha_salida')
+                              ->orWhere('il.fecha_salida', '>', DB::raw('NOW()'));
+                    })
                     ->leftJoin('empleados as e', 'il.empleado_id', '=', 'e.id_empleado')
-                    ->where('il.rn', '=', 1)  // Solo el primer registro de cada empleado
+                    ->whereRaw('il.id_estado = (
+                        SELECT il2.id_estado 
+                        FROM informacion_laboral il2 
+                        WHERE il2.empleado_id = il.empleado_id 
+                        AND (il2.fecha_salida IS NULL OR il2.fecha_salida > NOW())
+                        ORDER BY il2.fecha_ingreso DESC, il2.id_estado DESC 
+                        LIMIT 1
+                    )')
                     ->select([
                         'cc.id',
                         'cc.codigo',

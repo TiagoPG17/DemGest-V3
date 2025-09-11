@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 @section('content')
     <div class="max-w-4xl mx-auto p-4 space-y-6">
         <!-- Encabezado: Navegación y Acciones -->
-        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-lg shadow-sm">
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-2xl border-4 border-grey-500">
             <div class="flex items-center gap-2">
                 <a href="{{ route('empleados.index') }}" class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\Storage;
         @endif
 
         <!-- Tarjeta principal con información del empleado -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
             <!-- Encabezado con información básica -->
             <div class="p-6 border-b border-gray-200">
                 <div class="flex flex-col md:flex-row md:items-start gap-6">
@@ -159,7 +159,7 @@ use Illuminate\Support\Facades\Storage;
                     <!-- Tab: Información Personal -->
                     <div x-show="activeTab === 'personal'" class="space-y-6">
                         <div>
-                        <section aria-label="Datos personales del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <section aria-label="Datos personales del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                         <!-- Barra superior con color solido para verificar el funcionamiento -->
                         <div class="p-4 flex items-center gap-3" style="background:linear-gradient(90deg,#fde047,#f59e0b);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
@@ -169,7 +169,7 @@ use Illuminate\Support\Facades\Storage;
                         <h3 class="text-lg font-medium text-white">Datos Personales</h3>
                     </div>
                         <div class="p-6">
-                            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-yellow-100 border border-orange-200 rounded-lg p-4 relative">
+                            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-yellow-50 border border-orange-200 rounded-lg p-4 relative">
                                 <div>
                                     <dt class="font-medium text-gray-800">Tipo de Documento</dt>
                                     <dd class="mt-1 text-gray-900">{{ $empleado->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
@@ -226,7 +226,7 @@ use Illuminate\Support\Facades\Storage;
                     </section>
                         </div>
                         <div>
-                            <section aria-label="Información de Comunicación" class="bg-white rounded-lg shadow-sm border border-indigo-200">
+                            <section aria-label="Información de Comunicación" class="bg-white rounded-lg shadow-xl border border-indigo-200">
                                 <header class="bg-gradient-to-r from-purple-700 to-indigo-700 p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
@@ -258,7 +258,7 @@ use Illuminate\Support\Facades\Storage;
                             </section>
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
-                            <section aria-label="Lugar de Residencia del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                            <section aria-label="Lugar de Residencia del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200">
                                 <header class="bg-cyan-600 p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -296,7 +296,7 @@ use Illuminate\Support\Facades\Storage;
                     <div x-show="activeTab === 'ubicacion'" class="space-y-6">
                             <!-- Sección: Patologias -->
 
-                            <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="mt-6 bg-white rounded-lg shadow-xl border border-gray-200">
                             <header class="bg-emerald-500 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -307,8 +307,8 @@ use Illuminate\Support\Facades\Storage;
                                 @if ($empleado->patologias->count() > 0)
                                     <div class="space-y-6">
                                         @foreach ($empleado->patologias as $patologia)
-                                            <div class="bg-white border border-emerald-300 p-4 border border-emerald-200 rounded-lg bg-emerald-500 p-2">
-                                                <div class="flex items-center justify-between mb-2">
+                                            <div class="bg-white border border-emerald-300 p-4 border border-emerald-200 rounded-lg bg-emerald-50 p-2">
+                                                <div class=" flex items-center justify-between mb-2">
                                                     <h4 class="text-md font-semibold text-gray-900 flex items-center gap-2 p-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -360,7 +360,7 @@ use Illuminate\Support\Facades\Storage;
 
                     <!-- Tab: Información Laboral -->
                     <div x-show="activeTab === 'laboral'" class="space-y-6">
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="bg-white rounded-lg shadow-xl border border-gray-200">
                             <header class="bg-sky-600 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
@@ -509,7 +509,7 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
                             <!-- Archivos Adjuntos -->
-                            <div class="space-y-6">
+                            <div class="space-y-6 ml-4 -mt-2">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
                                 <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 space-y-6">
                                     @php
@@ -553,7 +553,7 @@ use Illuminate\Support\Facades\Storage;
 
                     <!-- Tab: Beneficiarios -->
                     <div x-show="activeTab === 'beneficiario'" class="space-y-6">
-                        <section aria-label="Beneficiarios del empleado" class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
+                        <section aria-label="Beneficiarios del empleado" class="bg-white shadow-xl rounded-lg overflow-hidden border border-gray-200">
                             <div class="bg-gradient-to-r from-pink-500 to-rose-500 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -635,7 +635,7 @@ use Illuminate\Support\Facades\Storage;
 
                     <!-- Tab: Datos Adicionales -->
                     <div x-show="activeTab === 'extra'" class="space-y-6">
-                        <section aria-label="Información adicional del empleado" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <section aria-label="Información adicional del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200">
                             <header class="bg-gradient-to-r from-indigo-600 to-blue-700 p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <path d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm0 0v8m0 0H4m8 0h8m0 0v-8m0 0c0-1.105-.895-2-2-2s-2 .895-2 2" />
@@ -689,7 +689,7 @@ use Illuminate\Support\Facades\Storage;
                         </section>
 
                         <div class="grid grid-cols-1">
-                            <section aria-label="Seguridad Social" class="bg-white rounded-lg shadow-sm border border-rose-200">
+                            <section aria-label="Seguridad Social" class="bg-white rounded-lg shadow-xl border border-rose-200">
                                 <header class="bg-gradient-to-r from-pink-600 to-rose-600 p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path d="M9 21V8a4 4 0 0 1 8 0v13" />

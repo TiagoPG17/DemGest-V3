@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig(({ command }) => ({
+    base: '', // 👈 Esto elimina el doble /build/build/
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
@@ -22,8 +23,8 @@ export default defineConfig(({ command }) => ({
             output: {
                 entryFileNames: 'assets/[name]-[hash].js',
                 chunkFileNames: 'assets/[name]-[hash].js',
-                assetFileNames: 'assets/[name]-[hash][extname]'
-            }
-        }
-    }
+                assetFileNames: 'assets/[name]-[hash][extname]',
+            },
+        },
+    },
 }));

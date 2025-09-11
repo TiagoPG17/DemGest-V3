@@ -50,7 +50,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Total Empleados -->
-                    <div class="rounded-lg p-4 border-l-4 border-sky-500">
+                    <div class="bg-sky-50 rounded-lg p-4 border-l-4 border-sky-500">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -65,7 +65,7 @@
                     </div>
                     
                     <!-- Nuevos en Contiflex (Mes) -->
-                    <div class="rounded-lg p-4 border-l-4 border-green-500">
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,7 +95,7 @@
                     </div>
                     
                     <!-- Próximos Contratos Contiflex -->
-                    <div class="rounded-lg p-4 border-l-4 border-purple-500">
+                    <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,7 +132,7 @@
                     </div>
                     
                     <!-- Nuevos en Formacol (Mes) -->
-                    <div class="rounded-lg p-4 border-l-4 border-green-500">
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,81 +180,132 @@
         </div>
     </div>
 
-    <!-- Sección de Centros de Costos -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6 mt-8">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-medium text-gray-900 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                Centros de Costos
-            </h2>
-        </div>
-        
-        <div class="p-6">
-            @if(isset($centrosCostos) && $centrosCostos->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                @foreach($centrosCostos as $centro)
-    @php
-        $color = str_starts_with($centro->codigo, 'CX_') ? 'blue' : 'red';
-        $bgGradient = $color === 'blue' ? 'from-blue-50 to-white' : 'from-red-50 to-white';
-    @endphp
-    <div class="bg-gradient-to-br {{ $bgGradient }} p-4 rounded-xl border border-gray-200 hover:shadow-sm transition-all duration-200 group">
-        <div class="flex items-start justify-between">
-            <div class="space-y-1">
-                <h3 class="text-sm font-semibold text-gray-800 group-hover:text-{{ $color }}-600 transition-colors">
-                    {{ $centro->nombre }}
-                </h3>
+    <!-- Sección de Centros de Costos con Pestañas -->
+        <div class="mt-8">
+            <div class="bg-white rounded-lg shadow-2xl border border-gray-300">
+                <!-- Encabezado -->
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Centros de Costos</h2>
+                    <p class="text-sm text-gray-600 mt-1">Organizados por empresa</p>
+                </div>
+                
+                <!-- Pestañas -->
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+                        <button onclick="mostrarCentrosEmpresa('contiflex')" id="tab-centros-contiflex" class="tab-button-active border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Contiflex
+                        </button>
+                        <button onclick="mostrarCentrosEmpresa('formacol')" id="tab-centros-formacol" class="tab-button-inactive border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Formacol
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- Contenido de las pestañas -->
+                <div class="p-4">
+                    @if(isset($centrosCostos) && $centrosCostos->count() > 0)
+                        <!-- Contenido Contiflex -->
+                        <div id="centros-contiflex" class="centros-content">
+                            @php
+                                $centrosContiflex = $centrosCostos->filter(function($centro) {
+                                    return str_starts_with($centro->codigo, 'CX_');
+                                });
+                            @endphp
+                            
+                            @if($centrosContiflex->count() > 0)
+                            
+                                <!-- Lista compacta -->
+                                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                        @foreach($centrosContiflex as $centro)
+                                            <div class="group bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                                                <div class="p-3">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-3 flex-1 min-w-0">
+                                                            <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-md text-xs font-bold text-blue-700 bg-blue-100 border border-blue-200">
+                                                                {{ $centro->codigo }}
+                                                            </span>
+                                                            <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $centro->nombre }}</h4>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ml-2">
+                                                            <div class="text-lg font-bold text-blue-600">{{ $centro->empleados_count ?? 0 }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center py-8 text-gray-500">
+                                    No hay centros de costos para Contiflex
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- Contenido Formacol -->
+                        <div id="centros-formacol" class="centros-content hidden">
+                            @php
+                                $centrosFormacol = $centrosCostos->filter(function($centro) {
+                                    return str_starts_with($centro->codigo, 'FC_');
+                                });
+                            @endphp
+                            
+                            @if($centrosFormacol->count() > 0)
+                                
+                                <!-- Lista compacta -->
+                                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                        @foreach($centrosFormacol as $centro)
+                                            <div class="group bg-gray-50 border border-gray-200 rounded-lg hover:border-red-300 hover:bg-red-50 transition-all duration-200">
+                                                <div class="p-3">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-3 flex-1 min-w-0">
+                                                            <span class="flex-shrink-0 inline-flex items-center px-2 py-1 rounded-md text-xs font-bold text-red-700 bg-red-100 border border-red-200">
+                                                                {{ $centro->codigo }}
+                                                            </span>
+                                                            <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $centro->nombre }}</h4>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ml-2">
+                                                            <div class="text-lg font-bold text-red-600">{{ $centro->empleados_count ?? 0 }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center py-8 text-gray-500">
+                                    No hay centros de costos para Formacol
+                                </div>
+                            @endif
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">No hay centros de costos registrados</h3>
+                        </div>
+                    @endif
+                </div>
             </div>
-            <div class="flex items-center bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-gray-100 shadow-xs">
-                <span class="text-sm font-bold text-gray-700 mr-1.5">{{ $centro->empleados_count ?? 0 }}</span>
-                <div class="w-2 h-2 rounded-full bg-{{ $color }}-500"></div>
-            </div>
-        </div>
-        @if($centro->empleados_count > 0)
-            @php
-                $porcentaje = min(($centro->empleados_count / $totalEmpleados) * 100, 100);
-            @endphp
-            <div class="mt-3 space-y-1.5">
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-medium text-gray-400">Empleados</span>
-                    <span class="text-xs font-medium text-{{ $color }}-600">{{ number_format($porcentaje, 1) }}%</span>
-                </div>
-                <div class="relative w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-{{ $color }}-400 to-{{ $color }}-600 rounded-full transition-all duration-500 ease-out" 
-                         style="width: {{ $porcentaje }}%"></div>
-                </div>
-            </div>
-        @endif
-    </div>
-@endforeach
-                </div>
-            @else
-                <div class="text-center py-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No hay centros de costos registrados</h3>
-                </div>
-            @endif
         </div>
     </div>
 
     @push('scripts')
     <script>
         function mostrarEmpresa(empresa) {
-            // Ocultar todos los contenidos
+            // Ocultar todos los contenidos principales
             document.querySelectorAll('[id^="contenido-"]').forEach(contenido => {
                 contenido.classList.add('hidden');
             });
             
-            // Desactivar todas las pestañas
-            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
-                tab.classList.remove('text-blue-600', 'border-blue-600');
-                tab.classList.remove('text-red-600', 'border-red-600');
-                tab.classList.remove('text-gray-700', 'border-gray-700');
-                tab.classList.add('text-gray-500');
-                tab.classList.remove('border-b-2');
+            // Desactivar todas las pestañas principales
+            document.querySelectorAll('button[id^="tab-"]:not([id^="tab-centros-"])').forEach(tab => {
+                tab.classList.remove('border-blue-600', 'text-blue-600', 'border-red-600', 'text-red-600');
+                tab.classList.add('text-gray-500', 'hover:text-gray-700', 'border-transparent');
             });
             
             // Mostrar el contenido seleccionado
@@ -262,13 +313,41 @@
             
             // Activar la pestaña seleccionada
             const tab = document.getElementById(`tab-${empresa}`);
-            tab.classList.remove('text-gray-500');
+            tab.classList.remove('text-gray-500', 'hover:text-gray-700', 'border-transparent');
             
             // Aplicar estilos según la empresa
             if (empresa === 'contiflex') {
-                tab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                tab.classList.add('border-blue-600', 'text-blue-600');
             } else if (empresa === 'formacol') {
-                tab.classList.add('text-red-600', 'border-b-2', 'border-red-600');
+                tab.classList.add('border-red-600', 'text-red-600');
+            }
+        }
+
+        function mostrarCentrosEmpresa(empresa) {
+            // Ocultar todos los contenidos de centros
+            document.querySelectorAll('.centros-content').forEach(contenido => {
+                contenido.classList.add('hidden');
+            });
+            
+            // Desactivar todas las pestañas
+            document.querySelectorAll('button[id^="tab-centros-"]').forEach(tab => {
+                tab.classList.remove('tab-button-active', 'border-blue-500', 'text-blue-600', 'border-red-500', 'text-red-600');
+                tab.classList.add('tab-button-inactive', 'border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            });
+            
+            // Mostrar el contenido seleccionado
+            document.getElementById(`centros-${empresa}`).classList.remove('hidden');
+            
+            // Activar la pestaña seleccionada
+            const tab = document.getElementById(`tab-centros-${empresa}`);
+            tab.classList.remove('tab-button-inactive', 'border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            tab.classList.add('tab-button-active');
+            
+            // Aplicar estilos según la empresa
+            if (empresa === 'contiflex') {
+                tab.classList.add('border-blue-500', 'text-blue-600');
+            } else if (empresa === 'formacol') {
+                tab.classList.add('border-red-500', 'text-red-600');
             }
         }
     </script>
