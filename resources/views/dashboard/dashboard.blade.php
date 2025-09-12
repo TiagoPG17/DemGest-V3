@@ -252,7 +252,7 @@
                                 @endphp
                                 
                                 @if($centrosFormacol->count() > 0)
-                                    <!-- Lista compacta -->
+                                    <!-- Lista compacta De centro de costos -->
                                     <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
                                             @foreach($centrosFormacol as $centro)
