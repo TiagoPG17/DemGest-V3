@@ -1,16 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @if ($errors->any())
-        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-2">
@@ -39,9 +29,7 @@
                 x-data="{
                     activeTab: 'personal',
                     patologias: [],
-                    beneficiarios: []
-                }"
-            >
+                    beneficiarios: []}">
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     
                     
@@ -120,20 +108,36 @@
                                     <label for="nombre_completo" class="block text-sm font-medium text-gray-700">
                                         Nombre Completo <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" name="nombre_completo" id="nombre_completo" value="{{ old('nombre_completo') }}" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                    <input type="text" name="nombre_completo" id="nombre_completo" value="{{ old('nombre_completo') }}" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none {{ $errors->has('nombre_completo') ? 'border-red-500 bg-red-50' : '' }}" required>
+                                    @error('nombre_completo')
+                                        <div class="mt-1 flex items-center text-red-600 text-sm">
+                                            <svg class="h-4 w-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span>Por favor ingresa el nombre completo del empleado</span>
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="fecha_nacimiento" class="block text-sm font-medium text-gray-700">
                                         Fecha de Nacimiento <span class="text-red-500">*</span>
                                     </label>
                                     <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
-                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                        class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none {{ $errors->has('fecha_nacimiento') ? 'border-red-500 bg-red-50' : '' }}" required>
+                                    @error('fecha_nacimiento')
+                                        <div class="mt-1 flex items-center text-red-600 text-sm">
+                                            <svg class="h-4 w-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span>La fecha de nacimiento es obligatoria (debes tener entre 18 y 80 años)</span>
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="tipo_documento_id" class="block text-sm font-medium text-gray-700">
                                         Tipo de Documento <span class="text-red-500">*</span>
                                     </label>
-                                    <select name="tipo_documento_id" id="tipo_documento_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                    <select name="tipo_documento_id" id="tipo_documento_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none {{ $errors->has('tipo_documento_id') ? 'border-red-500 bg-red-50' : '' }}" required>
                                         <option value="">Seleccione tipo de documento</option>
                                         @foreach($tiposDocumento as $tipo)
                                             <option value="{{ $tipo->id_tipo_documento }}" {{ old('tipo_documento_id') == $tipo->id_tipo_documento ? 'selected' : '' }}>
@@ -141,12 +145,28 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('tipo_documento_id')
+                                        <div class="mt-1 flex items-center text-red-600 text-sm">
+                                            <svg class="h-4 w-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span>Por favor selecciona un tipo de documento válido</span>
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="numero_documento" class="block text-sm font-medium text-gray-700">
                                         Número de Documento <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" name="numero_documento" id="numero_documento" value="{{ old('numero_documento') }}" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
+                                    <input type="text" name="numero_documento" id="numero_documento" value="{{ old('numero_documento') }}" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none {{ $errors->has('numero_documento') ? 'border-red-500 bg-red-50' : '' }}" required>
+                                    @error('numero_documento')
+                                        <div class="mt-1 flex items-center text-red-600 text-sm">
+                                            <svg class="h-4 w-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span>El número de documento es obligatorio y debe ser único</span>
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="sexo" class="block text-sm font-medium text-gray-700">

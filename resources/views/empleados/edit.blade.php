@@ -186,7 +186,8 @@ use Illuminate\Support\Js;
                                             class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
                                         <option value="">Seleccione nivel educativo</option>
                                         <option value="Primaria" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Primaria' ? 'selected' : '' }}>Primaria</option>
-                                        <option value="Secundaria" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Secundaria' ? 'selected' : '' }}>Secundaria</option>
+                                        <option value="Secundaria" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Secundaria' ? 'selected' : '' }}>Bachillerato Incompleto</option>
+                                        <option value="Bachillerato" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Bachillerato Completo' ? 'selected' : '' }}>Bachillerato Completo</option>
                                         <option value="Técnico" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Técnico' ? 'selected' : '' }}>Técnico</option>
                                         <option value="Tecnólogo" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Tecnólogo' ? 'selected' : '' }}>Tecnólogo</option>
                                         <option value="Profesional" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Profesional' ? 'selected' : '' }}>Profesional</option>

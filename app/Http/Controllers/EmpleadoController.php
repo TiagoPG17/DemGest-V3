@@ -438,7 +438,6 @@ class EmpleadoController extends Controller
             'residencia.barrio',
             'barrioResidencia',
             'informacionLaboral.empresa',
-
             'patologias',
             'beneficiarios.tipoDocumento',
             'beneficiarios',
