@@ -11,7 +11,7 @@ export default defineConfig({
     ],
     build: {
         outDir: 'public/build',
-        manifest: 'manifest.json',
+        manifest: true,   // debe ser booleano
         emptyOutDir: true,
         rollupOptions: {
             output: {
@@ -21,4 +21,5 @@ export default defineConfig({
             },
         },
     },
+    
 });
