@@ -19,7 +19,6 @@ use App\Models\EstadoCargo;
 use App\Models\EmpleadoPatologia;
 use App\Models\EmpleadoUbicacion;
 use App\Models\GrupoSanguineo;
-
 use App\Models\Etnia;
 use App\Models\Eps;
 use App\Models\Afp;
@@ -106,7 +105,6 @@ class EmpleadoController extends Controller
 
         return view('empleados.index', compact('empleados', 'departamentos', 'empresas'));
     }
-
 
     /**
      * Descargar reporte de contratos por vencer
@@ -263,6 +261,40 @@ class EmpleadoController extends Controller
                 Log::warning("No se encontró archivo en el campo documento_principal para el empleado {$empleado->id_empleado}");
             }
 
+            // Guardar la foto si se subió
+            if ($request->hasFile('foto')) {
+                try {
+                    $foto = $request->file('foto');
+                    
+                    // Validar que sea una imagen
+                    if (!$foto->isValid() || !str_starts_with($foto->getMimeType(), 'image/')) {
+                        Log::warning('El archivo subido no es una imagen válida para el empleado ' . $empleado->id_empleado);
+                        throw new \Exception('El archivo debe ser una imagen válida');
+                    }
+                    
+                    // Usar el ID correcto del empleado (id_empleado) y crear carpeta 'foto'
+                    $ruta = "empleados/{$empleado->id_empleado}/foto";
+                    $nombre = 'foto_' . uniqid() . '.' . $foto->getClientOriginalExtension();
+                    
+                    // Crear directorio si no existe
+                    if (!Storage::disk('public')->exists($ruta)) {
+                        Storage::disk('public')->makeDirectory($ruta, 0775, true);
+                    }
+                    
+                    // Guardar la foto en el disco público
+                    $rutaCompleta = $foto->storeAs($ruta, $nombre, 'public');
+                    
+                    // Actualizar el empleado con la ruta de la foto
+                    $empleado->foto = $rutaCompleta;
+                    $empleado->save();
+                    
+                    Log::info("Foto guardada exitosamente para el empleado {$empleado->id_empleado}: {$rutaCompleta}");
+                    
+                } catch (\Exception $e) {
+                    Log::error("Error al guardar la foto del empleado {$empleado->id_empleado}: " . $e->getMessage());
+                    // No lanzamos la excepción para no interrumpir el proceso de creación del empleado
+                }
+            }
 
             // Guardar ubicación de nacimiento
             EmpleadoUbicacion::create([
@@ -737,6 +769,60 @@ class EmpleadoController extends Controller
                 ]);
 
                 Log::info("Archivo de documentación general actualizado para el empleado {$empleado->id_empleado}");
+            }
+
+            // Eliminar foto si se solicita
+            if ($request->has('delete_photo') && $request->delete_photo == '1') {
+                try {
+                    if ($empleado->foto && Storage::disk('public')->exists($empleado->foto)) {
+                        Storage::disk('public')->delete($empleado->foto);
+                        Log::info("Foto eliminada para el empleado {$empleado->id_empleado}");
+                    }
+                    $empleado->foto = null;
+                    $empleado->save();
+                } catch (\Exception $e) {
+                    Log::error('Error al eliminar la foto del empleado ' . $empleado->id_empleado . ': ' . $e->getMessage());
+                }
+            }
+            
+            // Actualizar la foto si se subió una nueva
+            if ($request->hasFile('foto')) {
+                try {
+                    $foto = $request->file('foto');
+                    
+                    // Validar que sea una imagen
+                    if (!$foto->isValid() || !str_starts_with($foto->getMimeType(), 'image/')) {
+                        Log::warning('El archivo subido no es una imagen válida para el empleado ' . $empleado->id_empleado);
+                        throw new \Exception('El archivo debe ser una imagen válida');
+                    }
+                    
+                    // Eliminar foto anterior si existe
+                    if ($empleado->foto && Storage::disk('public')->exists($empleado->foto)) {
+                        Storage::disk('public')->delete($empleado->foto);
+                        Log::info("Foto anterior eliminada para el empleado {$empleado->id_empleado}");
+                    }
+                    
+                    // Usar el ID correcto del empleado (id_empleado) y crear carpeta 'foto'
+                    $ruta = "empleados/{$empleado->id_empleado}/foto";
+                    $nombre = 'foto_' . uniqid() . '.' . $foto->getClientOriginalExtension();
+                    
+                    // Crear directorio si no existe
+                    if (!Storage::disk('public')->exists($ruta)) {
+                        Storage::disk('public')->makeDirectory($ruta, 0775, true);
+                    }
+                    
+                    // Guardar la nueva foto en el disco público
+                    $rutaCompleta = $foto->storeAs($ruta, $nombre, 'public');
+                    
+                    // Actualizar el empleado con la ruta de la nueva foto
+                    $empleado->foto = $rutaCompleta;
+                    $empleado->save();
+                    
+                    Log::info("Foto actualizada exitosamente para el empleado {$empleado->id_empleado}: {$rutaCompleta}");
+                } catch (\Exception $e) {
+                    Log::error('Error al actualizar la foto del empleado ' . $empleado->id_empleado . ': ' . $e->getMessage());
+                    // No lanzamos la excepción para no interrumpir el resto de la actualización
+                }
             }
 
             DB::commit();

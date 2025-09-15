@@ -15,9 +15,7 @@ class DashboardController extends Controller
         try {
             // Activar el log de consultas SQL
             DB::enableQueryLog();
-            Log::info('=== INICIO DASHBOARD ===');
-            Log::info('Hora del servidor: ' . now());
-
+        
             // Obtener total de empleados activos por empresa
             // ID 1: Contiflex, ID 2: Formacol
             // Contar empleados activos de Contiflex
@@ -90,18 +88,7 @@ class DashboardController extends Controller
                 Log::info('Bindings: ' . json_encode($query['bindings']));
                 Log::info('Tiempo: ' . $query['time'] . 'ms');
             }
-            
-            // Verificar datos
-            Log::info('=== RESUMEN DE DATOS ===');
-            Log::info('Total empleados: ' . $totalEmpleados);
-            Log::info('Contiflex: ' . $contiflexCount);
-            Log::info('Formacol: ' . $formacolCount);
-            Log::info('Nuevos Contiflex: ' . $nuevosContiflexMes);
-            Log::info('Nuevos Formacol: ' . $nuevosFormacolMes);
-            Log::info('Inactivos Contiflex: ' . $inactivosContiflexMes);
-            Log::info('Inactivos Formacol: ' . $inactivosFormacolMes);
-            Log::info('Próximos Contiflex: ' . $proximosContratosContiflex);
-            Log::info('Próximos Formacol: ' . $proximosContratosFormacol);
+        
 
             // Inicializar variables
             $centrosCostos = collect();
@@ -159,10 +146,10 @@ class DashboardController extends Controller
                     ->orderBy('e.nombre_completo')
                     ->get();
 
-                Log::info('\n=== EMPLEADOS EN ADMINISTRACIÓN ===');
+                
                 foreach ($empleadosAdmin as $empleado) {
                     $estado = $empleado->fecha_salida ? 'INACTIVO' : 'ACTIVO';
-                    Log::info("ID: {$empleado->id_empleado}, Nombre: {$empleado->nombre_completo}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado}");
+                
                 }
                 
                 // Registrar información detallada para depuración
@@ -187,12 +174,7 @@ class DashboardController extends Controller
                         }
                     }
                 }
-                
-                Log::info('\n=== RESUMEN ===');
-                Log::info('Total centros: ' . $centrosCostos->count());
-                Log::info('Total empleados Contiflex: ' . $totalContiflex);
-                Log::info('Total empleados Formacol: ' . $totalFormacol);
-                Log::info('=========================');
+            
                 
             } catch (\Exception $e) {
                 Log::error('Error en DashboardController: ' . $e->getMessage());

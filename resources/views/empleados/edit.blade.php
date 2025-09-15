@@ -5,38 +5,17 @@ use Illuminate\Support\Js;
 @endphp
 
 @section('content')
-    <!-- Mensaje de error de validación -->
     @if ($errors->any())
-        <div id="alert" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-md" role="alert">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L9.586 10l-2.293 2.293a1 1 0 101.414 1.414L11 11.414l2.293 2.293a1 1 0 001.414-1.414L12.414 10l2.293-2.293a1 1 0 00-1.414-1.414L11 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium">¡Error de validación!</h3>
-                    <div class="mt-2 text-sm">
-                        <ul class="list-disc pl-5 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <script>
-            setTimeout(() => {
-                const alert = document.getElementById('alert');
-                if (alert) alert.style.display = 'none';
-            }, 5000);
-        </script>
     @endif
 
-    <!-- Contenedor principal -->
     <div class="max-w-4xl mx-auto space-y-6">
-        <!-- Encabezado y botón de acción -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <a href="{{ route('empleados.index') }}" class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-100">
@@ -56,63 +35,90 @@ use Illuminate\Support\Js;
                 Actualizar
             </button>
         </div>
-        <!-- Formulario -->
-    
         <form id="empleado-form" action="{{ route('empleados.update', $empleado) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            <!-- Componente Alpine.js para tabs y datos -->
-            <div x-data="{
+            <div
+                x-data="{
                     activeTab: 'personal',
                     patologias: {{ Js::from(old('patologias', $patologias ?? [])) }},
                     beneficiarios: {{ Js::from(old('beneficiarios', $beneficiarios ?? [])) }}
-                }">
+                }"
+            >
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-                    <!-- Foto de perfil (solo visual) -->
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <div class="flex flex-col sm:flex-row items-start gap-6">
-                            <!-- Contenedor de la foto -->
-                            <div class="w-36 h-36 rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">                      
-                                    <div id="foto-placeholder" class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </div>
-                            </div>
-                            <!-- Información de la foto -->
-                            <div class="flex-1 w-full">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Foto de perfil</label>
-                                <p class="text-sm text-gray-500">La funcionalidad de carga de fotos está temporalmente deshabilitada.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Navegación de pestañas -->
+                    <!-- Tabs -->
                     <div class="border-b border-gray-200">
-                        <nav class="flex -mb-px overflow-x-auto">
-                            <button type="button" @click="activeTab = 'personal'" :class="{'border-slate-800 text-slate-800': activeTab === 'personal', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'personal'}" class="py-4 px-6 border-b-2 font-medium text-sm">
-                                Información Personal
-                            </button>
-                            <button type="button" @click="activeTab = 'ubicacion'" :class="{'border-slate-800 text-slate-800': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'ubicacion'}" class="py-4 px-6 border-b-2 font-medium text-sm">
-                                Ubicación
-                            </button>
-                            <button type="button" @click="activeTab = 'laboral'" :class="{'border-slate-800 text-slate-800': activeTab === 'laboral', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'laboral'}" class="py-4 px-6 border-b-2 font-medium text-sm">
-                                Información Laboral
-                            </button>
-                            <button type="button" @click="activeTab = 'adicional'" :class="{'border-slate-800 text-slate-800': activeTab === 'adicional', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'adicional'}" class="py-4 px-6 border-b-2 font-medium text-sm">
-                         
-                         
-                            Datos Adicionales
-                            </button>
+                        <nav class="flex border-b border-gray-200 bg-slate-50 text-sm font-medium text-gray-600">
+                            <button type="button" @click="activeTab = 'personal'" :class="activeTab === 'personal' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Información Personal</button>
+                            <button type="button" @click="activeTab = 'ubicacion'" :class="activeTab === 'ubicacion' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Ubicación</button>
+                            <button type="button" @click="activeTab = 'laboral'" :class="activeTab === 'laboral' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Información Laboral</button>
+                            <button type="button" @click="activeTab = 'adicional'" :class="activeTab === 'adicional' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Datos Adicionales</button>
                         </nav>
                     </div>
-
-                    <!-- Contenido de las pestañas -->
-                    <div>
+                    <!-- Tab Content -->
+                    <div class="p-8">
                         <!-- Información Personal -->
                         <div x-show="activeTab === 'personal'" class="space-y-6">
-                            <br>
+                            <!-- Foto del empleado -->
+                            <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Foto del empleado</h3>
+                                
+                                <div class="flex items-start space-x-6">
+                                    <!-- Vista previa de la foto -->
+                                    <div class="flex-shrink-0">
+                                        <div id="preview-container" class="relative">
+                                            <!-- Estado sin foto -->
+                                            <div id="no-photo" class="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 bg-white flex items-center justify-center {{ $empleado->foto ? 'hidden' : '' }}">
+                                                <div class="text-center">
+                                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                    <span class="mt-1 block text-xs text-gray-500">Sin foto</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Vista previa con foto -->
+                                            <div id="with-photo" class="relative group {{ $empleado->foto ? '' : 'hidden' }}">
+                                                <img id="preview-img" class="w-32 h-32 rounded-lg object-cover border-2 border-gray-200 shadow-sm" alt="Foto actual" src="{{ $empleado->foto ? asset('storage/' . $empleado->foto) : '' }}">
+                                                <!-- Botón para eliminar foto -->
+                                                <button type="button" id="remove-photo" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Input de archivo -->
+                                    <div class="flex-1">
+                                        <div class="relative">
+                                            <input type="file" name="foto" id="foto" accept="image/*" class="hidden">
+                                            <label for="foto" class="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                                Seleccionar foto
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="mt-3 space-y-2">
+                                            <p class="text-sm text-gray-600">
+                                                <span class="font-medium">Formatos permitidos:</span> JPG, PNG, GIF
+                                            </p>
+                                            <p class="text-sm text-gray-600">
+                                                <span class="font-medium">Tamaño máximo:</span> 5MB
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-2">
+                                                La foto se usará para el perfil del empleado y en los reportes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Campos del formulario -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="nombre_completo" class="block text-sm font-medium text-gray-700">
@@ -898,93 +904,99 @@ use Illuminate\Support\Js;
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Para Lugar de Nacimiento
+document.addEventListener('DOMContentLoaded', function() {
+    // =============================================================================
+    // VARIABLES GLOBALES
+    // =============================================================================
+    
+    // Selectores de ubicación - Nacimiento
     const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
     const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
     const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
     
-    if (paisSelectNacimiento) {
-        paisSelectNacimiento.addEventListener('change', function() {
-            const paisId = this.value;
-            departamentoSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-            municipioSelectNacimiento.innerHTML = '<option value="">Seleccione municipio</option>';
-
-            fetch(`{{ url('/api/departamentos') }}/${paisId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione departamento</option>';
-                    data.forEach(dep => {
-                        options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                    });
-                    departamentoSelectNacimiento.innerHTML = options;
-                })
-                .catch(() => {
-                    departamentoSelectNacimiento.innerHTML = '<option value="">Error al cargar departamentos</option>';
-                });
-        });
-    }
-
-    if (departamentoSelectNacimiento) {
-        departamentoSelectNacimiento.addEventListener('change', function() {
-            const departamentoId = this.value;
-            municipioSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-
-            fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione municipio</option>';
-                    data.forEach(mun => {
-                        options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                    });
-                    municipioSelectNacimiento.innerHTML = options;
-                })
-                .catch(() => {
-                    municipioSelectNacimiento.innerHTML = '<option value="">Error al cargar municipios</option>';
-                });
-        });
-    }
-
-    // Para Lugar de Residencia
+    // Selectores de ubicación - Residencia
     const paisSelectResidencia = document.getElementById('pais_id_residencia');
     const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
     const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
     const barrioSelectResidencia = document.getElementById('barrio_id_residencia');
+    
+    // Selectores de información laboral
+    const empresaSelect = document.getElementById('empresa_id');
+    const cargoSelect = document.getElementById('cargo_id');
+    const cargoError = document.getElementById('cargo_error');
+    
+    // Selectores de foto
+    const fotoInput = document.getElementById('foto');
+    const noPhotoDiv = document.getElementById('no-photo');
+    const withPhotoDiv = document.getElementById('with-photo');
+    const previewImg = document.getElementById('preview-img');
+    const removePhotoBtn = document.getElementById('remove-photo');
+    
+    let requestSeq = 0; // Controla concurrencia de cargas
 
-    paisSelectResidencia?.addEventListener('change', function() {
-        const paisId = this.value;
-        departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-        municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
+    // =============================================================================
+    // FUNCIONES AUXILIARES
+    // =============================================================================
+    
+    /**
+     * Carga departamentos para un país específico
+     * @param {string} paisId - ID del país
+     * @param {HTMLElement} departamentoSelect - Select de departamentos
+     * @param {HTMLElement} municipioSelect - Select de municipios (opcional)
+     * @param {string|null} preselectId - ID del departamento a preseleccionar (opcional)
+     */
+    function cargarDepartamentos(paisId, departamentoSelect, municipioSelect = null, preselectId = null) {
+        departamentoSelect.innerHTML = '<option value="">Cargando...</option>';
+        if (municipioSelect) {
+            municipioSelect.innerHTML = '<option value="">Seleccione municipio</option>';
+        }
 
         fetch(`{{ url('/api/departamentos') }}/${paisId}`)
             .then(res => res.json())
             .then(data => {
                 let options = '<option value="">Seleccione departamento</option>';
                 data.forEach(dep => {
-                    options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
+                    const selected = preselectId && String(preselectId) === String(dep.id_departamento) ? 'selected' : '';
+                    options += `<option value="${dep.id_departamento}" ${selected}>${dep.nombre_departamento}</option>`;
                 });
-                departamentoSelectResidencia.innerHTML = options;
+                departamentoSelect.innerHTML = options;
+            })
+            .catch(() => {
+                departamentoSelect.innerHTML = '<option value="">Error al cargar departamentos</option>';
             });
-    });
-
-    departamentoSelectResidencia?.addEventListener('change', function() {
-        const departamentoId = this.value;
-        municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+    }
+    
+    /**
+     * Carga municipios para un departamento específico
+     * @param {string} departamentoId - ID del departamento
+     * @param {HTMLElement} municipioSelect - Select de municipios
+     * @param {string|null} preselectId - ID del municipio a preseleccionar (opcional)
+     */
+    function cargarMunicipios(departamentoId, municipioSelect, preselectId = null) {
+        municipioSelect.innerHTML = '<option value="">Cargando...</option>';
 
         fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
             .then(res => res.json())
             .then(data => {
                 let options = '<option value="">Seleccione municipio</option>';
                 data.forEach(mun => {
-                    options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
+                    const selected = preselectId && String(preselectId) === String(mun.id_municipio) ? 'selected' : '';
+                    options += `<option value="${mun.id_municipio}" ${selected}>${mun.nombre_municipio}</option>`;
                 });
-                municipioSelectResidencia.innerHTML = options;
+                municipioSelect.innerHTML = options;
+            })
+            .catch(() => {
+                municipioSelect.innerHTML = '<option value="">Error al cargar municipios</option>';
             });
-    });
-
-    municipioSelectResidencia?.addEventListener('change', function() {
-        const municipioId = this.value;
-        barrioSelectResidencia.innerHTML = '<option value="">Cargando barrios...</option>';
+    }
+    
+    /**
+     * Carga barrios para un municipio específico
+     * @param {string} municipioId - ID del municipio
+     * @param {HTMLElement} barrioSelect - Select de barrios
+     */
+    function cargarBarrios(municipioId, barrioSelect) {
+        barrioSelect.innerHTML = '<option value="">Cargando barrios...</option>';
         
         if (municipioId) {
             fetch(`{{ url('/api/barrios') }}/${municipioId}`)
@@ -994,146 +1006,227 @@ document.addEventListener('DOMContentLoaded', function () {
                     barrios.forEach(barrio => {
                         options += `<option value="${barrio.id_barrio}">${barrio.nombre_barrio}</option>`;
                     });
-                    barrioSelectResidencia.innerHTML = options;
+                    barrioSelect.innerHTML = options;
                 })
                 .catch(() => {
-                    barrioSelectResidencia.innerHTML = '<option value="">Error al cargar barrios</option>';
+                    barrioSelect.innerHTML = '<option value="">Error al cargar barrios</option>';
                 });
         } else {
-            barrioSelectResidencia.innerHTML = '<option value="">Seleccione un municipio primero</option>';
+            barrioSelect.innerHTML = '<option value="">Seleccione un municipio primero</option>';
         }
-    });
-
-    // Para Información Laboral → Empresa → Cargo
-    const empresaSelect = document.getElementById('empresa_id');
-    const cargoSelect   = document.getElementById('cargo_id');
-
-    empresaSelect?.addEventListener('change', function() {
-        const empresaId = this.value;
-        cargoSelect.innerHTML = '<option value="">Cargando cargos...</option>';
-        cargoSelect.disabled = true;
-
-        if (empresaId) {
-            fetch(`{{ url('/api/cargos') }}/${empresaId}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('Error en la petición');
-                    return res.json();
-                })
-                .then(cargos => {
-                    let options = '<option value="">Seleccione cargo</option>';
-                    cargos.forEach(cargo => {
-                        options += `<option value="${cargo.id_cargo}">${cargo.nombre_cargo}</option>`;
-                    });
-                    cargoSelect.innerHTML = options;
-                    cargoSelect.disabled = false;
-
-                    // Mantener valor previo (en caso de validación fallida)
-                    const oldValue = "{{ old('cargo_id') }}";
-                    if (oldValue) {
-                        cargoSelect.value = oldValue;
-                    }
-                })
-                .catch(() => {
-                    cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
-                    cargoSelect.disabled = false;
-                });
-        } else {
-            cargoSelect.innerHTML = '<option value="">Seleccione empresa primero</option>';
-            cargoSelect.disabled = false;
-        }
-    });
-
-    // Triggers iniciales si hay valores preseleccionados
-    if (paisSelectNacimiento?.value) paisSelectNacimiento.dispatchEvent(new Event('change'));
-    if (departamentoSelectNacimiento?.value) departamentoSelectNacimiento.dispatchEvent(new Event('change'));
-
-    if (empresaSelect?.value) empresaSelect.dispatchEvent(new Event('change'));
-});
-</script>
-
-<script>
-document.getElementById('empresa_id').addEventListener('change', function() {
-    let empresaId = this.value;
-    let cargoSelect = document.getElementById('cargo_id');
-
-    cargoSelect.innerHTML = '<option value="">Cargando...</option>';
-
-    if (empresaId) {
-        fetch(`/empresas/${empresaId}/cargos`)
-            .then(res => res.json())
-            .then(data => {
-                cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
-                data.forEach(cargo => {
-                    let option = document.createElement('option');
-                    option.value = cargo.id_cargo;
-                    option.textContent = cargo.nombre_cargo;
-                    cargoSelect.appendChild(option);
-                });
-            })
-            .catch(() => {
-                cargoSelect.innerHTML = '<option value="">Error cargando cargos</option>';
+    }
+    
+    /**
+     * Carga cargos para una empresa específica
+     * @param {string} empresaId - ID de la empresa
+     * @param {string|null} preselectId - ID del cargo a preseleccionar (opcional)
+     */
+    async function cargarCargos(empresaId, preselectId = null) {
+        cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+        cargoError && (cargoError.style.display = 'none');
+        
+        if (!empresaId) return;
+        
+        const currentSeq = ++requestSeq;
+        
+        try {
+            const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
+            const res = await fetch(url, { 
+                headers: { 'Accept': 'application/json' } 
             });
-    } else {
-        cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+            
+            if (!res.ok) throw new Error('Error al cargar cargos');
+            
+            const data = await res.json();
+            
+            // Ignorar respuestas antiguas si hubo otra solicitud posterior
+            if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
+                return;
+            }
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No hay cargos disponibles';
+                opt.disabled = true;
+                cargoSelect.appendChild(opt);
+                return;
+            }
+            
+            data.forEach(cargo => {
+                const opt = document.createElement('option');
+                opt.value = cargo.id_cargo;
+                opt.textContent = cargo.nombre_cargo;
+                
+                if (preselectId && String(preselectId) === String(cargo.id_cargo)) {
+                    opt.selected = true;
+                }
+                
+                cargoSelect.appendChild(opt);
+            });
+            
+        } catch (error) {
+            console.error('Error cargando cargos:', error);
+            
+            // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
+            if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
+                cargoError.style.display = '';
+            }
+        }
+    }
+    
+    /**
+     * Maneja la vista previa de la foto
+     * @param {Event} e - Evento de cambio del input
+     */
+    function manejarVistaPreviaFoto(e) {
+        const file = e.target.files[0];
+
+        if (file) {
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona un archivo de imagen válido.');
+                this.value = '';
+                return;
+            }
+
+            // Validar tamaño (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('La imagen no debe superar los 5MB.');
+                this.value = '';
+                return;
+            }
+
+            // Mostrar vista previa
+            previewImg.src = URL.createObjectURL(file);
+            noPhotoDiv.classList.add('hidden');
+            withPhotoDiv.classList.remove('hidden');
+            
+            // Eliminar el flag de eliminación si existe
+            const deleteInput = document.getElementById('delete-photo-flag');
+            if (deleteInput) {
+                deleteInput.remove();
+            }
+        } else {
+            // Ocultar vista previa solo si no hay foto existente
+            const hasExistingPhoto = previewImg.src && !previewImg.src.includes('blob:') && previewImg.src !== '';
+            if (!hasExistingPhoto) {
+                noPhotoDiv.classList.remove('hidden');
+                withPhotoDiv.classList.add('hidden');
+                previewImg.src = '';
+            }
+        }
+    }
+    
+    /**
+     * Elimina la foto seleccionada
+     */
+    function eliminarFoto() {
+        fotoInput.value = '';
+        noPhotoDiv.classList.remove('hidden');
+        withPhotoDiv.classList.add('hidden');
+        previewImg.src = '';
+        
+        // Si hay una foto existente, necesitamos indicar que se debe eliminar
+        const deleteInput = document.getElementById('delete-photo-flag');
+        if (deleteInput) {
+            deleteInput.value = '1';
+        } else {
+            // Crear un input hidden para marcar que se debe eliminar la foto
+            const form = fotoInput.closest('form');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'delete_photo';
+            hiddenInput.id = 'delete-photo-flag';
+            hiddenInput.value = '1';
+            form.appendChild(hiddenInput);
+        }
+    }
+
+    // =============================================================================
+    // EVENT LISTENERS - UBICACIÓN NACIMIENTO
+    // =============================================================================
+    
+    if (paisSelectNacimiento) {
+        paisSelectNacimiento.addEventListener('change', function() {
+            cargarDepartamentos(this.value, departamentoSelectNacimiento, municipioSelectNacimiento);
+        });
+    }
+    
+    if (departamentoSelectNacimiento) {
+        departamentoSelectNacimiento.addEventListener('change', function() {
+            cargarMunicipios(this.value, municipioSelectNacimiento);
+        });
+    }
+
+    // =============================================================================
+    // EVENT LISTENERS - UBICACIÓN RESIDENCIA
+    // =============================================================================
+    
+    paisSelectResidencia?.addEventListener('change', function() {
+        cargarDepartamentos(this.value, departamentoSelectResidencia, municipioSelectResidencia);
+    });
+    
+    departamentoSelectResidencia?.addEventListener('change', function() {
+        cargarMunicipios(this.value, municipioSelectResidencia);
+    });
+    
+    municipioSelectResidencia?.addEventListener('change', function() {
+        cargarBarrios(this.value, barrioSelectResidencia);
+    });
+
+    // =============================================================================
+    // EVENT LISTENERS - INFORMACIÓN LABORAL
+    // =============================================================================
+    
+    empresaSelect?.addEventListener('change', function() {
+        cargarCargos(this.value);
+    });
+
+    // =============================================================================
+    // EVENT LISTENERS - FOTO
+    // =============================================================================
+    
+    if (fotoInput) {
+        fotoInput.addEventListener('change', manejarVistaPreviaFoto);
+    }
+    
+    if (removePhotoBtn) {
+        removePhotoBtn.addEventListener('click', eliminarFoto);
+    }
+
+    // =============================================================================
+    // INICIALIZACIÓN
+    // =============================================================================
+    
+    // Triggers iniciales para cargar datos de nacimiento
+    const paisNacimientoId = "{{ old('pais_id_nacimiento', optional($empleado->nacimiento)->pais_id) }}";
+    const departamentoNacimientoId = "{{ old('departamento_id_nacimiento', optional($empleado->nacimiento)->departamento_id) }}";
+    const municipioNacimientoId = "{{ old('municipio_id_nacimiento', optional($empleado->nacimiento)->municipio_id) }}";
+    
+    if (paisNacimientoId) {
+        cargarDepartamentos(paisNacimientoId, departamentoSelectNacimiento, municipioSelectNacimiento, departamentoNacimientoId);
+    }
+    
+    if (departamentoNacimientoId && paisNacimientoId) {
+        cargarMunicipios(departamentoNacimientoId, municipioSelectNacimiento, municipioNacimientoId);
+    }
+    
+    // Cargar información laboral inicial
+    const empresaId = "{{ old('empresa_id', $empleado->informacionLaboral->first()?->empresa_id) }}";
+    const cargoId = "{{ old('cargo_id', optional($empleado->informacionLaboralActual?->estadoCargo)->cargo?->id_cargo) }}";
+    
+    if (empresaId) {
+        cargarCargos(empresaId, cargoId);
+    }
+    
+    // Restaurar valores previos en caso de validación fallida (esto ya está cubierto arriba, pero lo dejamos por compatibilidad)
+    const oldEmpresa = "{{ old('empresa_id') }}";
+    const oldCargo = "{{ old('cargo_id') }}";
+    
+    if (oldEmpresa && !empresaId) {
+        cargarCargos(oldEmpresa, oldCargo);
     }
 });
 </script>
-<script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const empresaSelect = document.getElementById('empresa_id');
-                                        const cargoSelect = document.getElementById('cargo_id');
-                                        const cargoError  = document.getElementById('cargo_error');
-                                        let requestSeq = 0; // controla concurrencia de cargas
-
-                                        async function cargarCargos(empresaId, preselectId = null) {
-                                            cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
-                                            cargoError && (cargoError.style.display = 'none');
-                                            if (!empresaId) return;
-                                            const currentSeq = ++requestSeq;
-                                            try {
-                                                const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
-                                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                                                if (!res.ok) throw new Error('Error al cargar cargos');
-                                                const data = await res.json();
-                                                // Ignorar respuestas antiguas si hubo otra solicitud posterior
-                                                if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
-                                                    return;
-                                                }
-                                                if (!Array.isArray(data) || data.length === 0) {
-                                                    const opt = document.createElement('option');
-                                                    opt.value = '';
-                                                    opt.textContent = 'No hay cargos disponibles';
-                                                    opt.disabled = true;
-                                                    cargoSelect.appendChild(opt);
-                                                    return;
-                                                }
-                                                data.forEach(c => {
-                                                    const opt = document.createElement('option');
-                                                    opt.value = c.id_cargo;
-                                                    opt.textContent = c.nombre_cargo;
-                                                    if (preselectId && String(preselectId) === String(c.id_cargo)) {
-                                                        opt.selected = true;
-                                                    }
-                                                    cargoSelect.appendChild(opt);
-                                                });
-                                            } catch (e) {
-                                                console.error(e);
-                                                // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
-                                                if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
-                                                    cargoError.style.display = '';
-                                                }
-                                            }
-                                        }
-
-                                        empresaSelect.addEventListener('change', function () {
-                                            cargarCargos(this.value);
-                                        });
-
-                                        const oldEmpresa = "{{ old('empresa_id') }}";
-                                        const oldCargo = "{{ old('cargo_id') }}";
-                                        if (oldEmpresa) {
-                                            cargarCargos(oldEmpresa, oldCargo);
-                                        }
-                                    });
-                                </script>
 @endpush

@@ -55,9 +55,66 @@
                         </nav>
                     </div>
                     <!-- Tab Content -->
-                    <div class="p-6">
+                    <div class="p-8">
                         <!-- Información Personal -->
                         <div x-show="activeTab === 'personal'" class="space-y-6">
+                            <!-- Foto del empleado -->
+                            <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Foto del empleado</h3>
+                                
+                                <div class="flex items-start space-x-6">
+                                    <!-- Vista previa de la foto -->
+                                    <div class="flex-shrink-0">
+                                        <div id="preview-container" class="relative">
+                                            <!-- Estado sin foto -->
+                                            <div id="no-photo" class="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 bg-white flex items-center justify-center">
+                                                <div class="text-center">
+                                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                    <span class="mt-1 block text-xs text-gray-500">Sin foto</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Vista previa con foto -->
+                                            <div id="with-photo" class="hidden relative group">
+                                                <img id="preview-img" class="w-32 h-32 rounded-lg object-cover border-2 border-gray-200 shadow-sm" alt="Vista previa">
+                                                <!-- Botón para eliminar foto -->
+                                                <button type="button" id="remove-photo" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Input de archivo -->
+                                    <div class="flex-1">
+                                        <div class="relative">
+                                            <input type="file" name="foto" id="foto" accept="image/*" class="hidden">
+                                            <label for="foto" class="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                                Seleccionar foto
+                                            </label>
+                                            <div class="mt-3 space-y-2">
+                                                <p class="text-sm text-gray-600">
+                                                    <span class="font-medium">Formatos permitidos:</span> JPG, PNG, GIF
+                                                </p>
+                                                <p class="text-sm text-gray-600">
+                                                    <span class="font-medium">Tamaño máximo:</span> 5MB
+                                                </p>
+                                                <p class="text-xs text-gray-500 mt-2">
+                                                    La foto se usará para el perfil del empleado y en los reportes.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="nombre_completo" class="block text-sm font-medium text-gray-700">
@@ -126,7 +183,7 @@
                                         <option value="">Seleccione nivel educativo</option>
                                         <option value="Primaria" {{ old('nivel_educativo') == 'Primaria' ? 'selected' : '' }}>Primaria</option>
                                         <option value="Secundaria" {{ old('nivel_educativo') == 'Secundaria' ? 'selected' : '' }}>Bachillerato Incompleto</option>
-					 <option value="Bachillerato" {{ old('nivel_educativo') == 'Bachillerato Completo' ? 'selected' : '' }}>Bachillerato Completo</option>	
+                                        <option value="Bachillerato" {{ old('nivel_educativo') == 'Bachillerato Completo' ? 'selected' : '' }}>Bachillerato Completo</option>
                                         <option value="Técnico" {{ old('nivel_educativo') == 'Técnico' ? 'selected' : '' }}>Técnico</option>
                                         <option value="Tecnólogo" {{ old('nivel_educativo') == 'Tecnólogo' ? 'selected' : '' }}>Tecnólogo</option>
                                         <option value="Profesional" {{ old('nivel_educativo') == 'Profesional' ? 'selected' : '' }}>Profesional</option>
@@ -866,63 +923,51 @@
 @endsection
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Para Lugar de Nacimiento
+document.addEventListener('DOMContentLoaded', function() {
+    // =============================================================================
+    // VARIABLES GLOBALES
+    // =============================================================================
+    
+    // Selectores de ubicación - Nacimiento
     const paisSelectNacimiento = document.getElementById('pais_id_nacimiento');
     const departamentoSelectNacimiento = document.getElementById('departamento_id_nacimiento');
     const municipioSelectNacimiento = document.getElementById('municipio_id_nacimiento');
     
-    if (paisSelectNacimiento) {
-        paisSelectNacimiento.addEventListener('change', function() {
-            const paisId = this.value;
-            departamentoSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-            municipioSelectNacimiento.innerHTML = '<option value="">Seleccione municipio</option>';
-
-            fetch(`{{ url('/api/departamentos') }}/${paisId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione departamento</option>';
-                    data.forEach(dep => {
-                        options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
-                    });
-                    departamentoSelectNacimiento.innerHTML = options;
-                })
-                .catch(() => {
-                    departamentoSelectNacimiento.innerHTML = '<option value="">Error al cargar departamentos</option>';
-                });
-        });
-    }
-
-    if (departamentoSelectNacimiento) {
-        departamentoSelectNacimiento.addEventListener('change', function() {
-            const departamentoId = this.value;
-            municipioSelectNacimiento.innerHTML = '<option value="">Cargando...</option>';
-
-            fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let options = '<option value="">Seleccione municipio</option>';
-                    data.forEach(mun => {
-                        options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
-                    });
-                    municipioSelectNacimiento.innerHTML = options;
-                })
-                .catch(() => {
-                    municipioSelectNacimiento.innerHTML = '<option value="">Error al cargar municipios</option>';
-                });
-        });
-    }
-
-    // Para Lugar de Residencia
+    // Selectores de ubicación - Residencia
     const paisSelectResidencia = document.getElementById('pais_id_residencia');
     const departamentoSelectResidencia = document.getElementById('departamento_id_residencia');
     const municipioSelectResidencia = document.getElementById('municipio_id_residencia');
     const barrioSelectResidencia = document.getElementById('barrio_id_residencia');
+    
+    // Selectores de información laboral
+    const empresaSelect = document.getElementById('empresa_id');
+    const cargoSelect = document.getElementById('cargo_id');
+    const cargoError = document.getElementById('cargo_error');
+    
+    // Selectores de foto
+    const fotoInput = document.getElementById('foto');
+    const noPhotoDiv = document.getElementById('no-photo');
+    const withPhotoDiv = document.getElementById('with-photo');
+    const previewImg = document.getElementById('preview-img');
+    const removePhotoBtn = document.getElementById('remove-photo');
+    
+    let requestSeq = 0; // Controla concurrencia de cargas
 
-    paisSelectResidencia?.addEventListener('change', function() {
-        const paisId = this.value;
-        departamentoSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
-        municipioSelectResidencia.innerHTML = '<option value="">Seleccione municipio</option>';
+    // =============================================================================
+    // FUNCIONES AUXILIARES
+    // =============================================================================
+    
+    /**
+     * Carga departamentos para un país específico
+     * @param {string} paisId - ID del país
+     * @param {HTMLElement} departamentoSelect - Select de departamentos
+     * @param {HTMLElement} municipioSelect - Select de municipios (opcional)
+     */
+    function cargarDepartamentos(paisId, departamentoSelect, municipioSelect = null) {
+        departamentoSelect.innerHTML = '<option value="">Cargando...</option>';
+        if (municipioSelect) {
+            municipioSelect.innerHTML = '<option value="">Seleccione municipio</option>';
+        }
 
         fetch(`{{ url('/api/departamentos') }}/${paisId}`)
             .then(res => res.json())
@@ -931,13 +976,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.forEach(dep => {
                     options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
                 });
-                departamentoSelectResidencia.innerHTML = options;
+                departamentoSelect.innerHTML = options;
+            })
+            .catch(() => {
+                departamentoSelect.innerHTML = '<option value="">Error al cargar departamentos</option>';
             });
-    });
-
-    departamentoSelectResidencia?.addEventListener('change', function() {
-        const departamentoId = this.value;
-        municipioSelectResidencia.innerHTML = '<option value="">Cargando...</option>';
+    }
+    
+    /**
+     * Carga municipios para un departamento específico
+     * @param {string} departamentoId - ID del departamento
+     * @param {HTMLElement} municipioSelect - Select de municipios
+     */
+    function cargarMunicipios(departamentoId, municipioSelect) {
+        municipioSelect.innerHTML = '<option value="">Cargando...</option>';
 
         fetch(`{{ url('/api/municipios') }}/${departamentoId}`)
             .then(res => res.json())
@@ -946,13 +998,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.forEach(mun => {
                     options += `<option value="${mun.id_municipio}">${mun.nombre_municipio}</option>`;
                 });
-                municipioSelectResidencia.innerHTML = options;
+                municipioSelect.innerHTML = options;
+            })
+            .catch(() => {
+                municipioSelect.innerHTML = '<option value="">Error al cargar municipios</option>';
             });
-    });
-
-    municipioSelectResidencia?.addEventListener('change', function() {
-        const municipioId = this.value;
-        barrioSelectResidencia.innerHTML = '<option value="">Cargando barrios...</option>';
+    }
+    
+    /**
+     * Carga barrios para un municipio específico
+     * @param {string} municipioId - ID del municipio
+     * @param {HTMLElement} barrioSelect - Select de barrios
+     */
+    function cargarBarrios(municipioId, barrioSelect) {
+        barrioSelect.innerHTML = '<option value="">Cargando barrios...</option>';
         
         if (municipioId) {
             fetch(`{{ url('/api/barrios') }}/${municipioId}`)
@@ -962,146 +1021,195 @@ document.addEventListener('DOMContentLoaded', function () {
                     barrios.forEach(barrio => {
                         options += `<option value="${barrio.id_barrio}">${barrio.nombre_barrio}</option>`;
                     });
-                    barrioSelectResidencia.innerHTML = options;
+                    barrioSelect.innerHTML = options;
                 })
                 .catch(() => {
-                    barrioSelectResidencia.innerHTML = '<option value="">Error al cargar barrios</option>';
+                    barrioSelect.innerHTML = '<option value="">Error al cargar barrios</option>';
                 });
         } else {
-            barrioSelectResidencia.innerHTML = '<option value="">Seleccione un municipio primero</option>';
+            barrioSelect.innerHTML = '<option value="">Seleccione un municipio primero</option>';
         }
-    });
-
-    // Para Información Laboral → Empresa → Cargo
-    const empresaSelect = document.getElementById('empresa_id');
-    const cargoSelect   = document.getElementById('cargo_id');
-
-    empresaSelect?.addEventListener('change', function() {
-        const empresaId = this.value;
-        cargoSelect.innerHTML = '<option value="">Cargando cargos...</option>';
-        cargoSelect.disabled = true;
-
-        if (empresaId) {
-            fetch(`{{ url('/api/cargos') }}/${empresaId}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('Error en la petición');
-                    return res.json();
-                })
-                .then(cargos => {
-                    let options = '<option value="">Seleccione cargo</option>';
-                    cargos.forEach(cargo => {
-                        options += `<option value="${cargo.id_cargo}">${cargo.nombre_cargo}</option>`;
-                    });
-                    cargoSelect.innerHTML = options;
-                    cargoSelect.disabled = false;
-
-                    // Mantener valor previo (en caso de validación fallida)
-                    const oldValue = "{{ old('cargo_id') }}";
-                    if (oldValue) {
-                        cargoSelect.value = oldValue;
-                    }
-                })
-                .catch(() => {
-                    cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
-                    cargoSelect.disabled = false;
-                });
-        } else {
-            cargoSelect.innerHTML = '<option value="">Seleccione empresa primero</option>';
-            cargoSelect.disabled = false;
-        }
-    });
-
-    // Triggers iniciales si hay valores preseleccionados
-    if (paisSelectNacimiento?.value) paisSelectNacimiento.dispatchEvent(new Event('change'));
-    if (departamentoSelectNacimiento?.value) departamentoSelectNacimiento.dispatchEvent(new Event('change'));
-
-    if (empresaSelect?.value) empresaSelect.dispatchEvent(new Event('change'));
-});
-</script>
-
-<script>
-document.getElementById('empresa_id').addEventListener('change', function() {
-    let empresaId = this.value;
-    let cargoSelect = document.getElementById('cargo_id');
-
-    cargoSelect.innerHTML = '<option value="">Cargando...</option>';
-
-    if (empresaId) {
-        fetch(`/empresas/${empresaId}/cargos`)
-            .then(res => res.json())
-            .then(data => {
-                cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
-                data.forEach(cargo => {
-                    let option = document.createElement('option');
-                    option.value = cargo.id_cargo;
-                    option.textContent = cargo.nombre_cargo;
-                    cargoSelect.appendChild(option);
-                });
-            })
-            .catch(() => {
-                cargoSelect.innerHTML = '<option value="">Error cargando cargos</option>';
+    }
+    
+    /**
+     * Carga cargos para una empresa específica
+     * @param {string} empresaId - ID de la empresa
+     * @param {string|null} preselectId - ID del cargo a preseleccionar (opcional)
+     */
+    async function cargarCargos(empresaId, preselectId = null) {
+        cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
+        cargoError && (cargoError.style.display = 'none');
+        
+        if (!empresaId) return;
+        
+        const currentSeq = ++requestSeq;
+        
+        try {
+            const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
+            const res = await fetch(url, { 
+                headers: { 'Accept': 'application/json' } 
             });
-    } else {
-        cargoSelect.innerHTML = '<option value="">Cargando Cargos</option>';
+            
+            if (!res.ok) throw new Error('Error al cargar cargos');
+            
+            const data = await res.json();
+            
+            // Ignorar respuestas antiguas si hubo otra solicitud posterior
+            if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
+                return;
+            }
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No hay cargos disponibles';
+                opt.disabled = true;
+                cargoSelect.appendChild(opt);
+                return;
+            }
+            
+            data.forEach(cargo => {
+                const opt = document.createElement('option');
+                opt.value = cargo.id_cargo;
+                opt.textContent = cargo.nombre_cargo;
+                
+                if (preselectId && String(preselectId) === String(cargo.id_cargo)) {
+                    opt.selected = true;
+                }
+                
+                cargoSelect.appendChild(opt);
+            });
+            
+        } catch (error) {
+            console.error('Error cargando cargos:', error);
+            
+            // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
+            if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
+                cargoError.style.display = '';
+            }
+        }
+    }
+    
+    /**
+     * Maneja la vista previa de la foto
+     * @param {Event} e - Evento de cambio del input
+     */
+    function manejarVistaPreviaFoto(e) {
+        const file = e.target.files[0];
+
+        if (file) {
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona un archivo de imagen válido.');
+                this.value = '';
+                return;
+            }
+
+            // Validar tamaño (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('La imagen no debe superar los 5MB.');
+                this.value = '';
+                return;
+            }
+
+            // Mostrar vista previa
+            previewImg.src = URL.createObjectURL(file);
+            noPhotoDiv.classList.add('hidden');
+            withPhotoDiv.classList.remove('hidden');
+        } else {
+            // Ocultar vista previa
+            noPhotoDiv.classList.remove('hidden');
+            withPhotoDiv.classList.add('hidden');
+            previewImg.src = '';
+        }
+    }
+    
+    /**
+     * Elimina la foto seleccionada
+     */
+    function eliminarFoto() {
+        fotoInput.value = '';
+        noPhotoDiv.classList.remove('hidden');
+        withPhotoDiv.classList.add('hidden');
+        previewImg.src = '';
+    }
+
+    // =============================================================================
+    // EVENT LISTENERS - UBICACIÓN NACIMIENTO
+    // =============================================================================
+    
+    if (paisSelectNacimiento) {
+        paisSelectNacimiento.addEventListener('change', function() {
+            cargarDepartamentos(this.value, departamentoSelectNacimiento, municipioSelectNacimiento);
+        });
+    }
+    
+    if (departamentoSelectNacimiento) {
+        departamentoSelectNacimiento.addEventListener('change', function() {
+            cargarMunicipios(this.value, municipioSelectNacimiento);
+        });
+    }
+
+    // =============================================================================
+    // EVENT LISTENERS - UBICACIÓN RESIDENCIA
+    // =============================================================================
+    
+    paisSelectResidencia?.addEventListener('change', function() {
+        cargarDepartamentos(this.value, departamentoSelectResidencia, municipioSelectResidencia);
+    });
+    
+    departamentoSelectResidencia?.addEventListener('change', function() {
+        cargarMunicipios(this.value, municipioSelectResidencia);
+    });
+    
+    municipioSelectResidencia?.addEventListener('change', function() {
+        cargarBarrios(this.value, barrioSelectResidencia);
+    });
+
+    // =============================================================================
+    // EVENT LISTENERS - INFORMACIÓN LABORAL
+    // =============================================================================
+    
+    empresaSelect?.addEventListener('change', function() {
+        cargarCargos(this.value);
+    });
+
+    // =============================================================================
+    // EVENT LISTENERS - FOTO
+    // =============================================================================
+    
+    if (fotoInput) {
+        fotoInput.addEventListener('change', manejarVistaPreviaFoto);
+    }
+    
+    if (removePhotoBtn) {
+        removePhotoBtn.addEventListener('click', eliminarFoto);
+    }
+
+    // =============================================================================
+    // INICIALIZACIÓN
+    // =============================================================================
+    
+    // Triggers iniciales si hay valores preseleccionados
+    if (paisSelectNacimiento?.value) {
+        paisSelectNacimiento.dispatchEvent(new Event('change'));
+    }
+    
+    if (departamentoSelectNacimiento?.value) {
+        departamentoSelectNacimiento.dispatchEvent(new Event('change'));
+    }
+    
+    if (empresaSelect?.value) {
+        empresaSelect.dispatchEvent(new Event('change'));
+    }
+    
+    // Restaurar valores previos en caso de validación fallida
+    const oldEmpresa = "{{ old('empresa_id') }}";
+    const oldCargo = "{{ old('cargo_id') }}";
+    
+    if (oldEmpresa) {
+        cargarCargos(oldEmpresa, oldCargo);
     }
 });
 </script>
-<script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const empresaSelect = document.getElementById('empresa_id');
-                                        const cargoSelect = document.getElementById('cargo_id');
-                                        const cargoError  = document.getElementById('cargo_error');
-                                        let requestSeq = 0; // controla concurrencia de cargas
-
-                                        async function cargarCargos(empresaId, preselectId = null) {
-                                            cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
-                                            cargoError && (cargoError.style.display = 'none');
-                                            if (!empresaId) return;
-                                            const currentSeq = ++requestSeq;
-                                            try {
-                                                const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
-                                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                                                if (!res.ok) throw new Error('Error al cargar cargos');
-                                                const data = await res.json();
-                                                // Ignorar respuestas antiguas si hubo otra solicitud posterior
-                                                if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
-                                                    return;
-                                                }
-                                                if (!Array.isArray(data) || data.length === 0) {
-                                                    const opt = document.createElement('option');
-                                                    opt.value = '';
-                                                    opt.textContent = 'No hay cargos disponibles';
-                                                    opt.disabled = true;
-                                                    cargoSelect.appendChild(opt);
-                                                    return;
-                                                }
-                                                data.forEach(c => {
-                                                    const opt = document.createElement('option');
-                                                    opt.value = c.id_cargo;
-                                                    opt.textContent = c.nombre_cargo;
-                                                    if (preselectId && String(preselectId) === String(c.id_cargo)) {
-                                                        opt.selected = true;
-                                                    }
-                                                    cargoSelect.appendChild(opt);
-                                                });
-                                            } catch (e) {
-                                                console.error(e);
-                                                // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
-                                                if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
-                                                    cargoError.style.display = '';
-                                                }
-                                            }
-                                        }
-
-                                        empresaSelect.addEventListener('change', function () {
-                                            cargarCargos(this.value);
-                                        });
-
-                                        const oldEmpresa = "{{ old('empresa_id') }}";
-                                        const oldCargo = "{{ old('cargo_id') }}";
-                                        if (oldEmpresa) {
-                                            cargarCargos(oldEmpresa, oldCargo);
-                                        }
-                                    });
-                                </script>
 @endpush

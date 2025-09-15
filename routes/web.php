@@ -35,13 +35,3 @@ Route::get('/barrios', [BarrioController::class, 'index']);
 
 Route::get('/empresas/{empresa}/cargos', [CargoController::class, 'cargosPorEmpresa'])->name('empresas.cargos');
 
-
-
-
-// Info de php
-Route::get('/info', function () {
-    phpinfo();
-});
-Route::get('/test', function () {
-    return 'OK';
-});

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class Empleado extends Model
@@ -44,6 +46,7 @@ class Empleado extends Model
     'ccf_id',
     'afc_id',
     'telefono_fijo',
+    'foto',
     ];
 
     protected $casts = [
@@ -94,6 +97,32 @@ class Empleado extends Model
     public function cargo()
     {
         return $this->belongsTo(Cargo::class, 'cargo_id');
+    }
+
+    // Accessor para obtener la URL completa de la foto
+    public function getFotoUrlAttribute()
+    {
+        if ($this->foto) {
+            return Storage::url($this->foto);
+        }
+        return null;
+    }
+
+    // Método para verificar si el empleado tiene foto
+    public function getTieneFotoAttribute()
+    {
+        return !empty($this->foto) && Storage::disk('public')->exists($this->foto);
+    }
+
+    // Método para compatibilidad con la vista show.blade.php
+    public function getFotoPerfilActualAttribute()
+    {
+        if ($this->tieneFoto) {
+            return (object)[
+                'url' => $this->fotoUrl
+            ];
+        }
+        return null;
     }
 
 

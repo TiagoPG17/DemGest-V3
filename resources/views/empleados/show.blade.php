@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @php
@@ -38,9 +39,7 @@ use Illuminate\Support\Facades\Storage;
                     </button>
                 </form>
             </div>
-
         </header>
-
         <!-- Mensaje de éxito -->
         @if (session('success'))
             <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
@@ -56,77 +55,89 @@ use Illuminate\Support\Facades\Storage;
         <!-- Tarjeta principal con información del empleado -->
         <div class="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
             <!-- Encabezado con información básica -->
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex flex-col md:flex-row md:items-start gap-6">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <!-- Foto de perfil -->
-                    <div class="w-36 h-36 rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                    <div class="w-36 aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
                         @if($empleado->fotoPerfilActual)
                             <img src="{{ $empleado->fotoPerfilActual->url }}" 
-                                 alt="Foto de perfil de {{ $empleado->nombre_completo }}" 
-                                 class="w-full h-full object-cover">
+                                alt="Foto de perfil de {{ $empleado->nombre_completo }}" 
+                                class="w-full h-full object-cover"
+                                loading="lazy">
                         @else
-                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400" aria-label="Sin foto de perfil">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                         @endif
                     </div>
+
                     
                     <div class="flex-1 min-w-0">
                     <?php
-                        // Calcular las iniciales del nombre completo (solo las dos primeras palabras)
-                        $iniciales = '';
-                        if ($empleado->nombre_completo) {
-                            $palabras = explode(' ', trim($empleado->nombre_completo));
-                            $primerasDosPalabras = array_slice($palabras, 0, 2);
-                            foreach ($primerasDosPalabras as $palabra) {
-                                if (!empty($palabra)) {
-                                    $iniciales .= strtoupper(substr($palabra, 0, 1));
-                                }
-                            }
-                        }
                         
                         $infoLaboral = $empleado->informacionLaboralActual;
                     ?>
                     
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold text-gray-900">{{ $empleado->nombre_completo }}</h2>
-                        <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6 gap-2">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $empleado->nombre_completo }}</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <!-- Cargo -->
-                            <div class="flex items-center text-sm text-gray-500">
-                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6a4 4 0 100 8 4 4 0 000-8zm0 14l-3.5-3.5m7 0L12 20m0-14V2" />
-                                </svg>
-                                {{ optional($infoLaboral?->estadoCargo?->cargo)->nombre_cargo ?? 'Sin cargo asignado' }}
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                                <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6a4 4 0 100 8 4 4 0 000-8zm0 14l-3.5-3.5m7 0L12 20m0-14V2" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500">Cargo:</span>
+                                    <p class="text-sm font-medium text-gray-900">{{ optional($infoLaboral?->estadoCargo?->cargo)->nombre_cargo ?? 'Sin cargo asignado' }}</p>
+                                </div>
                             </div>
+                            
                             <!-- Empresa -->
-                            <div class="flex items-center text-sm text-gray-500">
-                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21h18M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17M9 9h6m-6 4h6" />
-                                </svg>
-                                {{ optional($infoLaboral?->empresa)->nombre_empresa ?? 'Sin empresa asignada' }}
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21h18M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17M9 9h6m-6 4h6" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500">Empresa:</span>
+                                    <p class="text-sm font-medium text-gray-900">{{ optional($infoLaboral?->empresa)->nombre_empresa ?? 'Sin empresa asignada' }}</p>
+                                </div>
                             </div>
+                            
                             <!-- Fecha de ingreso -->
-                            <div class="flex items-center text-sm text-gray-500">
-                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Ingresó el {{ $infoLaboral?->fecha_ingreso?->format('d/m/Y') ?? 'No registrada' }}
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                                <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500">Ingresó:</span>
+                                    <p class="text-sm font-medium text-gray-900">{{ $infoLaboral?->fecha_ingreso?->format('d/m/Y') ?? 'No registrada' }}</p>
+                                </div>
                             </div>
+                            
                             <!-- Estado activo -->
-                            <div class="flex items-center">
-                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-{{ $empleado->estaActivo() ? 'green' : 'yellow' }}-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    @if($empleado->estaActivo())
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                    @else
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-.01-10a9 9 0 100 18 9 9 0 000-18z" />
-                                    @endif
-                                </svg>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold 
-                                    {{ $empleado->estaActivo() ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $empleado->estaActivo() ? 'Activo' : 'Inactivo' }}
-                                </span>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                                <div class="w-8 h-8 bg-{{ $empleado->estaActivo() ? 'green' : 'yellow' }}-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-{{ $empleado->estaActivo() ? 'green' : 'yellow' }}-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        @if($empleado->estaActivo())
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
+                                        @else
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-.01-10a9 9 0 100 18 9 9 0 000-18z" />
+                                        @endif
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500">Estado:</span>
+                                    <p class="text-sm font-medium text-gray-900">{{ $empleado->estaActivo() ? 'Activo' : 'Inactivo' }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

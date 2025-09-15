@@ -21,20 +21,19 @@
     <div class="min-h-screen flex">
         <!-- Sidebar (visible en desktop) -->
         <aside class="w-64 bg-[rgb(60,66,80)] text-white hidden md:block">
-            <div class="p-6">
-                <!-- Logo y título de la aplicación -->
-                <div class="flex items-center mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-300 mr-2">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"></path>
-                        <path d="m9 12 2 2 4-4"></path>
-                    </svg>
-                    <h1 class="text-2xl font-bold">GHconnecting</h1>
+            <div class="p-4">
+                <!-- Logo de la aplicación -->
+                <div class="flex flex-col items-center mb-2">
+                    <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-2 border border-white/10 shadow-lg mb-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="GHconnecting Logo" class="h-32 w-auto object-contain drop-shadow-lg hover:drop-shadow-xl transition-all duration-300 hover:scale-105">
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-lg px-4 py-1.5 border border-white/10 shadow-sm">
+                        <span class="text-blue-400 text-sm font-medium tracking-wide">Sistema de Gestión</span>
+                    </div>
                 </div>
-                <p class="text-indigo-200 text-sm mt-1">Sistema de Gestión</p>
             </div>
             <!-- Navegación de la sidebar -->
-            <nav class="mt-2">
+            <nav class="">
                 <a href="{{ route('dashboard') }}" class="flex items-center px-6 py-3 hover:bg-gray-800 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
