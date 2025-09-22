@@ -213,19 +213,6 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="rango_edad_id" class="block text-sm font-medium text-gray-700">
-                                        Rango de Edad <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="rango_edad_id" id="rango_edad_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
-                                        <option value="">Seleccione rango de edad</option>
-                                        @foreach($rangosEdad as $rango)
-                                            <option value="{{ $rango->id_rango }}" {{ old('rango_edad_id') == $rango->id_rango ? 'selected' : '' }}>
-                                                ({{ $rango->edad_minima }} - {{ $rango->edad_maxima }} años)
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
                                     <label for="etnia_id" class="block font-medium text-sm text-gray-700">Etnia</label>
                                     <select name="etnia_id" id="etnia_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none">
                                         <option value="">Selecciona una etnia</option>
@@ -943,7 +930,11 @@
 @endsection
 @push('scripts')
 <script>
+console.log('🚀 INICIANDO SCRIPT DE CREATE.BLADE.PHP');
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM CARGADO');
+    
     // =============================================================================
     // VARIABLES GLOBALES
     // =============================================================================
@@ -971,6 +962,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const previewImg = document.getElementById('preview-img');
     const removePhotoBtn = document.getElementById('remove-photo');
     
+    console.log('📋 ELEMENTOS ENCONTRADOS:');
+    console.log('- paisSelectNacimiento:', paisSelectNacimiento);
+    console.log('- empresaSelect:', empresaSelect);
+    console.log('- cargoSelect:', cargoSelect);
+    
     let requestSeq = 0; // Controla concurrencia de cargas
 
     // =============================================================================
@@ -984,21 +980,39 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {HTMLElement} municipioSelect - Select de municipios (opcional)
      */
     function cargarDepartamentos(paisId, departamentoSelect, municipioSelect = null) {
+        console.log('🌍 cargarDepartamentos llamado con paisId:', paisId);
+        console.log('🌍 departamentoSelect:', departamentoSelect);
+        
+        if (!paisId) {
+            console.log('❌ No hay paisId, retornando');
+            departamentoSelect.innerHTML = '<option value="">Seleccione país primero</option>';
+            return;
+        }
+        
         departamentoSelect.innerHTML = '<option value="">Cargando...</option>';
         if (municipioSelect) {
             municipioSelect.innerHTML = '<option value="">Seleccione municipio</option>';
         }
 
-        fetch(`{{ url('/api/departamentos') }}/${paisId}`)
-            .then(res => res.json())
+        const url = `{{ url('/api/departamentos') }}/${paisId}`;
+        console.log('🌍 Haciendo fetch a:', url);
+        
+        fetch(url)
+            .then(res => {
+                console.log('🌍 Respuesta recibida:', res.status, res.ok);
+                return res.json();
+            })
             .then(data => {
+                console.log('🌍 Datos recibidos:', data);
                 let options = '<option value="">Seleccione departamento</option>';
                 data.forEach(dep => {
                     options += `<option value="${dep.id_departamento}">${dep.nombre_departamento}</option>`;
                 });
                 departamentoSelect.innerHTML = options;
+                console.log('✅ Departamentos cargados correctamente');
             })
-            .catch(() => {
+            .catch(error => {
+                console.error('❌ Error al cargar departamentos:', error);
                 departamentoSelect.innerHTML = '<option value="">Error al cargar departamentos</option>';
             });
     }
@@ -1057,29 +1071,45 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {string|null} preselectId - ID del cargo a preseleccionar (opcional)
      */
     async function cargarCargos(empresaId, preselectId = null) {
+        console.log('💼 cargarCargos llamado con empresaId:', empresaId);
+        console.log('💼 cargoSelect:', cargoSelect);
+        
+        if (!empresaId) {
+            console.log('❌ No hay empresaId, retornando');
+            return;
+        }
+        
         cargoSelect.innerHTML = '<option value="">Selecciona Cargo</option>';
         cargoError && (cargoError.style.display = 'none');
-        
-        if (!empresaId) return;
         
         const currentSeq = ++requestSeq;
         
         try {
             const url = "{{ url('/empresas') }}" + "/" + encodeURIComponent(empresaId) + "/cargos";
+            console.log('💼 Haciendo fetch a:', url);
+            
             const res = await fetch(url, { 
                 headers: { 'Accept': 'application/json' } 
             });
             
-            if (!res.ok) throw new Error('Error al cargar cargos');
+            console.log('💼 Respuesta recibida:', res.status, res.ok);
+            
+            if (!res.ok) {
+                console.error('❌ Respuesta no OK:', res.status, res.statusText);
+                throw new Error('Error al cargar cargos');
+            }
             
             const data = await res.json();
+            console.log('💼 Datos recibidos:', data);
             
             // Ignorar respuestas antiguas si hubo otra solicitud posterior
             if (currentSeq !== requestSeq || empresaSelect.value !== String(empresaId)) {
+                console.log('⏭️ Ignorando respuesta antigua');
                 return;
             }
             
             if (!Array.isArray(data) || data.length === 0) {
+                console.log('📭 No hay cargos disponibles');
                 const opt = document.createElement('option');
                 opt.value = '';
                 opt.textContent = 'No hay cargos disponibles';
@@ -1088,6 +1118,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            console.log('✅ Cargando', data.length, 'cargos');
             data.forEach(cargo => {
                 const opt = document.createElement('option');
                 opt.value = cargo.id_cargo;
@@ -1100,8 +1131,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 cargoSelect.appendChild(opt);
             });
             
+            console.log('✅ Cargos cargados correctamente');
+            
         } catch (error) {
-            console.error('Error cargando cargos:', error);
+            console.error('❌ Error cargando cargos:', error);
             
             // Solo mostrar error si esta es la solicitud vigente y no hay opciones cargadas
             if (currentSeq === requestSeq && cargoError && cargoSelect.options.length <= 1) {
@@ -1159,40 +1192,72 @@ document.addEventListener('DOMContentLoaded', function() {
     // =============================================================================
     
     if (paisSelectNacimiento) {
+        console.log('🎯 Agregando listener a paisSelectNacimiento');
         paisSelectNacimiento.addEventListener('change', function() {
+            console.log('🎯 paisSelectNacimiento change:', this.value);
             cargarDepartamentos(this.value, departamentoSelectNacimiento, municipioSelectNacimiento);
         });
+    } else {
+        console.log('❌ paisSelectNacimiento no encontrado');
     }
     
     if (departamentoSelectNacimiento) {
+        console.log('🎯 Agregando listener a departamentoSelectNacimiento');
         departamentoSelectNacimiento.addEventListener('change', function() {
+            console.log('🎯 departamentoSelectNacimiento change:', this.value);
             cargarMunicipios(this.value, municipioSelectNacimiento);
         });
+    } else {
+        console.log('❌ departamentoSelectNacimiento no encontrado');
     }
 
     // =============================================================================
     // EVENT LISTENERS - UBICACIÓN RESIDENCIA
     // =============================================================================
     
-    paisSelectResidencia?.addEventListener('change', function() {
-        cargarDepartamentos(this.value, departamentoSelectResidencia, municipioSelectResidencia);
-    });
+    if (paisSelectResidencia) {
+        console.log('🎯 Agregando listener a paisSelectResidencia');
+        paisSelectResidencia.addEventListener('change', function() {
+            console.log('🎯 paisSelectResidencia change:', this.value);
+            cargarDepartamentos(this.value, departamentoSelectResidencia, municipioSelectResidencia);
+        });
+    } else {
+        console.log('❌ paisSelectResidencia no encontrado');
+    }
     
-    departamentoSelectResidencia?.addEventListener('change', function() {
-        cargarMunicipios(this.value, municipioSelectResidencia);
-    });
+    if (departamentoSelectResidencia) {
+        console.log('🎯 Agregando listener a departamentoSelectResidencia');
+        departamentoSelectResidencia.addEventListener('change', function() {
+            console.log('🎯 departamentoSelectResidencia change:', this.value);
+            cargarMunicipios(this.value, municipioSelectResidencia);
+        });
+    } else {
+        console.log('❌ departamentoSelectResidencia no encontrado');
+    }
     
-    municipioSelectResidencia?.addEventListener('change', function() {
-        cargarBarrios(this.value, barrioSelectResidencia);
-    });
+    if (municipioSelectResidencia) {
+        console.log('🎯 Agregando listener a municipioSelectResidencia');
+        municipioSelectResidencia.addEventListener('change', function() {
+            console.log('🎯 municipioSelectResidencia change:', this.value);
+            cargarBarrios(this.value, barrioSelectResidencia);
+        });
+    } else {
+        console.log('❌ municipioSelectResidencia no encontrado');
+    }
 
     // =============================================================================
     // EVENT LISTENERS - INFORMACIÓN LABORAL
     // =============================================================================
     
-    empresaSelect?.addEventListener('change', function() {
-        cargarCargos(this.value);
-    });
+    if (empresaSelect) {
+        console.log('🎯 Agregando listener a empresaSelect');
+        empresaSelect.addEventListener('change', function() {
+            console.log('🎯 empresaSelect change:', this.value);
+            cargarCargos(this.value);
+        });
+    } else {
+        console.log('❌ empresaSelect no encontrado');
+    }
 
     // =============================================================================
     // EVENT LISTENERS - FOTO
@@ -1210,16 +1275,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // INICIALIZACIÓN
     // =============================================================================
     
+    console.log('🚀 INICIALIZANDO...');
+    console.log('🚀 Valores iniciales:');
+    console.log('- paisSelectNacimiento.value:', paisSelectNacimiento?.value);
+    console.log('- empresaSelect.value:', empresaSelect?.value);
+    
     // Triggers iniciales si hay valores preseleccionados
     if (paisSelectNacimiento?.value) {
+        console.log('🚀 Disparando evento change en paisSelectNacimiento');
         paisSelectNacimiento.dispatchEvent(new Event('change'));
     }
     
     if (departamentoSelectNacimiento?.value) {
+        console.log('🚀 Disparando evento change en departamentoSelectNacimiento');
         departamentoSelectNacimiento.dispatchEvent(new Event('change'));
     }
     
     if (empresaSelect?.value) {
+        console.log('🚀 Disparando evento change en empresaSelect');
         empresaSelect.dispatchEvent(new Event('change'));
     }
     
@@ -1227,9 +1300,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const oldEmpresa = "{{ old('empresa_id') }}";
     const oldCargo = "{{ old('cargo_id') }}";
     
+    console.log('🚀 Valores old:', { oldEmpresa, oldCargo });
+    
     if (oldEmpresa) {
+        console.log('🚀 Cargando cargos con valores old');
         cargarCargos(oldEmpresa, oldCargo);
     }
+    
+    console.log('🎉 SCRIPT COMPLETADO');
 });
 </script>
 @endpush

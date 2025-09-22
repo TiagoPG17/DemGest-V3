@@ -103,7 +103,35 @@ class Empleado extends Model
     public function getFotoUrlAttribute()
     {
         if ($this->foto) {
-            return Storage::url($this->foto);
+            $url = Storage::url($this->foto);
+            
+            // Solo modificar URLs en entorno de desarrollo local
+            if (config('app.env') === 'local' && config('mobile.enable_url_replacement', true)) {
+                // Detectar automáticamente si estamos en desarrollo local
+                $appUrl = config('app.url');
+                
+                // Si la URL contiene localhost o 127.0.0.1, reemplazar con IP de red
+                if (strpos($url, 'localhost') !== false || strpos($url, '127.0.0.1') !== false) {
+                    $serverIp = config('mobile.server_ip');
+                    $protocol = config('mobile.protocol', 'http');
+                    $port = config('mobile.server_port');
+                    
+                    if ($serverIp) {
+                        // Reemplazar dominio local con IP de red
+                        $url = str_replace(['localhost', '127.0.0.1'], $serverIp, $url);
+                        
+                        // Asegurar protocolo
+                        $url = preg_replace('/^https?:\/\//', $protocol . '://', $url);
+                        
+                        // Añadir puerto si es necesario
+                        if ($port && $port != '80' && strpos($url, ':' . $port) === false) {
+                            $url = preg_replace('/(https?:\/\/[^\/]+)/', '$1:' . $port, $url);
+                        }
+                    }
+                }
+            }
+            
+            return $url;
         }
         return null;
     }

@@ -41,7 +41,6 @@ class StoreEmpleadoRequest extends FormRequest
                 'string',
                 'max:100',
             ],
-            'rango_edad_id' => 'required|exists:rango_edad,id_rango',
             'email' => [
                 'nullable',
                 'regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/',
@@ -172,8 +171,6 @@ class StoreEmpleadoRequest extends FormRequest
             'nivel_educativo.required' => 'El nivel educativo es obligatorio.',
             'nivel_educativo.string' => 'El nivel educativo debe ser una cadena de texto.',
             'nivel_educativo.max' => 'El nivel educativo no puede exceder los 100 caracteres.',
-            'rango_edad_id.required' => 'El rango de edad es obligatorio.',
-            'rango_edad_id.exists' => 'El rango de edad seleccionado no es válido.',
             'email.nullable' => 'El correo electrónico puede estar vacío.',
             'email.regex' => 'El correo electrónico no tiene un formato válido.',
             'email.unique' => 'El correo electrónico ya está registrado.',

@@ -16,28 +16,68 @@ class DashboardController extends Controller
             // Activar el log de consultas SQL
             DB::enableQueryLog();
         
-            // Obtener total de empleados activos por empresa
-            // ID 1: Contiflex, ID 2: Formacol
-            // Contar empleados activos de Contiflex
-            $contiflexCount = DB::table('informacion_laboral')
-                ->where('empresa_id', 1) // Contiflex
-                ->where(function($query) {
-                    $query->whereNull('fecha_salida')
-                          ->orWhere('fecha_salida', '>', now());
-                })
-                ->count();
+            // Obtener total de empleados activos por empresa usando lógica robusta
+            // Primero obtenemos los totales robustos de centros de costo
+            try {
+                $totalesRobustos = \App\Models\CentroCosto::getTotalesPorEmpresa();
+                $contiflexCount = $totalesRobustos['contiflex'];
+                $formacolCount = $totalesRobustos['formacol'];
+                $totalEmpleados = $contiflexCount + $formacolCount;
+                
+                // Validación adicional: contar directamente por empresa_id como respaldo
+                $contiflexDirecto = DB::table('informacion_laboral')
+                    ->where('empresa_id', 1) // Contiflex
+                    ->where(function($query) {
+                        $query->whereNull('fecha_salida')
+                              ->orWhere('fecha_salida', '>', now());
+                    })
+                    ->count();
 
-            // Contar empleados activos de Formacol
-            $formacolCount = DB::table('informacion_laboral')
-                ->where('empresa_id', 2) // Formacol
-                ->where(function($query) {
-                    $query->whereNull('fecha_salida')
-                          ->orWhere('fecha_salida', '>', now());
-                })
-                ->count();
+                $formacolDirecto = DB::table('informacion_laboral')
+                    ->where('empresa_id', 2) // Formacol
+                    ->where(function($query) {
+                        $query->whereNull('fecha_salida')
+                              ->orWhere('fecha_salida', '>', now());
+                    })
+                    ->count();
+                
+                // Si hay diferencias significativas, registrar advertencia
+                if (abs($contiflexCount - $contiflexDirecto) > 5) {
+                    Log::warning('Diferencia significativa en conteo Contiflex', [
+                        'conteo_robusto' => $contiflexCount,
+                        'conteo_directo' => $contiflexDirecto
+                    ]);
+                }
+                
+                if (abs($formacolCount - $formacolDirecto) > 5) {
+                    Log::warning('Diferencia significativa en conteo Formacol', [
+                        'conteo_robusto' => $formacolCount,
+                        'conteo_directo' => $formacolDirecto
+                    ]);
+                }
+                
+            } catch (\Exception $e) {
+                Log::error('Error en conteo robusto, usando método directo: ' . $e->getMessage());
+                
+                // Fallback al método directo
+                $contiflexCount = DB::table('informacion_laboral')
+                    ->where('empresa_id', 1) // Contiflex
+                    ->where(function($query) {
+                        $query->whereNull('fecha_salida')
+                              ->orWhere('fecha_salida', '>', now());
+                    })
+                    ->count();
 
-            // Total general de empleados activos
-            $totalEmpleados = $contiflexCount + $formacolCount;
+                $formacolCount = DB::table('informacion_laboral')
+                    ->where('empresa_id', 2) // Formacol
+                    ->where(function($query) {
+                        $query->whereNull('fecha_salida')
+                              ->orWhere('fecha_salida', '>', now());
+                    })
+                    ->count();
+
+                $totalEmpleados = $contiflexCount + $formacolCount;
+            }
 
             // Obtener empleados nuevos del mes actual por empresa
             $nuevosContiflexMes = DB::table('informacion_laboral')
@@ -82,110 +122,63 @@ class DashboardController extends Controller
 
             // Obtener el log de consultas
             $queries = DB::getQueryLog();
-            Log::info('=== CONSULTAS EJECUTADAS ===');
-            foreach ($queries as $query) {
-                Log::info($query['query']);
-                Log::info('Bindings: ' . json_encode($query['bindings']));
-                Log::info('Tiempo: ' . $query['time'] . 'ms');
-            }
         
 
-            // Inicializar variables
+            // Obtener centros de costo con conteo robusto usando el modelo
             $centrosCostos = collect();
             $totalContiflex = 0;
             $totalFormacol = 0;
             
             try {
-                // Consulta compatible con MySQL 5.7 para contar solo un centro de costo por empleado
-                $centrosCostos = DB::table('centro_costos as cc')
-                    ->leftJoin('estado_cargo as ec', 'cc.id', '=', 'ec.centro_costo_id')
-                    ->leftJoin('informacion_laboral as il', function($join) {
-                        $join->on('ec.estado_id', '=', 'il.id_estado')
-                              ->whereNull('il.fecha_salida')
-                              ->orWhere('il.fecha_salida', '>', DB::raw('NOW()'));
-                    })
-                    ->leftJoin('empleados as e', 'il.empleado_id', '=', 'e.id_empleado')
-                    ->whereRaw('il.id_estado = (
-                        SELECT il2.id_estado 
-                        FROM informacion_laboral il2 
-                        WHERE il2.empleado_id = il.empleado_id 
-                        AND (il2.fecha_salida IS NULL OR il2.fecha_salida > NOW())
-                        ORDER BY il2.fecha_ingreso DESC, il2.id_estado DESC 
-                        LIMIT 1
-                    )')
-                    ->select([
-                        'cc.id',
-                        'cc.codigo',
-                        'cc.nombre',
-                        DB::raw('COUNT(DISTINCT e.id_empleado) as empleados_count')
-                    ])
-                    ->groupBy('cc.id', 'cc.codigo', 'cc.nombre')
-                    ->orderBy('cc.codigo')
-                    ->get();
+                // Usar el método que filtra solo centros con empleados
+                $centrosCostos = \App\Models\CentroCosto::getCentrosConEmpleados();
                 
-                // Calcular totales por empresa
-                foreach ($centrosCostos as $centro) {
-                    if (str_starts_with($centro->codigo, 'CX_')) {
-                        $totalContiflex += $centro->empleados_count;
-                    } elseif (str_starts_with($centro->codigo, 'FC_')) {
-                        $totalFormacol += $centro->empleados_count;
-                    }
-                }
-
-                // Depuración: Ver empleados en Administración
-                $empleadosAdmin = DB::table('empleados as e')
-                    ->join('informacion_laboral as il', 'e.id_empleado', '=', 'il.empleado_id')
-                    ->join('estado_cargo as ec', 'il.id_estado', '=', 'ec.estado_id')
-                    ->join('centro_costos as cc', 'ec.centro_costo_id', '=', 'cc.id')
-                    ->where('cc.codigo', 'CX_10000') // Código de Administración
-                    ->where(function($query) {
-                        $query->whereNull('il.fecha_salida')
-                              ->orWhere('il.fecha_salida', '>', now());
-                    })
-                    ->select('e.id_empleado', 'e.nombre_completo', 'il.fecha_ingreso', 'il.fecha_salida')
-                    ->orderBy('e.nombre_completo')
-                    ->get();
-
+                // Obtener totales por empresa usando el método especializado
+                $totalesPorEmpresa = \App\Models\CentroCosto::getTotalesPorEmpresa();
+                $totalContiflex = $totalesPorEmpresa['contiflex'];
+                $totalFormacol = $totalesPorEmpresa['formacol'];
                 
-                foreach ($empleadosAdmin as $empleado) {
-                    $estado = $empleado->fecha_salida ? 'INACTIVO' : 'ACTIVO';
+                // Depuración: mostrar totales
+                Log::info('TOTALES POR EMPRESA:', [
+                    'contiflex' => $totalContiflex,
+                    'formacol' => $totalFormacol,
+                    'total_general' => $totalEmpleados
+                ]);
                 
+                // Validar coherencia de datos
+                $sumaCentrosContiflex = $centrosCostos->where('codigo', 'LIKE', 'CX_%')->sum('empleados_count');
+                $sumaCentrosFormacol = $centrosCostos->where('codigo', 'LIKE', 'FC_%')->sum('empleados_count');
+                
+                // Si hay diferencias, usar la suma de centros como fuente de verdad
+                if ($sumaCentrosContiflex != $totalContiflex) {
+                    $totalContiflex = $sumaCentrosContiflex;
+                    Log::warning('Coherencia de datos: Diferencia en total Contiflex', [
+                        'total_metodo' => $totalesPorEmpresa['contiflex'],
+                        'suma_centros' => $sumaCentrosContiflex
+                    ]);
                 }
                 
-                // Registrar información detallada para depuración
-                Log::info('=== DETALLE DE EMPLEADOS POR CENTRO DE COSTO ===');
-                foreach ($centrosCostos as $centro) {
-                    if ($centro->empleados_count > 0) {
-                        $empleados = DB::table('empleados as e')
-                            ->join('informacion_laboral as il', 'e.id_empleado', '=', 'il.empleado_id')
-                            ->join('estado_cargo as ec', 'il.id_estado', '=', 'ec.estado_id')
-                            ->where('ec.centro_costo_id', $centro->id)
-                            ->where(function($query) {
-                                $query->whereNull('il.fecha_salida')
-                                      ->orWhere('il.fecha_salida', '>', now());
-                            })
-                            ->select('e.id_empleado', 'e.numero_documento', 'e.nombre_completo', 'il.fecha_ingreso', 'il.fecha_salida')
-                            ->get();
-                        
-                        Log::info("\nCentro: {$centro->codigo} - {$centro->nombre} ({$centro->empleados_count} empleados)");
-                        foreach ($empleados as $empleado) {
-                            $estado = $empleado->fecha_salida ? 'INACTIVO' : 'ACTIVO';
-                            Log::info("- {$empleado->nombre_completo} (ID: {$empleado->id_empleado}, Doc: {$empleado->numero_documento}, Ingreso: {$empleado->fecha_ingreso}, Estado: {$estado})");
-                        }
-                    }
+                if ($sumaCentrosFormacol != $totalFormacol) {
+                    $totalFormacol = $sumaCentrosFormacol;
+                    Log::warning('Coherencia de datos: Diferencia en total Formacol', [
+                        'total_metodo' => $totalesPorEmpresa['formacol'],
+                        'suma_centros' => $sumaCentrosFormacol
+                    ]);
                 }
-            
                 
             } catch (\Exception $e) {
-                Log::error('Error en DashboardController: ' . $e->getMessage());
+                Log::error('Error en DashboardController al obtener centros de costo: ' . $e->getMessage());
                 
                 // En caso de error, devolver centros de costos sin conteo
-                $centrosCostos = $centrosCostos->isEmpty() ? collect() : $centrosCostos->map(function($item) {
+                $centrosCostos = \App\Models\CentroCosto::orderBy('codigo')->get()->map(function($item) {
                     $item->empleados_count = 0;
                     return $item;
                 });
             }
 
+            // Validación final de coherencia de datos
+            $this->validarCoherenciaFinal($contiflexCount, $formacolCount, $totalContiflex, $totalFormacol, $centrosCostos);
+            
             return view('dashboard.dashboard', [
                 'contiflexCount' => $contiflexCount,
                 'formacolCount' => $formacolCount,
@@ -210,6 +203,87 @@ class DashboardController extends Controller
                 'centrosCostos' => collect([]),
                 'error' => 'Error al cargar los datos del dashboard'
             ]);
+        }
+    }
+
+    /**
+     * Valida la coherencia final de los datos del dashboard
+     * 
+     * @param int $contiflexCount Conteo principal de Contiflex
+     * @param int $formacolCount Conteo principal de Formacol
+     * @param int $totalContiflex Total de Contiflex desde centros de costo
+     * @param int $totalFormacol Total de Formacol desde centros de costo
+     * @param Collection $centrosCostos Colección de centros de costo
+     */
+    private function validarCoherenciaFinal($contiflexCount, $formacolCount, $totalContiflex, $totalFormacol, $centrosCostos)
+    {
+        try {
+            // Validar coherencia entre conteo principal y totales de centros
+            if ($contiflexCount != $totalContiflex) {
+                Log::warning('Incoherencia en datos de Contiflex', [
+                    'conteo_principal' => $contiflexCount,
+                    'total_centros' => $totalContiflex,
+                    'diferencia' => abs($contiflexCount - $totalContiflex)
+                ]);
+            }
+
+            if ($formacolCount != $totalFormacol) {
+                Log::warning('Incoherencia en datos de Formacol', [
+                    'conteo_principal' => $formacolCount,
+                    'total_centros' => $totalFormacol,
+                    'diferencia' => abs($formacolCount - $totalFormacol)
+                ]);
+            }
+
+            // Validar que la suma de centros coincida con los totales
+            $sumaCentrosContiflex = $centrosCostos->where('codigo', 'LIKE', 'CX_%')->sum('empleados_count');
+            $sumaCentrosFormacol = $centrosCostos->where('codigo', 'LIKE', 'FC_%')->sum('empleados_count');
+
+            if ($totalContiflex != $sumaCentrosContiflex) {
+                Log::error('Error crítico: Total Contiflex no coincide con suma de centros', [
+                    'total_contiflex' => $totalContiflex,
+                    'suma_centros' => $sumaCentrosContiflex
+                ]);
+            }
+
+            if ($totalFormacol != $sumaCentrosFormacol) {
+                Log::error('Error crítico: Total Formacol no coincide con suma de centros', [
+                    'total_formacol' => $totalFormacol,
+                    'suma_centros' => $sumaCentrosFormacol
+                ]);
+            }
+
+            // Validar que no haya centros con conteos negativos
+            $centrosNegativos = $centrosCostos->where('empleados_count', '<', 0);
+            if ($centrosNegativos->count() > 0) {
+                Log::error('Centros de costo con conteos negativos', [
+                    'centros' => $centrosNegativos->pluck('codigo')->toArray()
+                ]);
+            }
+
+            // Validar que todos los centros tengan códigos correctos según su empresa
+            $centrosInconsistentes = $centrosCostos->filter(function($centro) {
+                $esContiflex = str_starts_with($centro->codigo, 'CX_');
+                $esFormacol = str_starts_with($centro->codigo, 'FC_');
+                return !$esContiflex && !$esFormacol;
+            });
+
+            if ($centrosInconsistentes->count() > 0) {
+                Log::warning('Centros de costo con códigos inconsistentes', [
+                    'centros' => $centrosInconsistentes->pluck('codigo')->toArray()
+                ]);
+            }
+
+            Log::info('Validación de coherencia final completada', [
+                'contiflex_final' => $contiflexCount,
+                'formacol_final' => $formacolCount,
+                'total_centros_contiflex' => $sumaCentrosContiflex,
+                'total_centros_formacol' => $sumaCentrosFormacol,
+                'total_centros_costos' => $centrosCostos->count()
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error en validación de coherencia final: ' . $e->getMessage());
         }
     }
 }

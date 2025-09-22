@@ -53,6 +53,7 @@ class EmpleadoController extends Controller
             'barrioResidencia',
             'rangoEdad',
             'informacionLaboral',
+            'informacionLaboralActual.empresa',
         ]);
 
         // Filtros existentes
@@ -77,7 +78,7 @@ class EmpleadoController extends Controller
 
         $filtroEmpresa = $request->get('empresa', 'todos');
         if ($filtroEmpresa !== 'todos') {
-            $query->whereHas('empresa', function ($q) use ($filtroEmpresa) {
+            $query->whereHas('informacionLaboralActual.empresa', function ($q) use ($filtroEmpresa) {
                 $q->where('nombre_empresa', 'like', '%' . $filtroEmpresa . '%');
             });
         }
@@ -160,9 +161,10 @@ class EmpleadoController extends Controller
 
     public function create()
     {
+        Log::info('DEBUG: Entrando a create()');
+        
         $paises = DB::table('pais')->get();
         $tiposDocumento = DB::table('tipo_documento')->get();
-        $rangosEdad = DB::table('rango_edad')->get();
         $cargos = DB::table('cargo')->get();
         $empresas = DB::table('empresa')->get();
         $barrios = DB::table('barrio')->get();
@@ -177,8 +179,17 @@ class EmpleadoController extends Controller
         $etnias = Etnia::all();
         $gruposSanguineos = GrupoSanguineo::all();
 
-        return view('empleados.create', compact(
-            'paises', 'tiposDocumento', 'rangosEdad', 'cargos', 'empresas', 'barrios',
+        Log::info('DEBUG: Datos cargados', [
+            'paises' => $paises->count(),
+            'tiposDocumento' => $tiposDocumento->count(),
+            'cargos' => $cargos->count(),
+            'empresas' => $empresas->count(),
+            'etnias' => $etnias->count(),
+            'gruposSanguineos' => $gruposSanguineos->count()
+        ]);
+
+        return view('empleados.create', compact(    
+            'paises', 'tiposDocumento', 'cargos', 'empresas', 'barrios',
             'departamentos', 'municipios', 'eps', 'afp', 'arl', 'ccf', 'afcs', 'ciudades', 'etnias', 'gruposSanguineos'
         ));
     }
@@ -206,7 +217,6 @@ class EmpleadoController extends Controller
             'fecha_nacimiento' => $validated['fecha_nacimiento'],
             'estado_civil' => $validated['estado_civil'],
             'nivel_educativo' => $validated['nivel_educativo'],
-            'rango_edad_id' => $validated['rango_edad_id'],
             'email' => $validated['email'] ?? null,
             'telefono' => $validated['telefono'] ?? null,
             'telefono_fijo' => $request->input('telefono_fijo'),
@@ -457,7 +467,6 @@ class EmpleadoController extends Controller
     {
         $empleado->load([
             'tipoDocumento',
-            'rangoEdad',
             'nacimiento.pais',
             'nacimiento.departamento',
             'nacimiento.municipio',
@@ -478,7 +487,6 @@ class EmpleadoController extends Controller
         ]);
 
         $tiposDocumento = TipoDocumento::all();
-        $rangosEdad = RangoEdad::all();
         $paises = Pais::all();
         $departamentos = Departamento::all();
         $municipios = Municipio::all();
@@ -529,7 +537,6 @@ class EmpleadoController extends Controller
             'empleado',
             'informacionLaboral',
             'tiposDocumento',
-            'rangosEdad',
             'paises',
             'departamentos',
             'municipios',
@@ -573,7 +580,6 @@ class EmpleadoController extends Controller
                 'fecha_nacimiento',
                 'estado_civil',
                 'nivel_educativo',
-                'rango_edad_id',
                 'email',
                 'telefono',
                 'direccion',

@@ -196,19 +196,6 @@ use Illuminate\Support\Js;
                                         <option value="Doctorado" {{ old('nivel_educativo', $empleado->nivel_educativo) == 'Doctorado' ? 'selected' : '' }}>Doctorado</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label for="rango_edad_id" class="block text-sm font-medium text-gray-700">
-                                        Rango de Edad <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="rango_edad_id" id="rango_edad_id" class="mt-2 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm shadow-md transition-all duration-200 ease-in-outfocus:border-sky-500 focus:ring-2 focus:ring-sky-400 focus:bg-white focus:outline-none" required>
-                                        <option value="">Seleccione rango de edad</option>
-                                        @foreach($rangosEdad as $rango)
-                                            <option value="{{ $rango->id_rango }}" {{ old('rango_edad_id', $empleado->rango_edad_id) == $rango->id_rango ? 'selected' : '' }}>
-                                                {{ $rango->nombre_rango }} ({{ $rango->edad_minima }} - {{ $rango->edad_maxima }} años)
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
                                 <!-- Grupo Sanguíneo (RH) -->
                                 <div>
                                     <label for="grupo_sanguineo_id" class="block text-sm font-medium text-gray-700">Grupo Sanguíneo (RH)</label>

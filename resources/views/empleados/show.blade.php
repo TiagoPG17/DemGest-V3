@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 @section('content')
     <div class="max-w-4xl mx-auto p-4 space-y-6">
         <!-- Encabezado: Navegación y Acciones -->
-        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-2xl border-4 border-grey-500">
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl shadow-2xl border-4 border-grey-500">
             <div class="flex items-center gap-2">
                 <a href="{{ route('empleados.index') }}" class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -18,26 +18,33 @@ use Illuminate\Support\Facades\Storage;
                 </a>
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Detalles del Empleado</h1>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                        <path d="m15 5 4 4" />
-                    </svg>
-                    Editar
-                </a>
-                <form action="{{ route('empleados.destroy', $empleado->id_empleado) }}" method="POST" class="inline" onsubmit="return confirm('¿Está seguro de eliminar este empleado?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors">
+            <div class="flex flex-wrap gap-2">
+                <!-- Botón Editar (solo para admin y gestión humana) -->
+                @if(is_admin() || is_gestion_humana())
+                    <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" class="inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-gray-300 shadow-sm text-xs sm:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                            <path d="m15 5 4 4" />
                         </svg>
-                        Eliminar
-                    </button>
-                </form>
+                        Editar
+                    </a>
+                @endif
+                
+                <!-- Botón Eliminar (solo para admin y gestión humana) -->
+                @if(is_admin() || is_gestion_humana())
+                    <form action="{{ route('empleados.destroy', $empleado->id_empleado) }}" method="POST" class="inline" onsubmit="return confirm('¿Está seguro de eliminar este empleado?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-transparent shadow-sm text-xs sm:text-sm font-medium rounded-md text-white bg-rose-600 hover:bg-rose-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            </svg>
+                            Eliminar
+                        </button>
+                    </form>
+                @endif
             </div>
         </header>
         <!-- Mensaje de éxito -->
@@ -55,37 +62,35 @@ use Illuminate\Support\Facades\Storage;
         <!-- Tarjeta principal con información del empleado -->
         <div class="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
             <!-- Encabezado con información básica -->
-            <div class="p-4 border-b border-gray-200">
-                <div class="flex flex-col md:flex-row md:items-center gap-6">
+            <div class="p-4 sm:p-6 border-b border-gray-200">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                     <!-- Foto de perfil -->
-                    <div class="w-36 aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
-                        @if($empleado->fotoPerfilActual)
-                            <img src="{{ $empleado->fotoPerfilActual->url }}" 
-                                alt="Foto de perfil de {{ $empleado->nombre_completo }}" 
-                                class="w-full h-full object-cover"
-                                loading="lazy">
-                        @else
-                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400" aria-label="Sin foto de perfil">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
-                        @endif
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <div class="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                            @if($empleado->fotoPerfilActual)
+                                <img src="{{ $empleado->fotoPerfilActual->url }}" 
+                                    alt="Foto de perfil de {{ $empleado->nombre_completo }}" 
+                                    class="w-full h-full object-cover"
+                                    loading="lazy">
+                            @else
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400" aria-label="Sin foto de perfil">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
-                    
-                    <div class="flex-1 min-w-0">
+                    <div class="flex-1 min-w-0 text-left">
                     <?php
-                        
                         $infoLaboral = $empleado->informacionLaboralActual;
                     ?>
-                    
-                    <div class="flex-1">
-                        <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $empleado->nombre_completo }}</h2>
+                        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 sm:mb-4">{{ $empleado->nombre_completo }}</h2>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <!-- Cargo -->
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                            <div class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
                                 <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
                                     <svg class="w-4 h-4 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6a4 4 0 100 8 4 4 0 000-8zm0 14l-3.5-3.5m7 0L12 20m0-14V2" />
@@ -98,7 +103,7 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                             
                             <!-- Empresa -->
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                            <div class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
                                 <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg class="w-4 h-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21h18M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17M9 9h6m-6 4h6" />
@@ -111,7 +116,7 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                             
                             <!-- Fecha de ingreso -->
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                            <div class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
                                 <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
                                     <svg class="w-4 h-4 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -124,9 +129,9 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                             
                             <!-- Estado activo -->
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                                <div class="w-8 h-8 bg-{{ $empleado->estaActivo() ? 'green' : 'yellow' }}-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-{{ $empleado->estaActivo() ? 'green' : 'yellow' }}-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center @if($empleado->estaActivo()) bg-green-100 @else bg-yellow-100 @endif">
+                                    <svg class="w-4 h-4 @if($empleado->estaActivo()) text-green-600 @else text-yellow-600 @endif" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         @if($empleado->estaActivo())
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
                                         @else
@@ -147,40 +152,56 @@ use Illuminate\Support\Facades\Storage;
             <!-- Tabs de información -->
             <div x-data="{ activeTab: 'personal' }">
                 <!-- Navegación de tabs -->
-                <nav class="border-b border-gray-200 flex -mb-px overflow-x-auto">
-                    <button type="button" @click="activeTab = 'personal'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'personal', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-500': activeTab !== 'personal' }">
-                        Información Personal
-                    </button>
-                    <button type="button" @click="activeTab = 'laboral'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'laboral', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'laboral' }">
-                        Información Laboral
-                    </button>
-                    <button type="button" @click="activeTab = 'beneficiario'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'beneficiario', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'beneficiario' }">
-                        Beneficiarios
-                    </button>
-                    <button type="button" @click="activeTab = 'extra'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'extra', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'extra' }">
-                        Datos Adicionales
-                    </button>
-                    <button type="button" @click="activeTab = 'ubicacion'" class="py-4 px-6 border-b-2 font-medium text-sm" :class="{ 'border-slate-800 text-slate-800': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'ubicacion' }">
-                        Salud
-                    </button>
-                </nav>
+                <div class="border-b border-gray-200">
+                    <!-- Tabs para desktop -->
+                    <nav class="hidden sm:flex -mb-px justify-center">
+                        <div class="flex space-x-1">
+                            <button type="button" @click="activeTab = 'personal'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'personal', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'personal' }">
+                                Información Personal
+                            </button>
+                            <button type="button" @click="activeTab = 'laboral'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'laboral', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'laboral' }">
+                                Información Laboral
+                            </button>
+                            <button type="button" @click="activeTab = 'beneficiario'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'beneficiario', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'beneficiario' }">
+                                Beneficiarios
+                            </button>
+                            <button type="button" @click="activeTab = 'extra'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'extra', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'extra' }">
+                                Datos Adicionales
+                            </button>
+                            <button type="button" @click="activeTab = 'ubicacion'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'ubicacion' }">
+                                Salud
+                            </button>
+                        </div>
+                    </nav>
+                    
+                    <!-- Selector para móvil -->
+                    <div class="sm:hidden p-3">
+                        <select x-model="activeTab" @change="activeTab = $event.target.value" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 font-medium focus:ring-2 focus:ring-slate-500 focus:border-slate-500">
+                            <option value="personal">Información Personal</option>
+                            <option value="laboral">Información Laboral</option>
+                            <option value="beneficiario">Beneficiarios</option>
+                            <option value="extra">Datos Adicionales</option>
+                            <option value="ubicacion">Salud</option>
+                        </select>
+                    </div>
+                </div>
 
                 <!-- Contenido de los tabs -->
-                <div class="p-6 space-y-6">
+                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                     <!-- Tab: Información Personal -->
                     <div x-show="activeTab === 'personal'" class="space-y-6">
                         <div>
                         <section aria-label="Datos personales del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
-                        <!-- Barra superior con color solido para verificar el funcionamiento -->
-                        <div class="p-4 flex items-center gap-3" style="background:linear-gradient(90deg,#fde047,#f59e0b);">
+                        <!-- Barra superior con gradiente -->
+                        <div class="p-3 sm:p-4 flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-amber-500">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                         </svg>
                         <h3 class="text-lg font-medium text-white">Datos Personales</h3>
                     </div>
-                        <div class="p-6">
-                            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-yellow-50 border border-orange-200 rounded-lg p-4 relative">
+                        <div class="p-4 sm:p-6">
+                            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-yellow-50 border border-yellow-200 rounded-lg p-4 relative">
                                 <div>
                                     <dt class="font-medium text-gray-800">Tipo de Documento</dt>
                                     <dd class="mt-1 text-gray-900">{{ $empleado->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
@@ -238,7 +259,7 @@ use Illuminate\Support\Facades\Storage;
                         </div>
                         <div>
                             <section aria-label="Información de Comunicación" class="bg-white rounded-lg shadow-xl border border-indigo-200">
-                                <header class="bg-gradient-to-r from-purple-700 to-indigo-700 p-4 flex items-center gap-3 rounded-t-lg">
+                                <header class="bg-gradient-to-r from-purple-700 to-indigo-700 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
                                         <path d="M21 10c0-5.5-4.5-10-10-10S1 4.5 1 10c0 7 10 13 10 13s10-6 10-13Z" />
@@ -246,7 +267,7 @@ use Illuminate\Support\Facades\Storage;
                                     </svg>
                                     <h3 class="text-lg font-medium text-white">Información de Contacto</h3>
                                 </header>
-                                <div class="p-6">
+                                <div class="p-4 sm:p-6">
                                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-indigo-50 border border-indigo-300 rounded-lg p-4 relative">
                                         <div>
                                             <dt class="font-medium text-gray-800">Dirección</dt>
@@ -270,7 +291,7 @@ use Illuminate\Support\Facades\Storage;
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
                             <section aria-label="Lugar de Residencia del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200">
-                                <header class="bg-cyan-600 p-4 flex items-center gap-3 rounded-t-lg">
+                                <header class="bg-cyan-600 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                         class="text-white">
@@ -279,7 +300,7 @@ use Illuminate\Support\Facades\Storage;
                                     </svg>
                                     <h3 class="text-lg font-medium text-white">Lugar de Residencia</h3>
                                 </header>
-                                <div class="p-6">
+                                <div class="p-4 sm:p-6">
                                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-sky-50 border border-sky-300 rounded-lg p-4 relative">
                                         <div>
                                             <dt class="font-medium text-gray-800">País</dt>
@@ -307,18 +328,18 @@ use Illuminate\Support\Facades\Storage;
                     <div x-show="activeTab === 'ubicacion'" class="space-y-6">
                             <!-- Sección: Patologias -->
 
-                            <div class="mt-6 bg-white rounded-lg shadow-xl border border-gray-200">
-                            <header class="bg-emerald-500 p-4 flex items-center gap-3 rounded-t-lg">
+                            <div class="mt-6 bg-white rounded-lg shadow-xl border border-emerald-200">
+                                <header class="bg-emerald-500 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-white">Patologías</h3>
                             </header>
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 @if ($empleado->patologias->count() > 0)
                                     <div class="space-y-6">
                                         @foreach ($empleado->patologias as $patologia)
-                                            <div class="bg-white border border-emerald-300 p-4 border border-emerald-200 rounded-lg bg-emerald-50 p-2">
+                                            <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 sm:p-4">
                                                 <div class=" flex items-center justify-between mb-2">
                                                     <h4 class="text-md font-semibold text-gray-900 flex items-center gap-2 p-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -372,7 +393,7 @@ use Illuminate\Support\Facades\Storage;
                     <!-- Tab: Información Laboral -->
                     <div x-show="activeTab === 'laboral'" class="space-y-6">
                         <div class="bg-white rounded-lg shadow-xl border border-gray-200">
-                            <header class="bg-sky-600 p-4 flex items-center gap-3 rounded-t-lg">
+                            <header class="bg-sky-600 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
                                     <path d="M12 22V7" />
@@ -383,7 +404,7 @@ use Illuminate\Support\Facades\Storage;
                                 </svg>
                                 <h3 class="text-lg font-medium text-white">Información Laboral</h3>
                             </header>
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 @if ($empleado->informacionLaboralActual)
                                     @php
                                         $fechaIngreso = $empleado->informacionLaboralActual->fecha_ingreso;
@@ -445,7 +466,7 @@ use Illuminate\Support\Facades\Storage;
                                         </div>
                                         <div class="w-full">
                                             <p class="text-sm text-gray-500 mb-1">Tiempo en la empresa</p>
-                                            <div class="w-full bg-blue-200 rounded-full h-2.5 dark:bg-blue-700">
+                                            <div class="w-full bg-blue-200 rounded-full h-2.5">
                                                 <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $porcentaje }}%;"></div>
                                             </div>
                                             <p class="text-sm text-gray-900 mt-1">{{ $duracion['texto'] }}</p>
@@ -520,9 +541,9 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
                             <!-- Archivos Adjuntos -->
-                            <div class="space-y-6 ml-4 -mt-2">
+                            <div class="mt-4">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
-                                <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 space-y-6">
+                                <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
                                     @php
                                         $nombresArchivos = [
                                             'adjunto1' => 'Ver contrato',
@@ -538,7 +559,7 @@ use Illuminate\Support\Facades\Storage;
                                             $nombreMostrar = $nombresArchivos[$campo] ?? 'Documentos Iniciales';
                                         @endphp
 
-                                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-6 py-6 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[140px] w-full">
+                                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-4 py-4 sm:px-5 sm:py-5 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[120px] sm:min-h-[140px] w-full">
                                             <div class="flex flex-col items-center text-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
@@ -565,17 +586,17 @@ use Illuminate\Support\Facades\Storage;
                     <!-- Tab: Beneficiarios -->
                     <div x-show="activeTab === 'beneficiario'" class="space-y-6">
                         <section aria-label="Beneficiarios del empleado" class="bg-white shadow-xl rounded-lg overflow-hidden border border-gray-200">
-                            <div class="bg-gradient-to-r from-pink-500 to-rose-500 p-4 flex items-center gap-3 rounded-t-lg">
+                            <div class="bg-gradient-to-r from-pink-500 to-rose-500 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-white">Beneficiarios</h3>
                             </div>
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 @if($empleado->beneficiarios->count() > 0)
                                     <div class="space-y-4">
                                         @foreach($empleado->beneficiarios as $beneficiario)
-                                            <div class="bg-pink-50 rounded-lg p-4 border border-pink-200 relative">
+                                            <div class="bg-pink-50 rounded-lg p-3 sm:p-4 border border-pink-200 relative">
                                                 <h4 class="text-md font-semibold text-gray-900 flex items-center gap-2 mb-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -647,14 +668,14 @@ use Illuminate\Support\Facades\Storage;
                     <!-- Tab: Datos Adicionales -->
                     <div x-show="activeTab === 'extra'" class="space-y-6">
                         <section aria-label="Información adicional del empleado" class="bg-white rounded-lg shadow-xl border border-gray-200">
-                            <header class="bg-gradient-to-r from-indigo-600 to-blue-700 p-4 flex items-center gap-3 rounded-t-lg">
+                            <header class="bg-gradient-to-r from-indigo-600 to-blue-700 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                                     <path d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm0 0v8m0 0H4m8 0h8m0 0v-8m0 0c0-1.105-.895-2-2-2s-2 .895-2 2" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-white">Información Adicional</h3>
                             </header>
-                            <div class="p-6">
-                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="p-4 sm:p-6">
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
                                     <div>
                                         <dt class="font-medium text-gray-800">Etnia</dt>
                                         <dd class="mt-1 text-gray-900">{{ $empleado->etnia->nombre ?? 'No especificado' }}</dd>
@@ -701,15 +722,15 @@ use Illuminate\Support\Facades\Storage;
 
                         <div class="grid grid-cols-1">
                             <section aria-label="Seguridad Social" class="bg-white rounded-lg shadow-xl border border-rose-200">
-                                <header class="bg-gradient-to-r from-pink-600 to-rose-600 p-4 flex items-center gap-3 rounded-t-lg">
+                                <header class="bg-gradient-to-r from-pink-600 to-rose-600 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path d="M9 21V8a4 4 0 0 1 8 0v13" />
                                         <path d="M5 21V12a4 4 0 0 1 8 0v9" />
                                     </svg>
                                     <h3 class="text-lg font-medium text-white">Afiliaciones a Seguridad Social</h3>
                                 </header>
-                                <div class="p-6">
-                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 relative">
+                                <div class="p-4 sm:p-6">
+                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-3 sm:p-4 relative">
                                         <div>
                                             <dt class="font-medium text-gray-800">EPS</dt>
                                             <dd class="mt-1 text-gray-900">{{ $empleado->eps->nombre ?? 'No especificada' }}</dd>

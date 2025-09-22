@@ -55,7 +55,6 @@ class UpdateEmpleadoRequest extends FormRequest
                 'string',
                 'max:100',
             ],
-            'rango_edad_id' => 'required|exists:rango_edad,id_rango',
             'email' => [
                 'nullable',
                 'regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/',
@@ -143,8 +142,6 @@ class UpdateEmpleadoRequest extends FormRequest
             'nivel_educativo.required' => 'El nivel educativo es obligatorio.',
             'nivel_educativo.string' => 'El nivel educativo debe ser una cadena de texto.',
             'nivel_educativo.max' => 'El nivel educativo no puede tener más de 100 caracteres.',
-            'rango_edad_id.required' => 'El rango de edad es obligatorio.',
-            'rango_edad_id.exists' => 'El rango de edad seleccionado no es válido.',
             'email.regex' => 'El correo electrónico debe contener un "@" seguido de un ".".',
             'email.unique' => 'El correo electrónico ya está en uso.',
             'email.max' => 'El correo electrónico no puede tener más de 255 caracteres.',

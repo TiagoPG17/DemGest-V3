@@ -1,1 +1,110 @@
-node_modules
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+/*.suo
+/*.ntvs*
+/*.njsproj
+/*.sln
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+/storage/logs/*.log
+/storage/logs/*/*.log
+
+# Cache
+/storage/framework/cache/*.php
+/storage/framework/cache/*/*.php
+/storage/framework/sessions/*.php
+/storage/framework/sessions/*/*.php
+/storage/framework/views/*.php
+/storage/framework/views/*/*.php
+/bootstrap/cache/*.php
+
+# Testing
+/.phpunit.cache
+/coverage
+
+# Editor files and directories
+.vscode/*
+!.vscode/extensions.json
+.idea/*
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Laravel specific
+/public/build/*
+!/public/build/.gitkeep
+/public/storage/*
+!/public/storage/.gitkeep
+/storage/app/*
+!/storage/app/.gitkeep
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/framework/*
+!/storage/framework/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Vendor files (except composer.json and composer.lock)
+/vendor/*
+!/vendor/autoload.php
+!/composer.json
+!/composer.lock
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Database files
+*.sql
+*.sqlite
+*.sqlite3
+
+# Uploads and user files
+/public/storage/empleados/*
+/public/storage/uploads/*
+
+# Development files
+asignar_rol.php
+fix_passwords.php
+generar_hash.php
+fix_user_password.sql
+plan.md
+
+# Vite
+.vite/
