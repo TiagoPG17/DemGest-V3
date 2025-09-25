@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto p-4 lg:p-8">
         <!-- Título -->
         <div class="mb-6">
-            <h1 class="text-4xl lg:text-6xl font-bold text-gray-900">Empleados</h1>
+            <h1 class="text-3xl lg:text-5xl font-bold text-gray-900">Empleados</h1>
         </div>
         
         <!-- Barra de búsqueda y filtros -->

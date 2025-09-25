@@ -13,6 +13,11 @@
         .page {
             page-break-after: always;
         }
+        
+        /* Evitar página en blanco al final */
+        .page:last-child {
+            page-break-after: avoid;
+        }
 
         .header {
             text-align: center;
@@ -94,7 +99,7 @@
         <hr class="linea-divisora">
 
         <div class="date">
-            Medellín, {{ \Carbon\Carbon::now()->translatedFormat('d \d\e F \d\e Y') }}
+            Medellín, {{ \Carbon\Carbon::now()->locale('es')->translatedFormat('d \d\e F \d\e Y') }}
         </div>
 
         <div class="destinatario">

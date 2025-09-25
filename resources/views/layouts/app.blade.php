@@ -44,11 +44,9 @@
              x-transition:leave-end="opacity-0"
              @click="mobileMenuOpen = false"
              class="lg:hidden fixed inset-0 bg-black/50 z-40"></div>
-        
-        <div class="flex flex-1">
-            <!-- Sidebar (responsive) -->
-            <aside class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-[rgb(60,66,80)] text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col h-screen" 
-                 :class="{ 'translate-x-0': mobileMenuOpen, '-translate-x-full': !mobileMenuOpen }">
+        <!-- Sidebar (responsive) -->
+        <aside id="sidebar" class="fixed lg:static top-0 left-0 z-40 w-64 bg-[rgb(60,66,80)] text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col min-h-screen" 
+                 :class="{ 'translate-x-0': mobileMenuOpen }">
                 
                 <!-- Botón cerrar móvil -->
                 <button class="lg:hidden absolute top-4 right-4 z-50 p-2 text-white/80 hover:text-white transition-colors duration-200" @click="mobileMenuOpen = false">
@@ -266,12 +264,11 @@
             </aside>
             
             <!-- Área principal de contenido -->
-            <main class="flex-1 overflow-auto bg-gray-50 lg:ml-0">
+            <main class="flex-1 overflow-auto bg-gray-50 w-full lg:w-[calc(100%-16rem)] lg:ml-64">
                 <div class="p-4 lg:p-6 min-h-screen">
                     @yield('content')
                 </div>
             </main>
-        </div>
     </div>
     
     @stack('scripts')

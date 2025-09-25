@@ -8,17 +8,31 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    // Configurar para acceso externo en desarrollo
-    server: {
-        host: '0.0.0.0', // Permite acceso desde cualquier IP
+    // Configurar para desarrollo (solo en entorno local)
+    server: process.env.APP_ENV === 'local' ? {
+        host: '0.0.0.0',
         port: 5173,
         strictPort: true,
-        origin: 'http://172.20.1.149:5173', // Tu IP local
-    },
+        origin: process.env.APP_URL || 'http://localhost:5173',
+    } : undefined,
     // Configurar para producción
     build: {
         outDir: 'public/build',
         assetsDir: 'assets',
         manifest: true,
+        // Optimizaciones para producción
+        cssCodeSplit: true,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['alpinejs'],
+                },
+            },
+        },
+    },
+    // Optimización para producción
+    optimizeDeps: {
+        include: ['alpinejs'],
     },
 });
+

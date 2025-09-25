@@ -200,58 +200,120 @@ use Illuminate\Support\Facades\Storage;
                         </svg>
                         <h3 class="text-lg font-medium text-white">Datos Personales</h3>
                     </div>
-                        <div class="p-4 sm:p-6">
+                        <div class="p-2 sm:p-6">
                             <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-yellow-50 border border-yellow-200 rounded-lg p-4 relative">
-                                <div>
-                                    <dt class="font-medium text-gray-800">Tipo de Documento</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Tipo de Documento
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Número de Documento</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->numero_documento ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                        </svg>
+                                        Número de Documento
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->numero_documento ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Fecha de Nacimiento</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->fecha_nacimiento ? $empleado->fecha_nacimiento->format('d/m/Y') : 'No especificada' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4M8 7h8M8 7l-4 9h16l-4-9" />
+                                        </svg>
+                                        Fecha de Nacimiento
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->fecha_nacimiento ? $empleado->fecha_nacimiento->format('d/m/Y') : 'No especificada' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Edad</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->edad ?? 'No calculada' }} años</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Edad
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->edad ?? 'No calculada' }} años</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Rango de Edad</dt>
-                                    <dd class="mt-1 text-gray-900">
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                        Rango de Edad
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">
                                         {{ $empleado->rangoEdad ? $empleado->rangoEdad->edad_minima . ' a ' . $empleado->rangoEdad->edad_maxima . ' años' : 'No especificado' }}
                                     </dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">País</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->pais->nombre_pais ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        País
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->nacimiento->pais->nombre_pais ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Departamento</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->departamento->nombre_departamento ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Departamento
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->nacimiento->departamento->nombre_departamento ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Municipio</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->nacimiento->municipio->nombre_municipio ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        Municipio
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->nacimiento->municipio->nombre_municipio ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Género</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->sexo ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        Género
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->sexo ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Grupo Sanguíneo</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->grupoSanguineo->nombre ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                        Grupo Sanguíneo
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->grupoSanguineo->nombre ?? 'No especificado' }}</dd>
                                 </div>
-                                <div>
-                                    <dt class="font-medium text-gray-800">Nivel Educativo</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->nivel_educativo ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                        </svg>
+                                        Nivel Educativo
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->nivel_educativo ?? 'No especificado' }}</dd>
                                 </div>
                                 
-                                <div>
-                                    <dt class="font-medium text-gray-800">Estado Civil</dt>
-                                    <dd class="mt-1 text-gray-900">{{ $empleado->estado_civil ?? 'No especificado' }}</dd>
+                                <div class="p-2 rounded-lg">
+                                    <dt class="font-semibold text-yellow-800 text-base flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                        Estado Civil
+                                    </dt>
+                                    <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->estado_civil ?? 'No especificado' }}</dd>
                                 </div>
                             </dl>
                         </div>
@@ -269,21 +331,42 @@ use Illuminate\Support\Facades\Storage;
                                 </header>
                                 <div class="p-4 sm:p-6">
                                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-indigo-50 border border-indigo-300 rounded-lg p-4 relative">
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Dirección</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->direccion ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                Dirección
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->direccion ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Teléfono</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->telefono ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                                Teléfono
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->telefono ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Teléfono fijo</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->telefono_fijo ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                                Teléfono fijo
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->telefono_fijo ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Correo Electrónico</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->email ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                Correo Electrónico
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->email ?? 'No especificado' }}</dd>
                                         </div>
                                     </dl>
                                 </div>
@@ -302,21 +385,42 @@ use Illuminate\Support\Facades\Storage;
                                 </header>
                                 <div class="p-4 sm:p-6">
                                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700 bg-sky-50 border border-sky-300 rounded-lg p-4 relative">
-                                        <div>
-                                            <dt class="font-medium text-gray-800">País</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->residencia->pais->nombre_pais ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                País
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->residencia->pais->nombre_pais ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Departamento</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->residencia->departamento->nombre_departamento ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                Departamento
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->residencia->departamento->nombre_departamento ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Municipio</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->residencia->municipio->nombre_municipio ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                                </svg>
+                                                Municipio
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->residencia->municipio->nombre_municipio ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Barrio</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->residencia->barrio->nombre_barrio ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                                </svg>
+                                                Barrio
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->residencia->barrio->nombre_barrio ?? 'No especificado' }}</dd>
                                         </div>
                                     </dl>
                                 </div>
@@ -360,17 +464,32 @@ use Illuminate\Support\Facades\Storage;
                                                 <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-700">
                                                     @if (isset($patologia->fecha_diagnostico))
                                                         <div class="col-span-1">
-                                                            <dt class="font-medium text-gray-800">Fecha de Diagnóstico</dt>
-                                                            <dd class="mt-1 text-gray-900">{{ $patologia->fecha_diagnostico ? \Carbon\Carbon::parse($patologia->fecha_diagnostico)->format('d/m/Y') : 'No especificada' }}</dd>
+                                                            <dt class="font-semibold text-emerald-800 text-base flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                </svg>
+                                                                Fecha de Diagnóstico
+                                                            </dt>
+                                                            <dd class="mt-2 text-gray-600 text-sm">{{ $patologia->fecha_diagnostico ? \Carbon\Carbon::parse($patologia->fecha_diagnostico)->format('d/m/Y') : 'No especificada' }}</dd>
                                                         </div>
                                                     @endif
                                                     <div class="@if(isset($patologia->fecha_diagnostico)) col-span-1 @else col-span-2 @endif">
-                                                        <dt class="font-medium text-gray-800">Descripción</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $patologia->descripcion_patologia ?? 'No especificada' }}</dd>
+                                                        <dt class="font-semibold text-emerald-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                            Descripción
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $patologia->descripcion_patologia ?? 'No especificada' }}</dd>
                                                     </div>
                                                     <div class="col-span-2">
-                                                        <dt class="font-medium text-gray-800">Tratamiento Actual</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $patologia->tratamiento_actual_patologia ?? 'No especificado' }}</dd>
+                                                        <dt class="font-semibold text-emerald-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                            </svg>
+                                                            Tratamiento Actual
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $patologia->tratamiento_actual_patologia ?? 'No especificado' }}</dd>
                                                     </div>
                                                 </dl>
                                             </div>
@@ -474,68 +593,129 @@ use Illuminate\Support\Facades\Storage;
                                     </div>
                                     <!-- Columnas Derechas: Detalles Laborales -->
                                     <dl class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6 text-sm text-gray-700">
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Cargo</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->estadoCargo->cargo->nombre_cargo ?? 'Sin cargo asignado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                Cargo
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->informacionLaboralActual->estadoCargo->cargo->nombre_cargo ?? 'Sin cargo asignado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Fecha de Ingreso</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->fecha_ingreso->format('d/m/Y') }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                Fecha de Ingreso
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->informacionLaboralActual->fecha_ingreso->format('d/m/Y') }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Fecha de Salida</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                Fecha de Salida
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ optional($empleado->informacionLaboralActual->fecha_salida)->format('d/m/Y') ?? 'No especificada' }}
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Tipo de Contrato</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_contrato ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                                                </svg>
+                                                Tipo de Contrato
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->informacionLaboralActual->tipo_contrato ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Tipo de Vinculacion</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->informacionLaboralActual->tipo_vinculacion ?? 'No especificado' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                                Tipo de Vinculacion
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->informacionLaboralActual->tipo_vinculacion ?? 'No especificado' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Ciudad Laboral</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                Ciudad Laboral
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ $empleado->informacionLaboralActual->ciudadLaboral->nombre ?? 'No especificada' }}
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">¿Aplica Dotación?</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                </svg>
+                                                ¿Aplica Dotación?
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ $empleado->informacionLaboralActual->aplica_dotacion ? 'Sí' : 'No' }}
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Talla de Camisa</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                                Talla de Camisa
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ $empleado->informacionLaboralActual->talla_camisa ?? 'No especificada' }}
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Talla de Pantalón</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                                Talla de Pantalón
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ $empleado->informacionLaboralActual->talla_pantalon ?? 'No especificada' }}
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Talla de Zapatos</dt>
-                                            <dd class="mt-1 text-gray-900">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                                Talla de Zapatos
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">
                                                 {{ $empleado->informacionLaboralActual->talla_zapatos ?? 'No especificada' }}
                                             </dd>
                                         </div>
                                         @php
                                             $informacion = $empleado->informacionLaboral->first();
                                         @endphp
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Relación Laboral</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $informacion?->relacion_laboral ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                                Relación Laboral
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $informacion?->relacion_laboral ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Relación Sindical</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $informacion?->relacion_sindical ? 'Sí' : 'No' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-sky-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                                Relación Sindical
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $informacion?->relacion_sindical ? 'Sí' : 'No' }}</dd>
                                         </div>
                                     </dl>
                                 </div>
@@ -607,41 +787,83 @@ use Illuminate\Support\Facades\Storage;
                                                     </span>
                                                 </h4>
                                                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-700">
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Fecha de Nacimiento</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $beneficiario->fecha_nacimiento ? \Carbon\Carbon::parse($beneficiario->fecha_nacimiento)->format('d/m/Y') : 'No especificada' }}</dd>
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            Fecha de Nacimiento
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $beneficiario->fecha_nacimiento ? \Carbon\Carbon::parse($beneficiario->fecha_nacimiento)->format('d/m/Y') : 'No especificada' }}</dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Tipo de Documento</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $beneficiario->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                            Tipo de Documento
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $beneficiario->tipoDocumento->nombre_tipo_documento ?? 'No especificado' }}</dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Número de Documento</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $beneficiario->numero_documento ?? 'No especificado' }}</dd>
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                                            </svg>
+                                                            Número de Documento
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $beneficiario->numero_documento ?? 'No especificado' }}</dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Nivel Educativo</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $beneficiario->nivel_educativo ?? 'No especificado' }}</dd>
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                                                            </svg>
+                                                            Nivel Educativo
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $beneficiario->nivel_educativo ?? 'No especificado' }}</dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Edad</dt>
-                                                        <dd class="mt-1 text-gray-900">{{ $beneficiario->edad }} años</dd>
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                                                            </svg>
+                                                            Edad
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">{{ $beneficiario->edad }} años</dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">¿Reside con el empleado?</dt>
-                                                        <dd class="mt-1 text-gray-900">
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                                            </svg>
+                                                            ¿Reside con el empleado?
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">
                                                             {{ $beneficiario->reside_con_empleado ? 'Sí' : 'No' }}
                                                         </dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">¿Depende económicamente?</dt>
-                                                        <dd class="mt-1 text-gray-900">
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                            ¿Depende económicamente?
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">
                                                             {{ $beneficiario->depende_economicamente ? 'Sí' : 'No' }}
                                                         </dd>
                                                     </div>
-                                                    <div>
-                                                        <dt class="font-medium text-gray-800">Contacto de emergencia</dt>
-                                                        <dd class="mt-1 text-gray-900">
+                                                    <div class="p-2 rounded-lg">
+                                                        <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                            </svg>
+                                                            Contacto de emergencia
+                                                        </dt>
+                                                        <dd class="mt-2 text-gray-600 text-sm">
                                                             {{ $beneficiario->contacto_emergencia ?? 'No especificado' }}
                                                         </dd>
                                                     </div>
@@ -675,46 +897,97 @@ use Illuminate\Support\Facades\Storage;
                                 <h3 class="text-lg font-medium text-white">Información Adicional</h3>
                             </header>
                             <div class="p-4 sm:p-6">
-                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Etnia</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->etnia->nombre ?? 'No especificado' }}</dd>
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Etnia
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->etnia->nombre ?? 'No especificado' }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">¿Es padre o madre?</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->padre_o_madre ? 'Sí' : 'No' }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                            ¿Es padre o madre?
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->padre_o_madre ? 'Sí' : 'No' }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Tipo de Vivienda</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vivienda }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                            </svg>
+                                            Tipo de Vivienda
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->tipo_vivienda }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Estrato</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->estrato }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                            </svg>
+                                            Estrato
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->estrato }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">¿Vehículo propio?</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->vehiculo_propio ? 'Sí' : 'No' }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                            ¿Vehículo propio?
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->vehiculo_propio ? 'Sí' : 'No' }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Tipo de Vehículo</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->tipo_vehiculo }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                            </svg>
+                                            Tipo de Vehículo
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->tipo_vehiculo }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Medio de Movilidad</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->movilidad }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                            </svg>
+                                            Medio de Movilidad
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->movilidad }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Institución Educativa</dt>
-                                        <dd class="mt-1 text-gray-900">{{ $empleado->institucion_educativa }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                            </svg>
+                                            Institución Educativa
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->institucion_educativa }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Idiomas</dt>
-                                        <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->idiomas }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                                            </svg>
+                                            Idiomas
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm whitespace-pre-line">{{ $empleado->idiomas }}</dd>
                                     </div>
-                                    <div>
-                                        <dt class="font-medium text-gray-800">Intereses Personales</dt>
-                                        <dd class="mt-1 text-gray-900 whitespace-pre-line">{{ $empleado->intereses_personales }}</dd>
+                                    <div class="p-2 rounded-lg">
+                                        <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                            Intereses Personales
+                                        </dt>
+                                        <dd class="mt-2 text-gray-600 text-sm whitespace-pre-line">{{ $empleado->intereses_personales }}</dd>
                                     </div>
                                 </dl>
                             </div>
@@ -730,26 +1003,51 @@ use Illuminate\Support\Facades\Storage;
                                     <h3 class="text-lg font-medium text-white">Afiliaciones a Seguridad Social</h3>
                                 </header>
                                 <div class="p-4 sm:p-6">
-                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-3 sm:p-4 relative">
-                                        <div>
-                                            <dt class="font-medium text-gray-800">EPS</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->eps->nombre ?? 'No especificada' }}</dd>
+                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 sm:p-6 relative">
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                </svg>
+                                                EPS
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->eps->nombre ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">ARL</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->arl->nombre ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                ARL
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->arl->nombre ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">AFP</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->afp->nombre ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                AFP
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->afp->nombre ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">AFC</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->afc->nombre ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                                AFC
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->afc->nombre ?? 'No especificada' }}</dd>
                                         </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-800">Caja de Compensación</dt>
-                                            <dd class="mt-1 text-gray-900">{{ $empleado->ccf->nombre ?? 'No especificada' }}</dd>
+                                        <div class="p-2 rounded-lg">
+                                            <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                                </svg>
+                                                Caja de Compensación
+                                            </dt>
+                                            <dd class="mt-2 text-gray-600 text-sm">{{ $empleado->ccf->nombre ?? 'No especificada' }}</dd>
                                         </div>
                                     </dl>
                                 </div>
