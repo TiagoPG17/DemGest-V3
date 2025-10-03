@@ -81,3 +81,35 @@ if (!function_exists('is_empleado')) {
         return hasRole('empleado');
     }
 }
+
+if (!function_exists('formatRoleName')) {
+    /**
+     * Format role name to be more readable and professional.
+     */
+    function formatRoleName($role): string
+    {
+        $roleNames = [
+            'admin' => 'Administrador',
+            'gestion_humana' => 'Gestión Humana',
+            'jefe' => 'Jefe',
+            'empleado' => 'Empleado'
+        ];
+        
+        return $roleNames[$role] ?? ucfirst(str_replace('_', ' ', $role));
+    }
+}
+
+if (!function_exists('getUserRoleNames')) {
+    /**
+     * Get formatted role names for the current authenticated user.
+     */
+    function getUserRoleNames(): array
+    {
+        if (!auth()->check()) {
+            return [];
+        }
+        
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        return array_map('formatRoleName', $roles);
+    }
+}

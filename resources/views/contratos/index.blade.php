@@ -7,7 +7,7 @@
         <div class="flex flex-row items-center justify-between">
             <div class="flex-1 min-w-0">
                 <h1 class="text-3xl font-bold text-gray-900 mb-1">Reportes de Contratos</h1>
-                <p class="text-gray-600">Gestión de prórrogas y preavisos</p>
+                <p class="text-gray-600">Gestion de prorrogas y preavisos</p>
             </div>
             
             <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0 ml-auto">
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Filtros rápidos -->
+    <!-- Filtros rÃ¡pidos -->
     <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
         <div class="flex flex-wrap justify-center gap-2">
             
@@ -46,7 +46,7 @@
             </button>
             <button onclick="setDateRange('next_month')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2">
                 <i class="fas fa-calendar-plus"></i>
-                Próximo mes
+                Proximo mes
             </button>
         </div>
     </div>
@@ -55,7 +55,7 @@
         <div class="bg-white rounded-lg shadow-sm border p-8 text-center">
             <div class="text-4xl mb-3"></div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No se encontraron empleados</h3>
-            <p class="text-gray-600">Asegúrate de que el rango de fechas sea correcto.</p>
+            <p class="text-gray-600">AsegÃºrate de que el rango de fechas sea correcto.</p>
         </div>
     @else
         <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
@@ -66,13 +66,13 @@
                             $opposite = $direction === 'asc' ? 'desc' : 'asc';
                         @endphp
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16 text-center">#</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">#</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-80">
                                 <a href="{{ route('contratos.index', array_merge(request()->all(), ['sort' => 'nombre', 'direction' => $sort === 'nombre' ? $opposite : 'asc'])) }}"
                                     class="text-gray-700 hover:text-gray-900 flex items-center gap-1">
                                     Nombre
                                     @if($sort === 'nombre')
-                                        <span>{{ $direction === 'asc' ? '↑' : '↓' }}</span>
+                                        <span>{{ $direction === 'asc' ? 'â†‘' : 'â†“' }}</span>
                                     @endif
                                 </a>
                             </th>

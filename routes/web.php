@@ -16,6 +16,7 @@ use App\Http\Controllers\BarrioController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\ContratoReporteController;
 use App\Http\Controllers\CargoController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +24,9 @@ use App\Http\Controllers\CargoController;
 |--------------------------------------------------------------------------
 */
 
-// Rutas para invitados (sin autenticación)
+// Rutas para invitados (sin autenticaciÃ³n)
 Route::middleware('guest')->group(function () {
-    // Redirigir la raíz al login para usuarios no autenticados
+    // Redirigir la raÃ­z al login para usuarios no autenticados
     Route::get('/', function () {
         return redirect()->route('login');
     });
@@ -33,7 +34,7 @@ Route::middleware('guest')->group(function () {
 
 
 
-// Rutas para invitados (sin autenticación)
+// Rutas para invitados (sin autenticaciÃ³n)
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
@@ -53,18 +54,18 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-// Rutas que requieren autenticación
+// Rutas que requieren autenticaciÃ³n
 Route::middleware('auth')->group(function () {
     // Dashboard para usuarios autenticados
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Rutas de empleados - PROTEGIDAS POR ROL
     
-    // Rutas de escritura (solo admin y gestión humana)
+    // Rutas de escritura (solo admin y gestiÃ³n humana)
     Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create')
         ->middleware('role:admin,gestion_humana');
     
-    // Rutas de lectura (admin, gestión humana, jefes)
+    // Rutas de lectura (admin, gestiÃ³n humana, jefes)
     Route::get('/empleados', [EmpleadoController::class, 'index'])->name('empleados.index')
         ->middleware('role:admin,gestion_humana,jefe');
     
@@ -84,14 +85,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/empleados/{empleado}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy')
         ->middleware('role:admin,gestion_humana');
     
-    // Rutas de reportes (solo admin y gestión humana)
+    // Ruta para eliminar eventos de empleado
+    Route::delete('/empleados/{empleado}/eventos/{evento}', [EmpleadoController::class, 'eliminarEvento'])->name('empleados.eventos.destroy')
+        ->middleware('role:admin,gestion_humana');
+    
+    // Ruta AJAX para verificar incapacidades activas
+    Route::get('/empleados/{empleado}/verificar-incapacidad', [EmpleadoController::class, 'verificarIncapacidadActiva'])
+        ->name('empleados.verificar-incapacidad')
+        ->middleware('role:admin,gestion_humana');
+    
+    // Rutas de reportes (solo admin y gestiÃ³n humana)
     Route::get('/empleados/report', [EmpleadoController::class, 'generateContractReport'])->name('empleados.report')
         ->middleware('role:admin,gestion_humana');
     
     Route::get('/empleados/reporte/pdf', [EmpleadoController::class, 'descargarReporteContratos'])->name('empleados.report.pdf')
         ->middleware('role:admin,gestion_humana');
     
-    // Rutas de reportes (solo admin y gestión humana)
+    // Rutas de reportes (solo admin y gestiÃ³n humana)
     Route::get('/reportes/contratos', [ContratoReporteController::class, 'index'])->name('contratos.index')
         ->middleware('role:admin,gestion_humana');
     
@@ -99,13 +109,17 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:admin,gestion_humana');
 
     // Rutas para todos los usuarios autenticados
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    
     Route::get('/api/departamentos/{paisId}', [UbicacionController::class, 'departamentos']);
     Route::get('/api/municipios/{departamentoId}', [UbicacionController::class, 'municipios']);
     Route::get('/api/barrios/{municipio}', [UbicacionController::class, 'barrios']);
     Route::get('/barrios', [BarrioController::class, 'index']);
     Route::get('/empresas/{empresa}/cargos', [CargoController::class, 'cargosPorEmpresa'])->name('empresas.cargos');
     
-    // Rutas de autenticación
+    // Rutas de autenticaciÃ³n
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');

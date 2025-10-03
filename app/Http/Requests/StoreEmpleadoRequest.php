@@ -20,13 +20,17 @@ class StoreEmpleadoRequest extends FormRequest
                 'required',
                 'string',
                 'min:5',
-                'max:11',
+                'max:15',
+                'regex:/^[0-9]+$/',
                 'unique:empleados,numero_documento',
             ],
             'nombre_completo' => [
                 'required',
                 'string',
+                'min:3',
                 'max:255',
+                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\.\',]+$/',
+                'trim'
             ],
             'sexo' => 'required|in:MASCULINO,FEMENINO,OTRO',
             'fecha_nacimiento' => [
@@ -43,14 +47,18 @@ class StoreEmpleadoRequest extends FormRequest
             ],
             'email' => [
                 'nullable',
-                'regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/',
-                'unique:empleados,email',
+                'string',
+                'email',
                 'max:255',
+                'unique:empleados,email',
+                'filter:lowercase',
             ],
             'telefono' => [
                 'nullable',
                 'string',
-                'max:13',
+                'min:7',
+                'max:15',
+                'regex:/^[0-9\+\-\s\(\)]+$/',
                 'unique:empleados,telefono',
             ],
             'direccion' => [
@@ -155,11 +163,15 @@ class StoreEmpleadoRequest extends FormRequest
             'numero_documento.required' => 'El número de documento es obligatorio.',
             'numero_documento.string' => 'El número de documento debe ser una cadena de texto.',
             'numero_documento.min' => 'El número de documento debe tener al menos 5 caracteres.',
-            'numero_documento.max' => 'El número de documento no puede exceder los 11 caracteres.',
+            'numero_documento.max' => 'El número de documento no puede exceder los 15 caracteres.',
+            'numero_documento.regex' => 'El número de documento solo puede contener números.',
             'numero_documento.unique' => 'El número de documento ya está registrado.',
             'nombre_completo.required' => 'El nombre completo es obligatorio.',
             'nombre_completo.string' => 'El nombre completo debe ser una cadena de texto.',
+            'nombre_completo.min' => 'El nombre completo debe tener al menos 3 caracteres.',
             'nombre_completo.max' => 'El nombre completo no puede exceder los 255 caracteres.',
+            'nombre_completo.regex' => 'El nombre completo solo puede contener letras, espacios, guiones, puntos, comillas simples y caracteres especiales del español (á, é, í, ó, ú, ñ).',
+            'nombre_completo.trim' => 'El nombre completo no puede contener espacios al inicio o al final.',
             'sexo.required' => 'El sexo es obligatorio.',
             'sexo.in' => 'El sexo seleccionado no es válido (debe ser MASCULINO, FEMENINO u OTRO).',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
@@ -172,12 +184,16 @@ class StoreEmpleadoRequest extends FormRequest
             'nivel_educativo.string' => 'El nivel educativo debe ser una cadena de texto.',
             'nivel_educativo.max' => 'El nivel educativo no puede exceder los 100 caracteres.',
             'email.nullable' => 'El correo electrónico puede estar vacío.',
-            'email.regex' => 'El correo electrónico no tiene un formato válido.',
-            'email.unique' => 'El correo electrónico ya está registrado.',
+            'email.string' => 'El correo electrónico debe ser una cadena de texto.',
+            'email.email' => 'El correo electrónico no tiene un formato válido. Debe ser similar a: usuario@dominio.com',
             'email.max' => 'El correo electrónico no puede exceder los 255 caracteres.',
+            'email.unique' => 'El correo electrónico ya está registrado.',
+            'email.filter' => 'El correo electrónico debe estar en minúsculas.',
             'telefono.nullable' => 'El teléfono puede estar vacío.',
             'telefono.string' => 'El teléfono debe ser una cadena de texto.',
-            'telefono.max' => 'El teléfono no puede exceder los 13 caracteres.',
+            'telefono.min' => 'El teléfono debe tener al menos 7 caracteres.',
+            'telefono.max' => 'El teléfono no puede exceder los 15 caracteres.',
+            'telefono.regex' => 'El teléfono solo puede contener números, espacios, paréntesis y los símbolos + y -.',
             'telefono.unique' => 'El teléfono ya está registrado.',
             'direccion.nullable' => 'La dirección puede estar vacía.',
             'direccion.string' => 'La dirección debe ser una cadena de texto.',
@@ -313,6 +329,58 @@ class StoreEmpleadoRequest extends FormRequest
             'informacion_laboral.relacion_sindical' => 'nullable|boolean',
             
         ];
+    }
+
+    /**
+     * Get the custom attributes for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'tipo_documento_id' => 'tipo de documento',
+            'numero_documento' => 'número de documento',
+            'nombre_completo' => 'nombre completo',
+            'sexo' => 'sexo',
+            'fecha_nacimiento' => 'fecha de nacimiento',
+            'estado_civil' => 'estado civil',
+            'nivel_educativo' => 'nivel educativo',
+            'email' => 'correo electrónico',
+            'telefono' => 'teléfono',
+            'direccion' => 'dirección',
+            'pais_id_nacimiento' => 'país de nacimiento',
+            'departamento_id_nacimiento' => 'departamento de nacimiento',
+            'municipio_id_nacimiento' => 'municipio de nacimiento',
+            'pais_id_residencia' => 'país de residencia',
+            'departamento_id_residencia' => 'departamento de residencia',
+            'municipio_id_residencia' => 'municipio de residencia',
+            'barrio_id_residencia' => 'barrio de residencia',
+            'empresa_id' => 'empresa',
+            'cargo_id' => 'cargo',
+            'fecha_ingreso' => 'fecha de ingreso',
+            'fecha_salida' => 'fecha de salida',
+            'tipo_contrato' => 'tipo de contrato',
+            'observaciones' => 'observaciones',
+            'turno' => 'turno',
+            'patologias' => 'patologías',
+            'beneficiarios' => 'beneficiarios',
+        ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'nombre_completo' => trim($this->nombre_completo),
+            'email' => $this->email ? strtolower(trim($this->email)) : null,
+            'telefono' => $this->telefono ? trim($this->telefono) : null,
+            'direccion' => $this->direccion ? trim($this->direccion) : null,
+            'observaciones' => $this->observaciones ? trim($this->observaciones) : null,
+            'turno' => $this->turno ? trim($this->turno) : null,
+        ]);
     }
 }
 

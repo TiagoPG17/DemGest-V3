@@ -3,6 +3,28 @@
 
 @php
 use Illuminate\Support\Facades\Storage;
+
+// Calcular información de vacaciones al principio para que esté disponible en toda la vista
+$infoLaboral = $empleado->informacionLaboralActual;
+$diasVacacionesAcumulados = 0;
+$diasVacacionesTomados = 0;
+$diasVacacionesPendientes = 0;
+
+if ($infoLaboral && $infoLaboral->fecha_ingreso) {
+    // Calcular días acumulados (1.25 días por mes trabajado)
+    $fechaIngreso = \Carbon\Carbon::parse($infoLaboral->fecha_ingreso);
+    $fechaActual = \Carbon\Carbon::now();
+    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaActual);
+    $diasVacacionesAcumulados = $mesesTrabajados * 1.25;
+    
+    // Obtener días tomados de vacaciones
+    $diasVacacionesTomados = $empleado->eventos()
+        ->where('tipo_evento', 'vacaciones')
+        ->sum('dias');
+    
+    // Calcular días pendientes
+    $diasVacacionesPendientes = max(0, $diasVacacionesAcumulados - $diasVacacionesTomados);
+}
 @endphp
 
 @section('content')
@@ -21,18 +43,31 @@ use Illuminate\Support\Facades\Storage;
             <div class="flex flex-wrap gap-2">
                 <!-- Botón Editar (solo para admin y gestión humana) -->
                 @if(is_admin() || is_gestion_humana())
-                    <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" class="inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-gray-300 shadow-sm text-xs sm:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                    @php
+                        $tituloBoton = $diasVacacionesPendientes <= 0 
+                            ? 'Editar empleado - Advertencia: No hay días de vacaciones disponibles' 
+                            : 'Editar empleado';
+                        $claseBoton = $diasVacacionesPendientes <= 0
+                            ? 'inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-gray-300 shadow-sm text-xs sm:text-sm font-medium rounded-md text-gray-500 bg-gray-100 cursor-not-allowed opacity-75'
+                            : 'inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-gray-300 shadow-sm text-xs sm:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors';
+                    @endphp
+                    <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" class="{{ $claseBoton }}" title="{{ $tituloBoton }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                             <path d="m15 5 4 4" />
                         </svg>
                         Editar
+                        @if ($diasVacacionesPendientes <= 0)
+                            <svg class="w-4 h-4 ml-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        @endif
                     </a>
                 @endif
                 
                 <!-- Botón Eliminar (solo para admin y gestión humana) -->
                 @if(is_admin() || is_gestion_humana())
-                    <form action="{{ route('empleados.destroy', $empleado->id_empleado) }}" method="POST" class="inline" onsubmit="return confirm('¿Está seguro de eliminar este empleado?');">
+                    <form action="{{ route('empleados.destroy', $empleado->id_empleado) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro que deseas eliminar al empleado \'{{ $empleado->nombre_completo }}\'? Esta acción no se puede deshacer.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="inline-flex items-center px-2 py-2 sm:px-4 sm:py-2 border border-transparent shadow-sm text-xs sm:text-sm font-medium rounded-md text-white bg-rose-600 hover:bg-rose-700 transition-colors">
@@ -128,11 +163,16 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
                             
-                            <!-- Estado activo -->
+                            <!-- Estado actual -->
                             <div class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center @if($empleado->estaActivo()) bg-green-100 @else bg-yellow-100 @endif">
-                                    <svg class="w-4 h-4 @if($empleado->estaActivo()) text-green-600 @else text-yellow-600 @endif" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        @if($empleado->estaActivo())
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $empleado->estado_clases }}">
+                                    <svg class="w-4 h-4 {{ $empleado->estado_actual == 'En vacaciones' ? 'text-blue-600' : ($empleado->estado_actual == 'En incapacidad' ? 'text-red-600' : ($empleado->estado_actual == 'Activo' ? 'text-green-600' : 'text-yellow-600')) }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        @if($empleado->estado_actual == 'En vacaciones')
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v5h5" />
+                                        @elseif($empleado->estado_actual == 'En incapacidad')
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-.01-10a9 9 0 100 18 9 9 0 000-18z" />
+                                        @elseif($empleado->estado_actual == 'Activo')
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
                                         @else
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-.01-10a9 9 0 100 18 9 9 0 000-18z" />
@@ -141,7 +181,7 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                                 <div>
                                     <span class="text-xs text-gray-500">Estado:</span>
-                                    <p class="text-sm font-medium text-gray-900">{{ $empleado->estaActivo() ? 'Activo' : 'Inactivo' }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ $empleado->estado_actual }}</p>
                                 </div>
                             </div>
                         </div>
@@ -154,21 +194,24 @@ use Illuminate\Support\Facades\Storage;
                 <!-- Navegación de tabs -->
                 <div class="border-b border-gray-200">
                     <!-- Tabs para desktop -->
-                    <nav class="hidden sm:flex -mb-px justify-center">
+                    <nav class="hidden sm:flex -mb-px justify-center overflow-x-auto">
                         <div class="flex space-x-1">
-                            <button type="button" @click="activeTab = 'personal'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'personal', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'personal' }">
-                                Información Personal
+                            <button type="button" @click="activeTab = 'personal'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'personal', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'personal' }">
+                                Informacion Personal
                             </button>
-                            <button type="button" @click="activeTab = 'laboral'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'laboral', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'laboral' }">
-                                Información Laboral
+                            <button type="button" @click="activeTab = 'laboral'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'laboral', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'laboral' }">
+                                Informacion Laboral
                             </button>
-                            <button type="button" @click="activeTab = 'beneficiario'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'beneficiario', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'beneficiario' }">
+                            <button type="button" @click="activeTab = 'eventos'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'eventos', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'eventos' }">
+                                Eventos
+                            </button>
+                            <button type="button" @click="activeTab = 'beneficiario'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'beneficiario', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'beneficiario' }">
                                 Beneficiarios
                             </button>
-                            <button type="button" @click="activeTab = 'extra'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'extra', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'extra' }">
+                            <button type="button" @click="activeTab = 'extra'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'extra', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'extra' }">
                                 Datos Adicionales
                             </button>
-                            <button type="button" @click="activeTab = 'ubicacion'" class="py-3 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 rounded-t-lg" :class="{ 'border-slate-800 text-slate-800 bg-slate-50 shadow-sm': activeTab === 'ubicacion', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'ubicacion' }">
+                            <button type="button" @click="activeTab = 'ubicacion'" class="py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200" :class="{ 'border-blue-600 text-blue-600 bg-blue-50': activeTab === 'ubicacion', 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50': activeTab !== 'ubicacion' }">
                                 Salud
                             </button>
                         </div>
@@ -182,6 +225,7 @@ use Illuminate\Support\Facades\Storage;
                             <option value="beneficiario">Beneficiarios</option>
                             <option value="extra">Datos Adicionales</option>
                             <option value="ubicacion">Salud</option>
+                            <option value="eventos">Eventos</option>
                         </select>
                     </div>
                 </div>
@@ -453,10 +497,16 @@ use Illuminate\Support\Facades\Storage;
                                                     </h4>
                                                     @if ($patologia->gravedad_patologia)
                                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                            @if(strtolower($patologia->gravedad_patologia) == 'leve') bg-green-100 text-green-800 
-                                                            @elseif(strtolower($patologia->gravedad_patologia) == 'moderada') bg-yellow-100 text-yellow-800 
-                                                            @elseif(strtolower($patologia->gravedad_patologia) == 'severa') bg-red-100 text-red-800 
-                                                            @else bg-gray-100 text-gray-800 @endif">
+                                                            @php
+                                                                $gravedad = strtolower($patologia->gravedad_patologia);
+                                                                $severityClasses = match($gravedad) {
+                                                                    'leve' => 'bg-green-100 text-green-800',
+                                                                    'moderada' => 'bg-yellow-100 text-yellow-800',
+                                                                    'severa' => 'bg-red-100 text-red-800',
+                                                                    default => 'bg-gray-100 text-gray-800'
+                                                                };
+                                                            @endphp
+                                                            {{ $severityClasses }}">
                                                             {{ $patologia->gravedad_patologia }}
                                                         </span>
                                                     @endif
@@ -473,7 +523,7 @@ use Illuminate\Support\Facades\Storage;
                                                             <dd class="mt-2 text-gray-600 text-sm">{{ $patologia->fecha_diagnostico ? \Carbon\Carbon::parse($patologia->fecha_diagnostico)->format('d/m/Y') : 'No especificada' }}</dd>
                                                         </div>
                                                     @endif
-                                                    <div class="@if(isset($patologia->fecha_diagnostico)) col-span-1 @else col-span-2 @endif">
+                                                    <div class="{{ isset($patologia->fecha_diagnostico) ? 'col-span-1' : 'col-span-2' }}">
                                                         <dt class="font-semibold text-emerald-800 text-base flex items-center gap-2">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -507,6 +557,515 @@ use Illuminate\Support\Facades\Storage;
                                 @endif
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Tab: Eventos y Vacaciones -->
+                    <div x-show="activeTab === 'eventos'" class="space-y-6">
+                        @php
+                            // Obtener todos los eventos para agrupar por año
+                            $todosEventos = $empleado->eventos()
+                                ->orderBy('fecha_inicio', 'desc')
+                                ->get();
+                            
+                            // Agrupar eventos por año
+                            $eventosPorAnio = $todosEventos->groupBy(function($evento) {
+                                return \Carbon\Carbon::parse($evento->fecha_inicio)->format('Y');
+                            });
+                        @endphp
+                        
+                        <!-- Resumen de Vacaciones -->
+                        <div class="bg-white rounded-lg shadow-xl border border-blue-200">
+                            <header class="bg-blue-600 p-3 sm:p-4 flex items-center gap-3 rounded-t-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                    <path d="M3 3v5h5"/>
+                                    <path d="M12 7v5l4 2"/>
+                                </svg>
+                                <h3 class="text-lg font-medium text-white">Resumen de Vacaciones</h3>
+                            </header>
+                            <div class="p-4 sm:p-6">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <!-- Días Acumulados -->
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                                        <div class="text-2xl font-bold text-green-600">{{ number_format($diasVacacionesAcumulados, 1) }}</div>
+                                        <div class="text-sm text-green-700">Días Acumulados</div>
+                                        <div class="text-xs text-green-600 mt-1">1.25 días/mes</div>
+                                    </div>
+                                    
+                                    <!-- Días Tomados -->
+                                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                                        <div class="text-2xl font-bold text-red-600">{{ $diasVacacionesTomados }}</div>
+                                        <div class="text-sm text-red-700">Días Tomados</div>
+                                        <div class="text-xs text-red-600 mt-1">Vacaciones disfrutadas</div>
+                                    </div>
+                                    
+                                    <!-- Días Pendientes -->
+                                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                                        <div class="text-2xl font-bold text-blue-600">{{ number_format($diasVacacionesPendientes, 1) }}</div>
+                                        <div class="text-sm text-blue-700">Días Pendientes</div>
+                                        <div class="text-xs text-blue-600 mt-1">Disponibles para tomar</div>
+                                    </div>
+                                </div>
+                                
+                                @if ($infoLaboral && $infoLaboral->fecha_ingreso)
+                                    <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <div class="text-sm text-gray-600">
+                                            <strong>Fecha de ingreso:</strong> {{ $infoLaboral->fecha_ingreso->format('d/m/Y') }}<br>
+                                            <strong>Meses trabajados:</strong> {{ round($mesesTrabajados) }} meses<br>
+                                            <strong>Próximas vacaciones:</strong> {{ round($diasVacacionesPendientes) }} días disponibles
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                        <div class="text-sm text-yellow-700">
+                                            <strong>Nota:</strong> No se puede calcular el tiempo de vacaciones porque no hay fecha de ingreso registrada.
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <!-- Advertencia de días de vacaciones no disponibles -->
+                        @if ($diasVacacionesPendientes <= 0)
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                    </svg>
+                                    <div>
+                                        <h4 class="text-red-800 font-medium">Días de vacaciones no disponibles</h4>
+                                        <p class="text-red-700 text-sm mt-1">Este empleado no tiene días de vacaciones disponibles. No se pueden registrar nuevas vacaciones hasta que acumule más días.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        
+                        <!-- Mensaje indicando seleccionar filtro -->
+                        <div id="mensaje-seleccionar-filtro" class="relative bg-gradient-to-br from-white via-indigo-50 to-white rounded-xl shadow-lg border border-indigo-100 overflow-hidden mb-6">
+                            <div class="p-8 text-center">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2">Selecciona un tipo de evento</h3>
+                                <p class="text-gray-500">Para ver el historial, por favor selecciona una opción en el filtro above.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Historial de Vacaciones por Año -->
+                        <div id="contenedor-historial-vacaciones" class="relative bg-gradient-to-br from-white via-indigo-50 to-white rounded-xl shadow-lg border border-indigo-100 overflow-hidden mb-6" style="display: none;">
+                            <!-- Fondo animado con partículas -->
+                            <div class="absolute inset-0 overflow-hidden">
+                                <div class="absolute -top-6 -left-6 w-12 h-12 bg-indigo-200 rounded-full mix-blend-multiply filter blur-lg opacity-10 animate-pulse-slow"></div>
+                                <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-lg opacity-10 animate-pulse-slow animation-delay-2000"></div>
+                            </div>
+                            
+                            <!-- Header -->
+                            <header class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-purple-700 p-3 sm:p-4 flex items-center gap-3 backdrop-blur-sm bg-opacity-95">
+                                <div class="relative">
+                                    <div class="absolute inset-0 bg-white bg-opacity-20 rounded-lg animate-ping-slow"></div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-white relative z-10 drop-shadow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight truncate">Historial de Vacaciones</h3>
+                                    <p class="text-indigo-200 text-xs sm:text-sm mt-0.5 opacity-90 hidden sm:block">Vacaciones agrupadas por año</p>
+                                </div>
+                            </header>
+                            
+                            <div class="relative p-3 sm:p-4">
+                                @if ($eventosPorAnio->count() > 0)
+                                    <!-- Acordeón de años -->
+                                    <div class="space-y-3">
+                                        @foreach ($eventosPorAnio as $anio => $eventosDelAnio)
+                                            @php
+                                                $eventosVacaciones = $eventosDelAnio->where('tipo_evento', 'vacaciones');
+                                                $totalDiasAnio = $eventosVacaciones->sum('dias');
+                                                $totalEventosAnio = $eventosVacaciones->count();
+                                            @endphp
+                                            
+                                            <!-- Acordeón por año -->
+                                            <div class="border border-indigo-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                                                <!-- Header del año (siempre visible) -->
+                                                <div class="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100 cursor-pointer hover:from-indigo-100 hover:to-purple-100 transition-all duration-200" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.accordion-icon').classList.toggle('rotate-180')">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center text-white shadow-md">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div>
+                                                                <h4 class="text-lg font-bold text-gray-900">{{ $anio }}</h4>
+                                                                <p class="text-sm text-gray-600">
+                                                                    <span class="contador-eventos" data-total-eventos="{{ $totalEventosAnio }}" data-total-dias="{{ $totalDiasAnio }}">
+                                                                        {{ $totalEventosAnio }} {{ $totalEventosAnio == 1 ? 'evento' : 'eventos' }} • {{ $totalDiasAnio }} días totales
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Contenido del año (inicialmente oculto) -->
+                                                <div class="hidden p-4 bg-white">
+                                                    <div class="grid gap-3">
+                                                        @foreach ($eventosVacaciones as $evento)
+                                                            @php
+                                                                $gradient = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'from-indigo-500 to-purple-400',
+                                                                    'incapacidad' => 'from-red-500 to-pink-400',
+                                                                    'permiso' => 'from-green-500 to-emerald-400',
+                                                                    default => 'from-purple-500 to-indigo-400'
+                                                                };
+                                                                $borderColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'border-indigo-300',
+                                                                    'incapacidad' => 'border-red-300',
+                                                                    'permiso' => 'border-green-300',
+                                                                    default => 'border-purple-300'
+                                                                };
+                                                                $bgColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'bg-indigo-50',
+                                                                    'incapacidad' => 'bg-red-50',
+                                                                    'permiso' => 'bg-green-50',
+                                                                    default => 'bg-purple-50'
+                                                                };
+                                                                $textColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'text-indigo-600',
+                                                                    'incapacidad' => 'text-red-600',
+                                                                    'permiso' => 'text-green-600',
+                                                                    default => 'text-purple-600'
+                                                                };
+                                                                $iconoSvg = match($evento->tipo_evento) {
+                                                                    'vacaciones' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                                        <polyline points="14 2 14 8 20 8"/>
+                                                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                                                        <polyline points="10 9 9 9 8 9"/>
+                                                                    </svg>',
+                                                                    'incapacidad' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                                                        <circle cx="12" cy="12" r="10"/>
+                                                                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                                                    </svg>',
+                                                                    'permiso' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                                                                        <path d="M12 8v4l3 3"/>
+                                                                    </svg>',
+                                                                    default => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                                                    </svg>'
+                                                                };
+                                                            @endphp
+                                                            
+                                                            <!-- Evento individual -->
+                                                            <div class="border-l-4 {{ $borderColor }} {{ $bgColor }} rounded-lg p-3 shadow-sm evento-item" data-tipo="{{ $evento->tipo_evento }}" data-dias="{{ $evento->dias }}">
+                                                                <div class="flex items-center justify-between">
+                                                                    <div class="flex items-center space-x-3">
+                                                                        <div class="w-8 h-8 bg-gradient-to-r {{ $gradient }} rounded-lg flex items-center justify-center text-white">
+                                                                            {!! $iconoSvg !!}
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="font-semibold text-gray-900">{{ ucfirst($evento->tipo_evento) }} - {{ $evento->dias }} días</div>
+                                                                            <div class="text-sm text-gray-600">{{ $evento->fecha_inicio->format('d/m/Y') }} - {{ $evento->fecha_fin->format('d/m/Y') }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex items-center space-x-2">
+                                                                        <div class="text-right">
+                                                                            <div class="text-lg font-bold {{ $textColor }}">{{ $evento->dias }}d</div>
+                                                                            <div class="text-xs text-gray-500">Duración</div>
+                                                                        </div>
+                                                                        @if(is_admin() || is_gestion_humana())
+                                                                            @if($evento->getKey())
+                                                                                <form action="{{ route('empleados.eventos.destroy', [$empleado->id_empleado, $evento->getKey()]) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro que deseas eliminar este evento de {{ ucfirst($evento->tipo_evento) }} de {{ $evento->dias }} días?\n\nEsta acción no se puede deshacer.');">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors" title="Eliminar evento">
+                                                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </form>
+                                                                            @else
+                                                                                <!-- Evento sin ID válido -->
+                                                                                <span class="text-xs text-gray-400" title="ID: {{ $evento->id_evento ?? 'null' }}">No eliminable (ID: {{ $evento->id_evento ?? 'null' }})</span>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <!-- Sin eventos -->
+                                    <div class="text-center py-8 text-gray-500">
+                                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                            <line x1="16" y1="2" x2="16" y2="6" />
+                                            <line x1="8" y1="2" x2="8" y2="6" />
+                                            <line x1="3" y1="10" x2="21" y2="10" />
+                                        </svg>
+                                        <p class="text-lg font-medium">No hay eventos registrados</p>
+                                        <p class="text-sm">Este empleado no tiene eventos en el historial.</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <!-- Filtro de Tipo de Eventos -->
+                        <div class="mb-6 filtro-barra-estable">
+                            <div class="flex flex-wrap gap-2 p-4 bg-white rounded-lg shadow-md border border-gray-200">
+                                <button onclick="filtrarEventos('todos')" id="filtro-todos" class="filtro-btn active px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-indigo-600 text-white shadow-md">
+                                    <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                    </svg>
+                                    Todos
+                                </button>
+                                <button onclick="filtrarEventos('vacaciones')" id="filtro-vacaciones" class="filtro-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+                                    <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                    Vacaciones
+                                </button>
+                                <button onclick="filtrarEventos('incapacidad')" id="filtro-incapacidad" class="filtro-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+                                    <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                    </svg>
+                                    Incapacidades
+                                </button>
+                                <button onclick="filtrarEventos('permiso')" id="filtro-permiso" class="filtro-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+                                    <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                                        <path d="M12 8v4l3 3"/>
+                                    </svg>
+                                        Permisos
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Historial de Eventos por Año -->
+                        <div id="contenedor-historial-eventos" class="relative bg-gradient-to-br from-white via-indigo-50 to-white rounded-xl shadow-lg border border-indigo-100 overflow-hidden" style="display: none;">
+                            <!-- Fondo animado con partículas -->
+                            <div class="absolute inset-0 overflow-hidden">
+                                <div class="absolute -top-6 -left-6 w-12 h-12 bg-indigo-200 rounded-full mix-blend-multiply filter blur-lg opacity-10 animate-pulse-slow"></div>
+                                <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-lg opacity-10 animate-pulse-slow animation-delay-2000"></div>
+                            </div>
+                            
+                            <!-- Header -->
+                            <header class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-purple-700 p-3 sm:p-4 flex items-center gap-3 backdrop-blur-sm bg-opacity-95">
+                                <div class="relative">
+                                    <div class="absolute inset-0 bg-white bg-opacity-20 rounded-lg animate-ping-slow"></div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-white relative z-10 drop-shadow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight truncate">Historial de Eventos</h3>
+                                    <p class="text-indigo-200 text-xs sm:text-sm mt-0.5 opacity-90 hidden sm:block">Eventos agrupados por año y tipo</p>
+                                </div>
+                            </header>
+                            
+                            <div class="relative p-3 sm:p-4">
+                                @if ($eventosPorAnio->count() > 0)
+                                    <!-- Acordeón de años -->
+                                    <div class="space-y-3">
+                                        @foreach ($eventosPorAnio as $anio => $eventosDelAnio)
+                                            @php
+                                                // Para el contenedor de eventos, mostrar todos los eventos
+                                                $eventosParaMostrar = $eventosDelAnio;
+                                                $totalDiasAnio = $eventosParaMostrar->sum('dias');
+                                                $totalEventosAnio = $eventosParaMostrar->count();
+                                            @endphp
+                                            
+                                            <!-- Acordeón por año -->
+                                            <div class="border border-indigo-200 rounded-lg overflow-hidden bg-white shadow-sm evento-anio" data-anio="{{ $anio }}">
+                                                <!-- Header del año (siempre visible) -->
+                                                <div class="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100 cursor-pointer hover:from-indigo-100 hover:to-purple-100 transition-all duration-200" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.accordion-icon').classList.toggle('rotate-180')">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center text-white shadow-md">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div>
+                                                                <h4 class="text-lg font-bold text-gray-900">{{ $anio }}</h4>
+                                                                <p class="text-sm text-gray-600">
+                                                                    <span class="contador-eventos" data-total-eventos="{{ $totalEventosAnio }}" data-total-dias="{{ $totalDiasAnio }}">
+                                                                        {{ $totalEventosAnio }} {{ $totalEventosAnio == 1 ? 'evento' : 'eventos' }} • {{ $totalDiasAnio }} días totales
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Contenido del año (inicialmente oculto) -->
+                                                <div class="hidden p-4 bg-white">
+                                                    <div class="grid gap-3">
+                                                        @foreach ($eventosParaMostrar as $evento)
+                                                            @php
+                                                                $gradient = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'from-indigo-500 to-purple-400',
+                                                                    'incapacidad' => 'from-red-500 to-pink-400',
+                                                                    'permiso' => 'from-green-500 to-emerald-400',
+                                                                    default => 'from-purple-500 to-indigo-400'
+                                                                };
+                                                                $borderColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'border-indigo-300',
+                                                                    'incapacidad' => 'border-red-300',
+                                                                    'permiso' => 'border-green-300',
+                                                                    default => 'border-purple-300'
+                                                                };
+                                                                $bgColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'bg-indigo-50',
+                                                                    'incapacidad' => 'bg-red-50',
+                                                                    'permiso' => 'bg-green-50',
+                                                                    default => 'bg-purple-50'
+                                                                };
+                                                                $textColor = match($evento->tipo_evento) {
+                                                                    'vacaciones' => 'text-indigo-600',
+                                                                    'incapacidad' => 'text-red-600',
+                                                                    'permiso' => 'text-green-600',
+                                                                    default => 'text-purple-600'
+                                                                };
+                                                                $iconoSvg = match($evento->tipo_evento) {
+                                                                    'vacaciones' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                                        <polyline points="14 2 14 8 20 8"/>
+                                                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                                                        <polyline points="10 9 9 9 8 9"/>
+                                                                    </svg>',
+                                                                    'incapacidad' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                                                        <circle cx="12" cy="12" r="10"/>
+                                                                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                                                    </svg>',
+                                                                    'permiso' => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                                                                        <path d="M12 8v4l3 3"/>
+                                                                    </svg>',
+                                                                    default => '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                                                    </svg>'
+                                                                };
+                                                            @endphp
+                                                            
+                                                            <!-- Evento individual -->
+                                                            <div class="border-l-4 {{ $borderColor }} {{ $bgColor }} rounded-lg p-3 shadow-sm evento-item" data-tipo="{{ $evento->tipo_evento }}" data-dias="{{ $evento->dias }}">
+                                                                <div class="flex items-center justify-between">
+                                                                    <div class="flex items-center space-x-3">
+                                                                        <div class="w-8 h-8 bg-gradient-to-r {{ $gradient }} rounded-lg flex items-center justify-center text-white">
+                                                                            {!! $iconoSvg !!}
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="font-semibold text-gray-900">{{ ucfirst($evento->tipo_evento) }} - {{ $evento->dias }} días</div>
+                                                                            <div class="text-sm text-gray-600">{{ $evento->fecha_inicio->format('d/m/Y') }} - {{ $evento->fecha_fin->format('d/m/Y') }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex items-center space-x-2">
+                                                                        <div class="text-right">
+                                                                            <div class="text-lg font-bold {{ $textColor }}">{{ $evento->dias }}d</div>
+                                                                            <div class="text-xs text-gray-500">Duración</div>
+                                                                        </div>
+                                                                        @if(is_admin() || is_gestion_humana())
+                                                                            @if($evento->getKey())
+                                                                                <form action="{{ route('empleados.eventos.destroy', [$empleado->id_empleado, $evento->getKey()]) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro que deseas eliminar este evento de {{ ucfirst($evento->tipo_evento) }} de {{ $evento->dias }} días?\n\nEsta acción no se puede deshacer.');">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors" title="Eliminar evento">
+                                                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </form>
+                                                                            @else
+                                                                                <!-- Evento sin ID válido -->
+                                                                                <span class="text-xs text-gray-400" title="ID: {{ $evento->getKey() }}">No eliminable (ID: {{ $evento->getKey() }})</span>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <!-- Sin eventos -->
+                                    <div class="text-center py-8 text-gray-500">
+                                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                            <line x1="16" y1="2" x2="16" y2="6" />
+                                            <line x1="8" y1="2" x2="8" y2="6" />
+                                            <line x1="3" y1="10" x2="21" y2="10" />
+                                        </svg>
+                                        <p class="text-lg font-medium">No hay eventos registrados</p>
+                                        <p class="text-sm">Este empleado no tiene eventos en el historial.</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <!-- Estilos CSS para las animaciones personalizadas -->
+                        <style>
+                        @keyframes pulse-slow {
+                            0%, 100% { opacity: 0.2; transform: scale(1); }
+                            50% { opacity: 0.4; transform: scale(1.05); }
+                        }
+                        @keyframes ping-slow {
+                            75%, 100% { transform: scale(2); opacity: 0; }
+                        }
+                        @keyframes spin-slow {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                        @keyframes float {
+                            0%, 100% { transform: translateY(0px); }
+                            50% { transform: translateY(-20px); }
+                        }
+                        .animate-pulse-slow { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+                        .animate-ping-slow { animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite; }
+                        .animate-spin-slow { animation: spin-slow 8s linear infinite; }
+                        .animate-float { animation: float 6s ease-in-out infinite; }
+                        .animation-delay-2000 { animation-delay: 2s; }
+                        .animation-delay-4000 { animation-delay: 4s; }
+                        .filtro-barra-estable { margin-bottom: 1.5rem !important; position: relative; }
+                        </style>
                     </div>
 
                     <!-- Tab: Información Laboral -->
@@ -721,9 +1280,9 @@ use Illuminate\Support\Facades\Storage;
                                 </div>
                             </div>
                             <!-- Archivos Adjuntos -->
-                            <div class="mt-4">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Archivos Adjuntos</h3>
-                                <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                            <div class="mt-10 mx-4 sm:mx-6 lg:mx-8 mb-8">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-6 text-center">Archivos Adjuntos</h3>
+                                <div class="grid gap-6 sm:gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-items-center">
                                     @php
                                         $nombresArchivos = [
                                             'adjunto1' => 'Ver contrato',
@@ -739,18 +1298,18 @@ use Illuminate\Support\Facades\Storage;
                                             $nombreMostrar = $nombresArchivos[$campo] ?? 'Documentos Iniciales';
                                         @endphp
 
-                                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-4 py-4 sm:px-5 sm:py-5 flex flex-col items-center justify-between hover:shadow-md transition-all duration-200 min-h-[120px] sm:min-h-[140px] w-full">
+                                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-4 py-4 sm:px-5 sm:py-5 flex flex-col items-center justify-between hover:shadow-lg transition-all duration-300 min-h-[100px] sm:min-h-[120px] w-full max-w-xs mx-auto">
                                             <div class="flex flex-col items-center text-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
                                                 </svg>
-                                                <span class="font-semibold text-gray-800 text-sm text-center break-words">
+                                                <span class="font-semibold text-gray-800 text-base text-center break-words">
                                                     {{ $nombreMostrar }}
                                                 </span>
                                             </div>
-                                            <a href="{{ Storage::url($archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            <a href="{{ Storage::url($archivo->ruta) }}" target="_blank" class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
                                                 Ver archivo
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                                 </svg>
                                             </a>
@@ -897,7 +1456,7 @@ use Illuminate\Support\Facades\Storage;
                                 <h3 class="text-lg font-medium text-white">Información Adicional</h3>
                             </header>
                             <div class="p-4 sm:p-6">
-                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
                                     <div class="p-2 rounded-lg">
                                         <dt class="font-semibold text-blue-800 text-base flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1003,7 +1562,7 @@ use Illuminate\Support\Facades\Storage;
                                     <h3 class="text-lg font-medium text-white">Afiliaciones a Seguridad Social</h3>
                                 </header>
                                 <div class="p-4 sm:p-6">
-                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 sm:p-6 relative">
+                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm text-gray-700 bg-rose-50 border border-rose-300 rounded-lg p-4 sm:p-6 relative">
                                         <div class="p-2 rounded-lg">
                                             <dt class="font-semibold text-rose-800 text-base flex items-center gap-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1058,4 +1617,198 @@ use Illuminate\Support\Facades\Storage;
             </div>
         </div>
     </div>
+    
+    <!-- Script para funcionalidad de filtrado de eventos -->
+    <script>
+    function actualizarContadores(contenedor, tipoFiltro) {
+        // Obtener todos los años dentro del contenedor
+        const aniosEnContenedor = contenedor.querySelectorAll('.evento-anio');
+        
+        aniosEnContenedor.forEach(anioDiv => {
+            // Obtener todos los eventos individuales dentro de este año
+            const eventosEnAnio = anioDiv.querySelectorAll('.evento-item');
+            
+            // Filtrar eventos según el tipo
+            let eventosFiltrados = [];
+            let totalDias = 0;
+            
+            eventosEnAnio.forEach(evento => {
+                const eventoTipo = evento.dataset.tipo;
+                if (tipoFiltro === 'todos' || eventoTipo === tipoFiltro) {
+                    eventosFiltrados.push(evento);
+                    const dias = parseInt(evento.dataset.dias) || 0;
+                    totalDias += dias;
+                }
+            });
+            
+            // Actualizar el contador en el header del año
+            const contadorSpan = anioDiv.querySelector('.contador-eventos');
+            if (contadorSpan) {
+                const totalEventos = eventosFiltrados.length;
+                const texto = `${totalEventos} ${totalEventos === 1 ? 'evento' : 'eventos'} • ${totalDias} días totales`;
+                contadorSpan.textContent = texto;
+            }
+        });
+    }
+    
+    function filtrarEventos(tipo) {
+        // Obtener los contenedores y el mensaje
+        const contenedorEventos = document.getElementById('contenedor-historial-eventos');
+        const contenedorVacaciones = document.getElementById('contenedor-historial-vacaciones');
+        const mensajeSeleccionar = document.getElementById('mensaje-seleccionar-filtro');
+        
+        // Ocultar el mensaje de selección
+        if (mensajeSeleccionar) {
+            mensajeSeleccionar.style.display = 'none';
+        }
+        
+        // Determinar qué contenedor mostrar según el tipo
+        let contenedorActivo;
+        if (tipo === 'todos') {
+            // Mostrar solo el contenedor de eventos (que ahora contiene todos los eventos)
+            contenedorActivo = contenedorEventos;
+            if (contenedorVacaciones) contenedorVacaciones.style.display = 'none';
+        } else if (tipo === 'vacaciones') {
+            contenedorActivo = contenedorVacaciones;
+            if (contenedorEventos) contenedorEventos.style.display = 'none';
+        } else {
+            contenedorActivo = contenedorEventos;
+            if (contenedorVacaciones) contenedorVacaciones.style.display = 'none';
+        }
+        
+        // Mostrar el contenedor activo
+        if (contenedorActivo) {
+            contenedorActivo.style.display = 'block';
+        }
+        
+        // Obtener todos los botones de filtro
+        const botonesFiltro = document.querySelectorAll('.filtro-btn');
+        
+        // Obtener todos los años de eventos
+        const aniosEventos = document.querySelectorAll('.evento-anio');
+        
+        // Obtener todos los eventos individuales
+        const eventosIndividuales = document.querySelectorAll('.evento-item');
+        
+        // Actualizar estado de los botones
+        botonesFiltro.forEach(boton => {
+            boton.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-md');
+            boton.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+        });
+        
+        // Activar el botón seleccionado
+        const botonActivo = document.getElementById(`filtro-${tipo}`);
+        botonActivo.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-md');
+        botonActivo.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+        
+        // Filtrar eventos
+        if (tipo === 'todos') {
+            // Mostrar todos los años y eventos en ambos contenedores
+            aniosEventos.forEach(anio => {
+                anio.style.display = 'block';
+            });
+            eventosIndividuales.forEach(evento => {
+                evento.style.display = 'block';
+            });
+        } else {
+            // Filtrar por tipo específico
+            let hayEventosVisibles = false;
+            
+            aniosEventos.forEach(anio => {
+                const eventosDelAnio = anio.querySelectorAll('.evento-item');
+                let hayEventosDelTipo = false;
+                
+                eventosDelAnio.forEach(evento => {
+                    if (evento.dataset.tipo === tipo) {
+                        evento.style.display = 'block';
+                        hayEventosDelTipo = true;
+                        hayEventosVisibles = true;
+                    } else {
+                        evento.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar/ocultar el año según si tiene eventos del tipo seleccionado
+                anio.style.display = hayEventosDelTipo ? 'block' : 'none';
+            });
+            
+            // Si no hay eventos visibles, mostrar mensaje
+            if (!hayEventosVisibles) {
+                // Aquí podrías agregar un mensaje de "No hay eventos de este tipo"
+                console.log('No hay eventos del tipo:', tipo);
+            }
+        }
+        
+        // No hacer scroll automático para evitar el desplazamiento brusco
+    }
+    
+    // No inicializar automáticamente - esperar a que el usuario seleccione un filtro
+    document.addEventListener('DOMContentLoaded', function() {
+        // Asegurar que el mensaje de selección esté visible y los contenedores ocultos
+        const mensajeSeleccionar = document.getElementById('mensaje-seleccionar-filtro');
+        const contenedorVacaciones = document.getElementById('contenedor-historial-vacaciones');
+        const contenedorEventos = document.getElementById('contenedor-historial-eventos');
+        
+        if (mensajeSeleccionar) {
+            mensajeSeleccionar.style.display = 'block';
+        }
+        if (contenedorVacaciones) {
+            contenedorVacaciones.style.display = 'none';
+        }
+        if (contenedorEventos) {
+            contenedorEventos.style.display = 'none';
+        }
+    });
+    
+    </script>
+
+
+    <script>
+        // Interceptar errores de AJAX y redirigir con mensaje de error
+        const originalFetch = window.fetch;
+        window.fetch = function() {
+            return originalFetch.apply(this, arguments)
+                .then(response => {
+                    if (!response.ok && response.status === 500) {
+                        return response.clone().text().then(text => {
+                            // Buscar si el error es de vacaciones
+                            if (text.includes('días de vacaciones disponibles')) {
+                                // Extraer el mensaje de error
+                                const errorMessage = text.match(/El empleado solo tiene [\d.]+ días de vacaciones disponibles\. No puede solicitar [\d]+ días\./)?.[0] || 'No tiene suficientes días de vacaciones disponibles.';
+                                
+                                // Guardar el mensaje en sessionStorage y recargar la página
+                                sessionStorage.setItem('error_message', errorMessage);
+                                window.location.reload();
+                                return Promise.reject(text);
+                            }
+                            return Promise.reject(text);
+                        });
+                    }
+                    return response;
+                })
+                .catch(error => {
+                    // Si ya fue manejado por el bloque anterior, no hacer nada
+                    if (typeof error === 'string' && error.includes('días de vacaciones disponibles')) {
+                        return Promise.reject(error);
+                    }
+                    
+                    // Manejar otros errores
+                    console.error('Error en la petición:', error);
+                    return Promise.reject(error);
+                });
+        };
+        
+        // Verificar si hay un mensaje de error en sessionStorage y mostrarlo
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessage = sessionStorage.getItem('error_message');
+            if (errorMessage) {
+                sessionStorage.removeItem('error_message');
+                // El mensaje se mostrará automáticamente a través del sistema de alertas de Laravel
+                // pero necesitamos recargar la página con el parámetro de error
+                const url = new URL(window.location);
+                url.searchParams.set('error', encodeURIComponent(errorMessage));
+                window.location.href = url.toString();
+            }
+        });
+    </script>
 @endsection

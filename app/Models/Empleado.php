@@ -190,6 +190,11 @@ class Empleado extends Model
         return $this->hasMany(Beneficiario::class, 'empleado_id', 'id_empleado');
     }
 
+    public function eventos()
+    {
+        return $this->hasMany(Evento::class, 'empleado_id', 'id_empleado');
+    }
+
     public function nacimiento()
     {
         return $this->hasOne(EmpleadoUbicacion::class, 'empleado_id')->where('tipo_ubicacion', 'NACIMIENTO');
@@ -279,6 +284,46 @@ class Empleado extends Model
     public function setNombreCompletoAttribute($value)
     {
         $this->attributes['nombre_completo'] = mb_strtoupper($value, 'UTF-8');
+    }
+
+    /**
+     * Obtener el estado actual del empleado considerando eventos activos
+     */
+    public function getEstadoActualAttribute()
+    {
+        $hoy = Carbon::today();
+        
+        // Buscar eventos activos (vacaciones o incapacidad) que estén en progreso hoy
+        $eventoActivo = $this->eventos()
+            ->whereIn('tipo_evento', ['vacaciones', 'incapacidad'])
+            ->where('fecha_inicio', '<=', $hoy)
+            ->where('fecha_fin', '>=', $hoy)
+            ->first();
+        
+        if ($eventoActivo) {
+            return match($eventoActivo->tipo_evento) {
+                'vacaciones' => 'En vacaciones',
+                'incapacidad' => 'En incapacidad',
+                default => 'Activo'
+            };
+        }
+        
+        // Si no hay eventos activos, verificar estado normal
+        return $this->estaActivo() ? 'Activo' : 'Inactivo';
+    }
+
+    /**
+     * Obtener las clases CSS para el estado actual
+     */
+    public function getEstadoClasesAttribute()
+    {
+        return match($this->estado_actual) {
+            'En vacaciones' => 'bg-blue-100 text-blue-800',
+            'En incapacidad' => 'bg-red-100 text-red-800',
+            'Activo' => 'bg-green-100 text-green-800',
+            'Inactivo' => 'bg-yellow-100 text-yellow-800',
+            default => 'bg-gray-100 text-gray-800'
+        };
     }
 }
 

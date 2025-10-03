@@ -43,4 +43,5 @@ return array(
     'ec07570ca5a812141189b1fa81503674' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
     '377b22b161c09ed6e5152de788ca020a' => $vendorDir . '/spatie/laravel-permission/src/helpers.php',
     'af5c7414008ffae8561d0514ad128022' => $baseDir . '/app/Helpers/RoleHelper.php',
+    '86a6b62feb5194797d0f782b3df19d0f' => $baseDir . '/app/Helpers/AlertHelper.php',
 );

@@ -40,6 +40,7 @@
                             <button type="button" @click="activeTab = 'ubicacion'" :class="activeTab === 'ubicacion' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Ubicación</button>
                             <button type="button" @click="activeTab = 'laboral'" :class="activeTab === 'laboral' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Información Laboral</button>
                             <button type="button" @click="activeTab = 'adicional'" :class="activeTab === 'adicional' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Datos Adicionales</button>
+                            <button type="button" @click="activeTab = 'eventos'" :class="activeTab === 'eventos' ? 'text-slate-800 border-slate-800' : 'border-transparent hover:text-gray-700 hover:border-gray-300'" class="px-6 py-3 border-b-2 transition-all duration-200">Eventos</button>
                         </nav>
                     </div>
                     <!-- Tab Content -->
@@ -895,6 +896,59 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Eventos -->
+                        <div x-show="activeTab === 'eventos'" class="space-y-6">
+                            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Eventos del Empleado</h3>
+                                <p class="text-sm text-gray-600 mb-6">Aquí puedes agregar eventos como vacaciones, incapacidades o permisos. Estos campos son opcionales.</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="tipo_evento" class="block text-sm font-medium text-gray-700">Tipo de Evento</label>
+                                        <select name="eventos[tipo_evento]" id="tipo_evento" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                                            <option value="">Seleccione un tipo de evento</option>
+                                            <option value="vacaciones">Vacaciones</option>
+                                            <option value="incapacidad">Incapacidad</option>
+                                            <option value="permiso">Permiso</option>
+                                            <option value="otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="dias_evento" class="block text-sm font-medium text-gray-700">Días</label>
+                                        <input type="number" name="eventos[dias]" id="dias_evento" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm" placeholder="Número de días">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="fecha_inicio_evento" class="block text-sm font-medium text-gray-700">Fecha Inicio</label>
+                                        <input type="date" name="eventos[fecha_inicio]" id="fecha_inicio_evento" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="fecha_fin_evento" class="block text-sm font-medium text-gray-700">Fecha Fin</label>
+                                        <input type="date" name="eventos[fecha_fin]" id="fecha_fin_evento" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200">
+                                    <div class="flex">
+                                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                        </svg>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium text-blue-800">Información importante</h3>
+                                            <div class="mt-2 text-sm text-blue-700">
+                                                <ul class="list-disc pl-5 space-y-1">
+                                                    <li>Los días de vacaciones se calculan automáticamente (1.25 días por mes trabajado)</li>
+                                                    <li>La fecha fin se calcula automáticamente basado en la fecha inicio y los días</li>
+                                                    <li>Estos campos son opcionales y pueden ser llenados más tarde</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1168,6 +1222,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 🎉 Iniciar todo
     init();
+    
+    // 📅 Cálculo automático de fecha fin para eventos
+    const calcularFechaFin = () => {
+        const fechaInicio = document.getElementById('fecha_inicio_evento');
+        const dias = document.getElementById('dias_evento');
+        const fechaFin = document.getElementById('fecha_fin_evento');
+        
+        if (fechaInicio && dias && fechaFin) {
+            const actualizarFechaFin = () => {
+                if (fechaInicio.value && dias.value && parseInt(dias.value) > 0) {
+                    const startDate = new Date(fechaInicio.value);
+                    const numDias = parseInt(dias.value);
+                    
+                    if (!isNaN(startDate.getTime())) {
+                        const endDate = new Date(startDate);
+                        endDate.setDate(startDate.getDate() + numDias - 1);
+                        
+                        const formattedDate = endDate.toISOString().split('T')[0];
+                        fechaFin.value = formattedDate;
+                    }
+                } else {
+                    fechaFin.value = '';
+                }
+            };
+            
+            fechaInicio.addEventListener('change', actualizarFechaFin);
+            dias.addEventListener('input', actualizarFechaFin);
+        }
+    };
+    
+    calcularFechaFin();
 });
 </script>
 @endpush

@@ -98,13 +98,16 @@
                             @forelse($empleados as $empleado)
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <!-- Número de fila con borde según empresa -->
-                                    <td class="py-4 pr-4 whitespace-nowrap pl-4
-                                    @php $empresaNombre = $empleado->informacionLaboralActual?->empresa?->nombre_empresa; @endphp
-                                        @if($empresaNombre == 'Contiflex')
-                                            border-l-4 border-sky-500
-                                        @elseif($empresaNombre == 'Formacol')
-                                            border-l-4 border-red-500
-                                        @endif ">
+                                    <td class="py-4 pr-4 whitespace-nowrap pl-4 border-l-4
+                                    @php 
+                                        $empresaNombre = $empleado->informacionLaboralActual?->empresa?->nombre_empresa;
+                                        $borderColor = match($empresaNombre) {
+                                            'Contiflex' => 'border-sky-500',
+                                            'Formacol' => 'border-red-500',
+                                            default => ''
+                                        };
+                                    @endphp
+                                        {{ $borderColor }}">
                                         <span class="text-sm text-gray-600">{{ $loop->iteration + ($empleados->currentPage() - 1) * $empleados->perPage() }}</span>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
@@ -117,13 +120,8 @@
                                         <div class="text-sm text-gray-900">{{ $empleado->informacionLaboralActual?->empresa?->nombre_empresa ?? 'No especificada' }}</div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 inline-flex text-xs leading-none font-semibold rounded-full
-                                            @if($empleado->estaActivo())
-                                                bg-green-100 text-green-800
-                                            @else
-                                                bg-yellow-100 text-yellow-800
-                                            @endif">
-                                            {{ $empleado->estaActivo() ? 'Activo' : 'Inactivo' }}
+                                        <span class="px-2 py-1 inline-flex text-xs leading-none font-semibold rounded-full {{ $empleado->estado_clases }}">
+                                            {{ $empleado->estado_actual }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center">
@@ -149,12 +147,13 @@
                                                 </a>
                                             @endif
                                             
+                                            
                                             <!-- Botón Eliminar (solo para admin y gestión humana) -->
                                             @if(is_admin() || is_gestion_humana())
                                                 <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="inline-block">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="inline-flex items-center px-4 py-3 text-xs font-medium rounded-md shadow-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 transition-colors" onclick="return confirm('¿Seguro que deseas eliminar este empleado?');" title="Eliminar empleado permanentemente">
+                                                    <button type="button" class="inline-flex items-center px-4 py-3 text-xs font-medium rounded-md shadow-sm text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 transition-colors" onclick="validarEliminacionEmpleado({{ $empleado->id_empleado }}, '{{ $empleado->nombre_completo }}')" title="Eliminar empleado permanentemente">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                         </svg>
@@ -192,13 +191,8 @@
                                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
                                         {{ $loop->iteration + ($empleados->currentPage() - 1) * $empleados->perPage() }}
                                     </span>
-                                    <span class="px-2 py-1 inline-flex text-xs leading-none font-semibold rounded-full
-                                        @if($empleado->estaActivo())
-                                            bg-green-100 text-green-800
-                                        @else
-                                            bg-yellow-100 text-yellow-800
-                                        @endif">
-                                        {{ $empleado->estaActivo() ? 'Activo' : 'Inactivo' }}
+                                    <span class="px-2 py-1 inline-flex text-xs leading-none font-semibold rounded-full {{ $empleado->estado_clases }}">
+                                        {{ $empleado->estado_actual }}
                                     </span>
                                 </div>
                                 <div class="flex items-center space-x-1">
@@ -223,12 +217,13 @@
                                         </a>
                                     @endif
                                     
+                                    
                                     <!-- Botón Eliminar (solo para admin y gestión humana) -->
                                     @if(is_admin() || is_gestion_humana())
                                         <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-rose-500 hover:bg-rose-600 text-white transition-colors" onclick="return confirm('¿Seguro que deseas eliminar este empleado?');" title="Eliminar empleado permanentemente">
+                                            <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-rose-500 hover:bg-rose-600 text-white transition-colors" onclick="validarEliminacionEmpleado({{ $empleado->id_empleado }}, '{{ $empleado->nombre_completo }}')" title="Eliminar empleado permanentemente">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -505,5 +500,56 @@
         }
     </style>
 
+    <!-- Script para validación de protección laboral -->
+    <script>
+    function validarEliminacionEmpleado(empleadoId, empleadoNombre) {
+        // Mostrar indicador de carga
+        const botonOriginal = event.target;
+        const textoOriginal = botonOriginal.innerHTML;
+        botonOriginal.innerHTML = '<svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+        botonOriginal.disabled = true;
+        
+        // Verificar si el empleado tiene incapacidades activas
+        fetch(`/empleados/${empleadoId}/verificar-incapacidad`)
+            .then(response => response.json())
+            .then(data => {
+                // Restaurar botón
+                botonOriginal.innerHTML = textoOriginal;
+                botonOriginal.disabled = false;
+                
+                if (data.tiene_incapacidad) {
+                    // Mostrar alerta de protección laboral
+                    alert(data.mensaje + '\n\n⚖️  ARTÍCULO 24 CÓDIGO SUSTANTIVO DEL TRABAJO\n📋 LEY 100 DE 1993\n\nEste despido está PROHIBIDO por ley.');
+                    return false;
+                } else {
+                    // Mostrar confirmación normal
+                    if (confirm(`¿Seguro que deseas eliminar al empleado ${empleadoNombre}?\n\nEsta acción es permanente y no se puede deshacer.`)) {
+                        // Enviar el formulario
+                        const form = botonOriginal.closest('form');
+                        if (form) {
+                            form.submit();
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                // Restaurar botón
+                botonOriginal.innerHTML = textoOriginal;
+                botonOriginal.disabled = false;
+                
+                console.error('Error al verificar incapacidades:', error);
+                
+                // Si hay error, permitir la eliminación normal con confirmación
+                if (confirm(`¿Seguro que deseas eliminar al empleado ${empleadoNombre}?\n\nEsta acción es permanente y no se puede deshacer.\n\n(No se pudo verificar el estado de incapacidades)`)) {
+                    const form = botonOriginal.closest('form');
+                    if (form) {
+                        form.submit();
+                    }
+                }
+            });
+        
+        return false; // Prevenir envío inmediato del formulario
+    }
+    </script>
 
 @endsection

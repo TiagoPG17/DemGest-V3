@@ -24,6 +24,9 @@
     
     <!-- Alpine.js para interacciones dinámicas -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <!-- SweetAlert2 para alertas bonitas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="font-sans antialiased bg-gray-50" x-data="{ mobileMenuOpen: false }">
     <div class="min-h-screen flex overflow-hidden">
@@ -69,64 +72,44 @@
                 <!-- Navegación de la sidebar -->
                 <nav class="flex-1 px-2 lg:px-4 pb-4 overflow-y-auto">
                     <div class="space-y-1 lg:space-y-2">
-                        <a href="{{ route('dashboard') }}" class="nav-link group relative flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 hover:text-white transition-all duration-300 transform hover:translate-x-1 hover:shadow-lg overflow-hidden {{ request()->is('/') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
-                            <!-- Efecto de fondo animado -->
-                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 {{ request()->is('/') ? 'opacity-100 animate-pulse' : '' }}"></div>
-                            <!-- Icono -->
-                            <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4 group-hover:scale-125 transition-transform duration-300 relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a href="{{ route('dashboard') }}" class="nav-link flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gray-700 hover:text-white transition-all duration-300 hover:scale-110 hover:opacity-100 hover:shadow-lg hover:shadow-blue-500/50 hover:z-10 {{ request()->is('/') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                             </svg>
-                            <span class="font-semibold text-base lg:text-lg relative z-10">Inicio</span>
-                            <!-- Indicador hover/activo -->
-                            <div class="absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 w-2 h-6 lg:h-8 bg-blue-400 rounded-full {{ request()->is('/') ? 'opacity-100 shadow-lg' : 'opacity-0 group-hover:opacity-100' }} transition-opacity duration-300"></div>
+                            <span class="font-semibold text-base lg:text-lg">Inicio</span>
                         </a>
                         
                         @if(is_admin() || is_gestion_humana() || is_jefe())
-                            <a href="{{ route('empleados.index') }}" class="nav-link group relative flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 hover:text-white transition-all duration-300 transform hover:translate-x-1 hover:shadow-lg overflow-hidden {{ request()->is('empleados') || request()->is('empleados/*') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
-                                <!-- Efecto de fondo animado -->
-                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 {{ request()->is('empleados') || request()->is('empleados/*') ? 'opacity-100 animate-pulse' : '' }}"></div>
-                                <!-- Icono -->
-                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4 group-hover:scale-125 transition-transform duration-300 relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <a href="{{ route('empleados.index') }}" class="nav-link flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gray-700 hover:text-white transition-all duration-300 hover:scale-110 hover:opacity-100 hover:shadow-lg hover:shadow-blue-500/50 hover:z-10 {{ request()->is('empleados') || request()->is('empleados/*') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
+                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                                     <circle cx="9" cy="7" r="4" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 2 0 0 0-3-3.87" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75" />
                                 </svg>
-                                <span class="font-semibold text-base lg:text-lg relative z-10">Empleados</span>
-                                <!-- Indicador hover/activo -->
-                                <div class="absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 w-2 h-6 lg:h-8 bg-blue-400 rounded-full {{ request()->is('empleados') || request()->is('empleados/*') ? 'opacity-100 shadow-lg' : 'opacity-0 group-hover:opacity-100' }} transition-opacity duration-300"></div>
+                                <span class="font-semibold text-base lg:text-lg">Empleados</span>
                             </a>
                         @endif
                         
                         @if(is_admin() || is_gestion_humana())
-                            <a href="{{ route('contratos.index') }}" class="nav-link group relative flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 hover:text-white transition-all duration-300 transform hover:translate-x-1 hover:shadow-lg overflow-hidden {{ request()->is('reportes/contratos') || request()->is('reportes/contratos/*') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
-                                <!-- Efecto de fondo animado -->
-                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 {{ request()->is('reportes/contratos') || request()->is('reportes/contratos/*') ? 'opacity-100 animate-pulse' : '' }}"></div>
-                                <!-- Icono -->
-                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4 group-hover:scale-125 transition-transform duration-300 relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <a href="{{ route('contratos.index') }}" class="nav-link flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gray-700 hover:text-white transition-all duration-300 hover:scale-110 hover:opacity-100 hover:shadow-lg hover:shadow-blue-500/50 hover:z-10 {{ request()->is('contratos') || request()->is('contratos/*') || request()->is('reportes') || request()->is('reportes/*') ? 'text-white bg-gradient-to-r from-blue-600/30 to-blue-500/20 border-l-4 border-blue-400 shadow-lg' : '' }}" @click.stop>
+                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                                     <polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="14 2 14 8 20 8" />
                                     <line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="16" y1="13" x2="8" y2="13" />
                                     <line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="16" y1="17" x2="8" y2="17" />
                                     <line stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="10" y1="9" x2="8" y2="9" />
                                 </svg>
-                                <span class="font-semibold text-base lg:text-lg relative z-10">Reporte</span>
-                                <!-- Indicador hover/activo -->
-                                <div class="absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 w-2 h-6 lg:h-8 bg-blue-400 rounded-full {{ request()->is('reportes/contratos') || request()->is('reportes/contratos/*') ? 'opacity-100 shadow-lg' : 'opacity-0 group-hover:opacity-100' }} transition-opacity duration-300"></div>
+                                <span class="font-semibold text-base lg:text-lg">Reporte</span>
                             </a>
                         @endif
                         
                         @if(is_empleado())
-                            <a href="#" class="nav-link group relative flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 hover:text-white transition-all duration-300 transform hover:translate-x-1 hover:shadow-lg overflow-hidden">
-                                <!-- Efecto de fondo animado -->
-                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <!-- Icono -->
-                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4 group-hover:scale-125 transition-transform duration-300 relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <a href="#" class="nav-link flex items-center px-3 lg:px-5 py-3 lg:py-4 text-gray-300 rounded-xl lg:rounded-2xl hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 hover:text-white transition-all duration-300 hover:scale-110 hover:opacity-100 hover:shadow-lg hover:shadow-blue-500/50 hover:z-10 overflow-hidden">
+                                <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-3 lg:mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                <span class="font-semibold text-base lg:text-lg relative z-10">Mi Información</span>
-                                <!-- Indicador hover/activo -->
-                                <div class="absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 w-2 h-6 lg:h-8 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <span class="font-semibold text-base lg:text-lg">Mi Información</span>
                             </a>
                         @endif
                     </div>                    
@@ -228,6 +211,24 @@
                          @click.away="userMenuOpen = false"
                          style="margin-top: 12px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95)); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); overflow: hidden;">
                         
+                        <!-- Opción de perfil -->
+                        <a href="{{ route('profile.edit') }}" style="width: 100%; padding: 12px 16px; background: none; border: none; color: white; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; text-align: left; text-decoration: none;" 
+                           onmouseover="this.style.background='linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.3))'; this.style.paddingLeft='20px'" 
+                           onmouseout="this.style.background='none'; this.style.paddingLeft='16px'">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.3)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <svg style="width: 16px; height: 16px; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 2px;">Mi Perfil</div>
+                                <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Gestionar cuenta y seguridad</div>
+                            </div>
+                        </a>
+                        
+                        <!-- Divisor -->
+                        <div style="height: 1px; background: rgba(255, 255, 255, 0.1); margin: 4px 16px;"></div>
+                        
                         <!-- Opción de cerrar sesión -->
                         <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                             @csrf
@@ -264,9 +265,14 @@
             </aside>
             
             <!-- Área principal de contenido -->
-            <main class="flex-1 overflow-auto bg-gray-50 w-full lg:w-[calc(100%-16rem)] lg:ml-64">
+            <main class="flex-1 overflow-auto bg-gray-50">
                 <div class="p-4 lg:p-6 min-h-screen">
-                    @yield('content')
+                    <div class="max-w-6xl mx-auto lg:pl-4">
+                        <!-- Sistema de Alertas Unificado -->
+                        @include('components.alertas')
+                        
+                        @yield('content')
+                    </div>
                 </div>
             </main>
     </div>

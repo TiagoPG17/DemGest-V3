@@ -29,10 +29,7 @@ class CentroCosto extends Model
             'informacion_laboral',
             'centro_costo_id',
             'empleado_id'
-        )->where(function($query) {
-            $query->whereNull('informacion_laboral.fecha_salida')
-                  ->orWhere('informacion_laboral.fecha_salida', '>', now());
-        });
+        )->whereNull('informacion_laboral.fecha_salida'); // ✅ Solo empleados realmente activos
     }
 
     /**
@@ -61,10 +58,7 @@ class CentroCosto extends Model
         $directos = DB::table('informacion_laboral as il')
             ->join('empleados as e', 'il.empleado_id', '=', 'e.id_empleado')
             ->where('il.centro_costo_id', $this->id)
-            ->where(function($query) {
-                $query->whereNull('il.fecha_salida')
-                      ->orWhere('il.fecha_salida', '>', now());
-            })
+            ->whereNull('il.fecha_salida') // ✅ Solo empleados realmente activos
             ->select('e.id_empleado');
 
         // Subconsulta para obtener empleados activos con relación a través de estado_cargo
@@ -72,10 +66,7 @@ class CentroCosto extends Model
             ->join('informacion_laboral as il', 'ec.estado_id', '=', 'il.id_estado')
             ->join('empleados as e', 'il.empleado_id', '=', 'e.id_empleado')
             ->where('ec.centro_costo_id', $this->id)
-            ->where(function($query) {
-                $query->whereNull('il.fecha_salida')
-                      ->orWhere('il.fecha_salida', '>', now());
-            })
+            ->whereNull('il.fecha_salida') // ✅ Solo empleados realmente activos
             ->select('e.id_empleado');
 
         // Unir ambas consultas y eliminar duplicados usando UNION
@@ -99,7 +90,7 @@ class CentroCosto extends Model
                         JOIN empleados e ON il.empleado_id = e.id_empleado
                         WHERE il.centro_costo_id = centro_costos.id
                         AND il.empresa_id = ' . $empresaId . '
-                        AND (il.fecha_salida IS NULL OR il.fecha_salida > NOW())
+                        AND il.fecha_salida IS NULL -- ✅ Solo empleados realmente activos
                         
                         UNION
                         
@@ -110,7 +101,7 @@ class CentroCosto extends Model
                         JOIN empleados e ON il.empleado_id = e.id_empleado
                         WHERE ec.centro_costo_id = centro_costos.id
                         AND il.empresa_id = ' . $empresaId . '
-                        AND (il.fecha_salida IS NULL OR il.fecha_salida > NOW())
+                        AND il.fecha_salida IS NULL -- ✅ Solo empleados realmente activos
                     ) as empleados_combinados
                 ) as total_empleados'))
             ->where(function($query) use ($empresaId) {
@@ -167,10 +158,7 @@ class CentroCosto extends Model
             ->join('informacion_laboral as il', 'ec.estado_id', '=', 'il.id_estado')
             ->join('empleados as e', 'il.empleado_id', '=', 'e.id_empleado')
             ->where('ec.centro_costo_id', $centroCostoId)
-            ->where(function($query) {
-                $query->whereNull('il.fecha_salida')
-                      ->orWhere('il.fecha_salida', '>', now());
-            })
+            ->whereNull('il.fecha_salida') // ✅ Solo empleados realmente activos
             ->count();
             
         return $empleadosEstadoCargo;

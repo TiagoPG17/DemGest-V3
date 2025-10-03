@@ -27,18 +27,12 @@ class DashboardController extends Controller
                 // Validación adicional: contar directamente por empresa_id como respaldo
                 $contiflexDirecto = DB::table('informacion_laboral')
                     ->where('empresa_id', 1) // Contiflex
-                    ->where(function($query) {
-                        $query->whereNull('fecha_salida')
-                              ->orWhere('fecha_salida', '>', now());
-                    })
+                    ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                     ->count();
 
                 $formacolDirecto = DB::table('informacion_laboral')
                     ->where('empresa_id', 2) // Formacol
-                    ->where(function($query) {
-                        $query->whereNull('fecha_salida')
-                              ->orWhere('fecha_salida', '>', now());
-                    })
+                    ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                     ->count();
                 
                 // Si hay diferencias significativas, registrar advertencia
@@ -62,18 +56,12 @@ class DashboardController extends Controller
                 // Fallback al método directo
                 $contiflexCount = DB::table('informacion_laboral')
                     ->where('empresa_id', 1) // Contiflex
-                    ->where(function($query) {
-                        $query->whereNull('fecha_salida')
-                              ->orWhere('fecha_salida', '>', now());
-                    })
+                    ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                     ->count();
 
                 $formacolCount = DB::table('informacion_laboral')
                     ->where('empresa_id', 2) // Formacol
-                    ->where(function($query) {
-                        $query->whereNull('fecha_salida')
-                              ->orWhere('fecha_salida', '>', now());
-                    })
+                    ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                     ->count();
 
                 $totalEmpleados = $contiflexCount + $formacolCount;
@@ -110,13 +98,13 @@ class DashboardController extends Controller
             // Obtener empleados con contratos próximos a vencer (próximos 30 días)
             $proximosContratosContiflex = DB::table('informacion_laboral')
                 ->where('empresa_id', 1) // Contiflex
-                ->whereNull('fecha_salida')
+                ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                 ->whereBetween('fecha_prorroga', [now(), now()->addDays(30)])
                 ->count();
 
             $proximosContratosFormacol = DB::table('informacion_laboral')
                 ->where('empresa_id', 2) // Formacol
-                ->whereNull('fecha_salida')
+                ->whereNull('fecha_salida') // ✅ Solo empleados realmente activos
                 ->whereBetween('fecha_prorroga', [now(), now()->addDays(30)])
                 ->count();
 
@@ -260,27 +248,6 @@ class DashboardController extends Controller
                     'centros' => $centrosNegativos->pluck('codigo')->toArray()
                 ]);
             }
-
-            // Validar que todos los centros tengan códigos correctos según su empresa
-            $centrosInconsistentes = $centrosCostos->filter(function($centro) {
-                $esContiflex = str_starts_with($centro->codigo, 'CX_');
-                $esFormacol = str_starts_with($centro->codigo, 'FC_');
-                return !$esContiflex && !$esFormacol;
-            });
-
-            if ($centrosInconsistentes->count() > 0) {
-                Log::warning('Centros de costo con códigos inconsistentes', [
-                    'centros' => $centrosInconsistentes->pluck('codigo')->toArray()
-                ]);
-            }
-
-            Log::info('Validación de coherencia final completada', [
-                'contiflex_final' => $contiflexCount,
-                'formacol_final' => $formacolCount,
-                'total_centros_contiflex' => $sumaCentrosContiflex,
-                'total_centros_formacol' => $sumaCentrosFormacol,
-                'total_centros_costos' => $centrosCostos->count()
-            ]);
 
         } catch (\Exception $e) {
             Log::error('Error en validación de coherencia final: ' . $e->getMessage());

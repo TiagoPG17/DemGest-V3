@@ -30,6 +30,7 @@ class InformacionLaboral extends Model
         'relacion_laboral',
         'relacion_sindical',
         'tipo_vinculacion',
+        'dias_vacaciones_acumulados',
     ];
 
 
@@ -37,6 +38,7 @@ class InformacionLaboral extends Model
         'fecha_ingreso' => 'date',
         'fecha_salida' => 'date',
         'aplica_dotacion' => 'boolean',
+        'dias_vacaciones_acumulados' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
